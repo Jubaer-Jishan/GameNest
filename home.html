@@ -4,389 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>GameNest</title>
-  <style>
-   
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #0b1220;
-      color: #fff;
-    }
-
-   
-    .scroll-animation {
-      opacity: 0;
-      transform: translateY(40px);
-      transition: all 0.8s ease-out;
-    }
-
-    .scroll-animation.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px 50px;
-      background-color: #0f172a;
-    }
-
-    .logo {
-      font-size: 20px;
-      font-weight: bold;
-      color: #60a5fa;
-    }
-
-    .logo span {
-      color: #a78bfa;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 30px;
-    }
-
-    .nav-links a {
-      text-decoration: none;
-      color: #fff;
-      font-size: 15px;
-      transition: color 0.3s;
-    }
-
-    .nav-links a:hover,
-    .nav-links a.active {
-      color: #60a5fa;
-      border-bottom: 2px solid #60a5fa;
-      padding-bottom: 3px;
-    }
-
-   
-    .hero {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 80px 50px;
-      flex-wrap: wrap;
-    }
-
-    .hero-text {
-      max-width: 50%;
-      min-width: 300px;
-    }
-
-    .hero-text h1 {
-      font-size: 45px;
-      line-height: 1.3;
-    }
-
-    .hero-text h1 span {
-      color: #60a5fa;
-    }
-
-    .hero-text p {
-      margin: 20px 0;
-      font-size: 18px;
-      color: #cbd5e1;
-    }
-
-    .hero-buttons {
-      display: flex;
-      gap: 15px;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      padding: 12px 25px;
-      font-size: 16px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: bold;
-      min-width: 120px;
-      text-align: center;
-    }
-
-    .btn-primary {
-      background-color: #3b82f6;
-      color: #fff;
-    }
-
-    .btn-secondary {
-      background-color: #1e293b;
-      color: #fff;
-      border: 1px solid #475569;
-    }
-
-    .hero-image {
-      width: 280px;
-      height: 300px;
-      background-color: #1e293b;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      color: #94a3b8;
-      min-width: 280px;
-      margin-top: 20px;
-    }
-
-    .how {
-      text-align: center;
-      padding: 60px 50px;
-      max-width: 900px;
-      margin: 0 auto 80px;
-    }
-
-    .how h2 {
-      font-size: 28px;
-      margin-bottom: 20px;
-    }
-
-    .how p {
-      font-size: 18px;
-      color: #cbd5e1;
-      max-width: 700px;
-      margin: 0 auto;
-    }
-
-    .features {
-      display: flex;
-      justify-content: center;
-      gap: 30px;
-      max-width: 900px;
-      margin: 0 auto 100px;
-      flex-wrap: wrap;
-    }
-
-    .feature-card {
-      background-color: #1e293b;
-      border-radius: 12px;
-      padding: 30px 20px;
-      flex: 1 1 280px;
-      max-width: 280px;
-      color: #cbd5e1;
-      text-align: center;
-      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
-      transition: transform 0.3s ease;
-    }
-
-    .feature-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 12px 25px rgba(59, 130, 246, 0.4);
-    }
-
-    .feature-icon {
-      background-color: #6366f1;
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      margin: 0 auto 15px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 22px;
-    }
-
-    .feature-card h3 {
-      color: #fff;
-      margin-bottom: 10px;
-      font-size: 18px;
-    }
-
-    .feature-card p {
-      font-size: 14px;
-      line-height: 1.5;
-      margin-bottom: 15px;
-    }
-
-    .feature-card a {
-      color: #3b82f6;
-      font-weight: bold;
-      text-decoration: none;
-      font-size: 14px;
-      transition: color 0.3s ease;
-    }
-
-    .feature-card a:hover {
-      color: #60a5fa;
-    }
-
-   
-    .banner {
-      background: linear-gradient(90deg, #4e42ff, #8119f1);
-      padding: 40px 50px;
-      border-radius: 15px;
-      margin: 40px 50px 60px;
-      color: #fff;
-      box-shadow: 0 8px 25px rgba(128, 25, 241, 0.4);
-      max-width: 900px;
-      margin-left: auto;
-      margin-right: auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 20px;
-    }
-
-    .banner-content h2 {
-      font-size: 28px;
-      font-weight: 700;
-      margin-bottom: 10px;
-    }
-
-    .banner-content p {
-      font-size: 16px;
-      max-width: 600px;
-      color: #e0e0e0;
-    }
-
-    .btn-join {
-      background-color: #fff;
-      color: #3b3cff;
-      border: none;
-      border-radius: 8px;
-      padding: 12px 28px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      white-space: nowrap;
-      min-width: 120px;
-    }
-
-    .btn-join:hover {
-      background-color: #d1d1ff;
-    }
-
-  
-    footer.footer {
-      background-color: #0f172a;
-      color: #cbd5e1;
-      padding: 50px 50px 60px;
-      font-size: 14px;
-    }
-
-    .footer-container {
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 30px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .footer-column {
-      flex: 1 1 200px;
-      min-width: 180px;
-    }
-
-    .footer-column h3,
-    .footer-column h4 {
-      color: #fff;
-      margin-bottom: 15px;
-      font-weight: 700;
-    }
-
-    .footer-column p {
-      line-height: 1.6;
-      margin-bottom: 15px;
-      color: #94a3b8;
-    }
-
-    .footer-column ul {
-      list-style: none;
-      padding-left: 0;
-    }
-
-    .footer-column ul li {
-      margin-bottom: 10px;
-    }
-
-    .footer-column ul li a {
-      color: #94a3b8;
-      text-decoration: none;
-      transition: color 0.3s ease;
-    }
-
-    .footer-column ul li a:hover {
-      color: #60a5fa;
-    }
-
-    .social-icons a {
-      margin-right: 12px;
-      display: inline-block;
-      width: 22px;
-      height: 22px;
-      filter: brightness(0.8);
-      transition: filter 0.3s ease;
-    }
-
-    .social-icons a:hover {
-      filter: brightness(1);
-    }
-
-    .contact-info li span {
-      margin-right: 8px;
-    }
-
-    @media (max-width: 768px) {
-      .hero {
-        flex-direction: column;
-        padding: 40px 20px;
-      }
-
-      .hero-text {
-        max-width: 100%;
-      }
-
-      .hero-image {
-        margin-top: 30px;
-        max-width: 100%;
-      }
-
-      .features {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .banner {
-        flex-direction: column;
-        padding: 30px 20px;
-      }
-
-      .btn-join {
-        align-self: center;
-        margin-top: 15px;
-      }
-
-      .footer-container {
-        flex-direction: column;
-      }
-
-      .footer-column {
-        min-width: 100%;
-        margin-bottom: 30px;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://kit.fontawesome.com/5e38181f55.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    
-
+  
   <div class="navbar">
     <div class="logo">Game<span>Nest</span></div>
     <div class="nav-links">
@@ -394,65 +16,65 @@
       <a href="#">Trade Center</a>
       <a href="#">Rent Games</a>
       <a href="#">Bidding</a>
-     
       <a href="login.html">Login / Sign Up</a> 
     </div>
   </div>
 
- 
-  <div class="hero scroll-animation">
-    <div class="hero-text">
-      <h1>Trade, Rent, and <br /> Bid on <span>Video Games</span></h1>
-      <p>Join the largest gaming exchange community. Save money, play more games, and connect with fellow gamers.</p>
-      <div class="hero-buttons">
-       <a href="login.html" class="btn btn-primary">Start Trading</a>  
-      <a href="login.html" class="btn btn-secondary">Join Now</a> 
+  <div class="container firstSection">
+    <div class="hero scroll-animation">
+      <div class="hero-text">
+        <h1>Trade, Rent, and <br /> Bid on <span>Video Games</span></h1>
+        <p>Join the largest gaming exchange community. Save money, play more games, and connect with fellow gamers.</p>
+        <div class="hero-buttons">
+          <a href="login.html" class="btn btn-primary">Start Trading</a>  
+          <a href="login.html" class="btn btn-secondary">Join Now</a> 
+        </div>
+      </div>
+     
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="how scroll-animation">
+      <h2>How GameNest Works</h2>
+      <p>We make it easy to trade, rent, and bid on games. Save money and play more games than ever before.</p>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="features scroll-animation">
+      <div class="feature-card">
+        <div class="feature-icon">⇄</div>
+        <h3>Trade Games</h3>
+        <p>Exchange your completed games for new adventures. Trade directly with other gamers in your area or nationwide.</p>
+        <a href="#">Explore Trading &gt;</a>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">⏰</div>
+        <h3>Rent Games</h3>
+        <p>Try before you buy or enjoy short-term gaming. Rent games from other members at a fraction of the retail price.</p>
+        <a href="#">Browse Rentals &gt;</a>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <h3>Bid on Games</h3>
+        <p>Find rare and collectible games through our auction system. Place bids and win games at competitive prices.</p>
+        <a href="#">View Auctions &gt;</a>
       </div>
     </div>
-    <div class="hero-image">🎮 Game Illustration</div>
   </div>
 
-
-  <div class="how scroll-animation">
-    <h2>How GameXchange Works</h2>
-    <p>We make it easy to trade, rent, and bid on games. Save money and play more games than ever before.</p>
-  </div>
-
-
-  <div class="features scroll-animation">
-    <div class="feature-card">
-      <div class="feature-icon">⇄</div>
-      <h3>Trade Games</h3>
-      <p>Exchange your completed games for new adventures. Trade directly with other gamers in your area or nationwide.</p>
-      <a href="#">Explore Trading &gt;</a>
-    </div>
-
-    <div class="feature-card">
-      <div class="feature-icon">⏰</div>
-      <h3>Rent Games</h3>
-      <p>Try before you buy or enjoy short-term gaming. Rent games from other members at a fraction of the retail price.</p>
-      <a href="#">Browse Rentals &gt;</a>
-    </div>
-
-    <div class="feature-card">
-      <div class="feature-icon">📊</div>
-      <h3>Bid on Games</h3>
-      <p>Find rare and collectible games through our auction system. Place bids and win games at competitive prices.</p>
-      <a href="#">View Auctions &gt;</a>
+  <div class="container">
+    <div class="banner scroll-animation">
+      <div class="banner-content">
+        <h2>Ready to start gaming smarter?</h2>
+        <p>Join GameNest today and connect with gamers in your area. Trade, rent, and bid on games to maximize your gaming experience.</p>
+      </div>
+      <a href="login.html" class="btn-join">Join Now</a>
     </div>
   </div>
-
- 
-  <div class="banner scroll-animation">
-    <div class="banner-content">
-      <h2>Ready to start gaming smarter?</h2>
-      <p>Join GameXchange today and connect with gamers in your area. Trade, rent, and bid on games to maximize your gaming experience.</p>
-    </div>
-    
-     <a href="login.html" class="btn-join">Join Now</a>
-     
-  </div>
-
 
   <footer class="footer">
     <div class="footer-container">
@@ -460,8 +82,11 @@
         <h3><span class="logo">Game<span>Nest</span></span></h3>
         <p>The ultimate platform for gamers to trade, rent, and bid on video games. Save money and play more games.</p>
         <div class="social-icons">
-          <a href="#"><img src="images/twitter.svg" alt="Twitter" /></a>
-          
+       
+          <a href="#" id="social"><i class="fa-brands fa-facebook"></i></a>
+          <a href="#" id="social"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" id="social"><i class="fa-brands fa-x-twitter"></i></a>
+          <a href="#" id="social"><i class="fa-brands fa-pinterest"></i></a>
         </div>
       </div>
 
@@ -492,12 +117,11 @@
         <ul class="contact-info">
           <li><span>✉️</span> support@gamexchange.com</li>
           <li><span>📞</span> (555) 123-4567</li>
-          <li><span>📍</span> 123 Gaming Street, Suite 100<br />San Francisco, CA 94107</li>
+          <li><span>📍</span> Dhanmondi<br />Dhaka</li>
         </ul>
       </div>
     </div>
   </footer>
-
 
   <script>
     const observer = new IntersectionObserver((entries) => {
