@@ -21,7 +21,30 @@
     background-attachment: fixed;
     background-blend-mode: overlay, overlay, overlay, normal;
   }
-  
+
+  #particles-js {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+  }
+  #particles-js::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(0,0,0,0.0) 30%, rgba(0,0,0,0.6) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+  .carousel-container, .navbar, .container {
+    position: relative;
+    z-index: 1;
+  }
+
   
   /* ==============================
      CONTAINER
@@ -123,10 +146,8 @@
   color: #60a5fa; /* optional, match underline color */
 }
 
-  
 
 
-    
   /* ==============================
      HERO SECTION
      ============================== */
@@ -185,35 +206,170 @@
   }
   
   /* Hero Right Side Video */
-  .hero-video {
-    flex: 1;
-    min-width: 280px;
-  }
-  .hero-video video {
-    width: 100%;
-    border-radius: 12px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-  }
-  .hero-video-container {
-    width: 50%;
-    min-width: 280px;
-    position: relative;
-  }
-  
-  .hero-video {
-    width: 100%;
-    height: auto;
-    border-radius: 12px;
-    display: block;
-    background: #000;
-    /* Outer glow effect */
-    box-shadow: 0 0 30px rgba(137, 216, 255, 0.7), 0 0 60px rgba(130, 0, 255, 0.5);
-    transition: none; /* remove hover pop-out / scale */
-  }
-  
-  .hero-video:hover {
-    transform: none; /* ensure no pop-out on hover */
-  }
+ .hero-video {
+  flex: 1;
+  min-width: 280px;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  display: block;
+  background: #0b0f25;
+  overflow: hidden;
+  position: relative;
+}
+
+.hero-video video {
+  width: 100%;
+  border-radius: 12px;
+  display: block;
+}
+
+.hero-video::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(0,0,0,0) 25%, rgba(11,15,37,1) 100%);
+}
+
+.hero-video:hover {
+  transform: none;
+}
+
+  /*=========================
+    Slider
+==========================*/
+
+.carousel-container {
+  position: relative;
+  max-width: 100%;
+  margin: 35px auto;
+  overflow: hidden;
+}
+
+.sliderTitle{
+  color: white;
+  margin: 25px;
+  text-align: center;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+}
+
+.carousel-track {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+  will-change: transform;
+}
+
+.carousel-slide {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  min-width: 200px;
+  margin: 10px 7px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.carousel-slide:hover {
+  transform: scale(1.05);
+}
+
+.carousel-slide img {
+  width: 100%;
+  height: 85%;
+  display: block;
+  border-radius: 10px;
+}
+
+.slide-overlay {
+  position: absolute;
+  bottom: 54px;
+  border-radius: 10px;
+  left: 0;
+  width: 100%;
+  height: 90%;
+  padding: 20px 15px;
+  background: linear-gradient(to top, rgba(0,0,0,1), transparent);
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  text-align: center;  
+  gap: 10px;
+}
+
+.carousel-slide:hover .slide-overlay {
+  opacity: 1;
+}
+
+/* Title & description */
+.slide-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.slide-desc {
+  font-size: 0.9rem;
+  margin: 0;
+  line-height: 1.2;
+}
+
+/* Explore button (transparent, classy) */
+.slide-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #ff3c78;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9rem;
+  padding: 6px 12px;
+  border: 2px solid #ff3c78;
+  border-radius: 30px;
+  transition: all 0.3s ease;
+}
+
+.slide-btn:hover {
+  background: #ff3c78;
+  color: #fff;
+  transform: scale(1.05);
+}
+
+
+/* navigation btn container */
+.carousel-buttons {
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+}
+
+.carousel-btn {
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 20px;
+  margin: 5px;
+  background-color: transparent;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.carousel-btn:hover {
+  background: #00000072;
+  color: #fff;
+  transform: scale(1.1);
+}
   
   
   /* ==============================
@@ -221,7 +377,7 @@
      ============================== */
   .how {
     text-align: center;
-    padding: 60px 50px;
+    padding: 0 50px;
     max-width: 900px;
     margin: 0 auto 80px;
   }

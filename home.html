@@ -8,6 +8,8 @@
   <script src="https://kit.fontawesome.com/5e38181f55.js" crossorigin="anonymous"></script>
 </head>
 <body>
+
+  <div id="particles-js"></div>
   
   <div class="navbar">
     <div class="logo">Game<span>Nest</span></div>
@@ -16,7 +18,7 @@
       <a href="#">Trade Center</a>
       <a href="#">Rent Games</a>
       <a href="#">Bidding</a>
-      <a href="login.html">Login / Sign Up</a> 
+      <a href="auth.html">Login / Sign Up</a> 
     </div>
   </div>
 
@@ -26,8 +28,8 @@
         <h1>Trade, Rent, and <br /> Bid on <span>Video Games</span></h1>
         <p>Join the largest gaming exchange community. Save money, play more games, and connect with fellow gamers.</p>
         <div class="hero-buttons">
-          <a href="login.html" class="btn btn-primary">Start Trading</a>  
-          <a href="login.html" class="btn btn-secondary">Join Now</a> 
+          <a href="auth.html" class="btn btn-primary">Start Trading</a>  
+          <a href="auth.html" class="btn btn-secondary">Join Now</a> 
         </div>
       </div>
 
@@ -43,6 +45,76 @@
     </div>
   </div>
 
+  <!--Slider Start-->
+  <div class="container carousel-container">
+    <h2 class="sliderTitle">Trending Now</h2>
+    <div class="carousel-track">
+      <div class="carousel-slide">
+        <img src="sliderImage/1.jpeg" alt="1">
+        <div class="slide-overlay">
+          <h3 class="slide-title">Game Name 1</h3>
+          <p class="slide-desc">Short description for game 1.</p>
+          <a href="#" class="slide-btn">Explore</a>
+        </div>
+      </div>
+      <div class="carousel-slide">
+        <img src="sliderImage/2.jpeg" alt="2">
+        <div class="slide-overlay">
+          <h3 class="slide-title">Game Name 2</h3>
+          <p class="slide-desc">Short description for game 2.</p>
+          <a href="#" class="slide-btn">Explore</a>
+        </div>
+      </div>
+      <div class="carousel-slide">
+        <img src="sliderImage/3.jpeg" alt="3">
+        <div class="slide-overlay">
+          <h3 class="slide-title">Game Name 3</h3>
+          <p class="slide-desc">Short description for game 3.</p>
+          <a href="#" class="slide-btn">Explore</a>
+        </div>
+      </div>
+      <div class="carousel-slide">
+        <img src="sliderImage/4.jpeg" alt="4">
+        <div class="slide-overlay">
+          <h3 class="slide-title">Game Name 4</h3>
+          <p class="slide-desc">Short description for game 4.</p>
+          <a href="#" class="slide-btn">Explore</a>
+        </div>
+      </div>
+      <div class="carousel-slide">
+        <img src="sliderImage/5.jpeg" alt="5">
+        <div class="slide-overlay">
+          <h3 class="slide-title">Game Name 5</h3>
+          <p class="slide-desc">Short description for game 5.</p>
+          <a href="#" class="slide-btn">Explore</a>
+        </div>
+      </div>
+      <div class="carousel-slide">
+        <img src="sliderImage/6.jpeg" alt="6">
+        <div class="slide-overlay">
+          <h3 class="slide-title">Game Name 6</h3>
+          <p class="slide-desc">Short description for game 6.</p>
+          <a href="#" class="slide-btn">Explore</a>
+        </div>
+      </div>
+      <div class="carousel-slide">
+        <img src="sliderImage/7.jpeg" alt="7">
+        <div class="slide-overlay">
+          <h3 class="slide-title">Game Name 7</h3>
+          <p class="slide-desc">Short description for game 7.</p>
+          <a href="#" class="slide-btn">Explore</a>
+        </div>
+      </div>
+    </div>
+  
+    <div class="carousel-buttons">
+      <button class="carousel-btn prev">&#10094;</button>
+      <button class="carousel-btn next">&#10095;</button>
+    </div>
+  </div>
+  <!-- Slider End -->
+
+  <!--How Works-->
   <div class="container">
     <div class="how scroll-animation">
       <h2>How GameNest Works</h2>
@@ -81,7 +153,7 @@
         <h2>Ready to start gaming smarter?</h2>
         <p>Join GameNest today and connect with gamers in your area. Trade, rent, and bid on games to maximize your gaming experience.</p>
       </div>
-      <a href="login.html" class="btn-join">Join Now</a>
+      <a href="auth.html" class="btn-join">Join Now</a>
     </div>
   </div>
 
@@ -95,7 +167,7 @@
           <a href="#" id="social"><i class="fa-brands fa-facebook"></i></a>
           <a href="#" id="social"><i class="fa-brands fa-instagram"></i></a>
           <a href="#" id="social"><i class="fa-brands fa-x-twitter"></i></a>
-          <a href="#" id="social"><i class="fa-brands fa-pinterest"></i></a>
+          <a href="#" id="social"><i class="fa-brands fa-discord"></i></a>
         </div>
       </div>
 
@@ -132,6 +204,7 @@
     </div>
   </footer>
 
+
   <script>
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -147,5 +220,8 @@
       observer.observe(el);
     });
   </script>
+  <script src="slider.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
+  <script src="particle.js"></script>
 </body>
 </html>

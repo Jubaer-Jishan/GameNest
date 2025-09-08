@@ -1,0 +1,220 @@
+.fade-in {
+    animation: gamerEntrance 0.8s ease-in-out both;
+  }
+  
+  @keyframes gamerEntrance {
+    0% { opacity: 0; transform: scale(0.95) translateY(30px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  
+  body {
+    background-color: #0f172a;
+    background-image: url('images/background.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px 15px;
+  }
+  
+  form p, form h2{
+    text-align: center;
+  }
+  .auth-container {
+    background-color: #1e293b;
+    border-radius: 16px;
+    padding: 30px 40px;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
+  }
+  
+  .tabs {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #334155;
+  }
+  
+  .tabs button {
+    background: none;
+    border: none;
+    color: #94a3b8;
+    padding: 10px 0;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    flex: 1;
+    border-bottom: 3px solid transparent;
+    transition: 0.3s;
+  }
+  
+  .tabs button.active {
+    color: #fff;
+    border-bottom: 3px solid #6366f1;
+  }
+  
+  .form-group {
+    margin-bottom: 18px;
+  }
+  
+  .form-group label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 6px;
+    color: #cbd5e1;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: none;
+    background-color: #334155;
+    color: #fff;
+  }
+  
+  .form-group input:focus {
+    outline: 2px solid #6366f1;
+  }
+  
+  .form-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+    font-size: 14px;
+  }
+  
+  .form-actions a {
+    font-size: 13px;
+    color: #60a5fa;
+    text-decoration: none;
+  }
+  
+  .form-actions a:hover {
+    text-decoration: underline;
+  }
+
+  .chkBox label{
+    font-size: 14px;
+  }
+
+  .chkBox label a{
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  
+  .btn-primary {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(to right, #6366f1, #7c3aed);
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    margin-bottom: 15px;
+  }
+  
+  .or-divider {
+    text-align: center;
+    margin-bottom: 15px;
+    color: #94a3b8;
+    font-size: 14px;
+  }
+  
+  .social-buttons {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .social-buttons button {
+    flex: 1;
+    background-color: #0f172a;
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #334155;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .hidden { display: none; }
+  
+  .back-home {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: #60a5fa;
+    text-decoration: none;
+    font-size: 14px;
+  }
+  
+  .back-home:hover {
+    text-decoration: underline;
+  }
+  
+  .subtitle {
+    margin-bottom: 25px;
+    font-size: 14px;
+    color: #cbd5e1;
+  }
+  
+  .error-message {
+    color: #f87171; /* red */
+    font-size: 13px;
+    margin-top: 4px;
+    font-weight: 500;
+  }
+  
+  input.error {
+    border: 1px solid #f87171;
+  }
+  
+  .eye-icon, .eye-off-icon {
+    pointer-events: none; /* prevent accidental click inside svg */
+  }
+  
+  /* strong password */
+
+.password-popup {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #1e293b;
+    color: #fff;
+    padding: 10px 14px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    margin-top: 6px;
+    z-index: 10;
+    font-size: 13px;
+    display: none;
+}
+
+.password-popup button {
+    background: linear-gradient(to right, #6366f1, #7c3aed);
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    margin-left: 8px;
+    }
