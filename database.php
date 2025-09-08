@@ -1,14 +1,15 @@
 <?php
-$host = "localhost";     // usually localhost
-$user = "root";          // your MySQL username
-$pass = "";              // your MySQL password (empty by default in XAMPP)
-$dbname = "gamenest";   // your database name
-
-// Create connection
-$conn = new mysqli($host, $user, $pass, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-?>
+  $conn = mysqli_connect("localhost", "root", '', 'gamenestdb');
+ 
+    if (!$conn) {
+        die("Connection failed: " . mysqli_connect_error());
+    }else{
+        echo "connetted <br>";
+    }
+ 
+    $sql = "CREATE DATABASE IF NOT EXISTS " . 'gamenestdb';
+    if ($conn->query($sql) === TRUE) {
+        echo "Database created successfully<br>";
+    } else {
+        die("Error creating database: " . $conn->error);
+    }

@@ -99,30 +99,28 @@ document.addEventListener("DOMContentLoaded", () => {
   
     let suggestedPass = "";
   
-    signupForm.addEventListener("submit", (e) => {
+    signupForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       let valid = true;
-  
+    
       // Name
       if (nameInput.value.trim().length < 2) {
         showError(nameInput, "Enter your full name");
         valid = false;
       } else clearError(nameInput);
-  
+    
       // Email
       if (!isValidEmail(emailInput.value.trim())) {
         showError(emailInput, "Enter a valid email address");
         valid = false;
       } else clearError(emailInput);
-  
+    
       // Password
       if (!isStrongPassword(passInput.value.trim())) {
         showError(passInput, "Password must be 8+ chars, include upper, lower, number & symbol");
-        const toggleNow = passInput.parentElement.querySelector("span");
-            toggleNow.style.top = "40%";          
         valid = false;
       } else clearError(passInput);
-  
+    
       // Confirm password
       if (confirmPassInput.value.trim() === "") {
         showError(confirmPassInput, "Please confirm your password");
@@ -131,7 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
         showError(confirmPassInput, "Passwords do not match");
         valid = false;
       } else clearError(confirmPassInput);
-  
+    
       // Terms checkbox
       const termsErrorDiv = termsCheckbox.parentElement.querySelector(".error-message");
       if (!termsCheckbox.checked) {
@@ -146,13 +144,32 @@ document.addEventListener("DOMContentLoaded", () => {
       } else if (termsErrorDiv) {
         termsErrorDiv.remove();
       }
-  
+    
+      // Only if valid, send data to PHP
       if (valid) {
-        alert("Account created successfully 🎉");
-        signupForm.reset();
-        popup.style.display = "none";
+        try {
+          const res = await fetch("register.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              fullName: nameInput.value.trim(),
+              email: emailInput.value.trim(),
+              password: passInput.value.trim()
+            })
+          });
+    
+          const data = await res.json();
+          alert(data.message);
+          if (data.status === "success") {
+            signupForm.reset();
+            popup.style.display = "none";
+          }
+        } catch (err) {
+          alert("Server error: " + err.message);
+        }
       }
     });
+    
   
     // ===== PASSWORD SHOW/HIDE =====
     document.querySelectorAll("input[type='password']").forEach(input => {
