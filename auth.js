@@ -98,77 +98,57 @@ document.addEventListener("DOMContentLoaded", () => {
     wrapperPass.appendChild(popup);
   
     let suggestedPass = "";
-  
-    signupForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      let valid = true;
-    
-      // Name
-      if (nameInput.value.trim().length < 2) {
-        showError(nameInput, "Enter your full name");
+
+
+signupForm.addEventListener("submit", function(e){
+    e.preventDefault(); // Page reload stop
+
+    let valid = true;
+
+    // Name validation
+    if(nameInput.value.trim().length < 2){
+        alert("Enter your full name");
         valid = false;
-      } else clearError(nameInput);
-    
-      // Email
-      if (!isValidEmail(emailInput.value.trim())) {
-        showError(emailInput, "Enter a valid email address");
+    }
+
+    // Email validation
+    else if(!/\S+@\S+\.\S+/.test(emailInput.value.trim())){
+        alert("Enter a valid email address");
         valid = false;
-      } else clearError(emailInput);
-    
-      // Password
-      if (!isStrongPassword(passInput.value.trim())) {
-        showError(passInput, "Password must be 8+ chars, include upper, lower, number & symbol");
+    }
+
+    // Password validation
+    else if(passInput.value.trim().length < 8){
+        alert("Password must be at least 8 characters");
         valid = false;
-      } else clearError(passInput);
-    
-      // Confirm password
-      if (confirmPassInput.value.trim() === "") {
-        showError(confirmPassInput, "Please confirm your password");
+    }
+
+    // Confirm password
+    else if(passInput.value.trim() !== confirmPassInput.value.trim()){
+        alert("Passwords do not match");
         valid = false;
-      } else if (confirmPassInput.value.trim() !== passInput.value.trim()) {
-        showError(confirmPassInput, "Passwords do not match");
+    }
+
+    // Terms
+    else if(!termsCheckbox.checked){
+        alert("You must agree to the Terms & Privacy Policy");
         valid = false;
-      } else clearError(confirmPassInput);
-    
-      // Terms checkbox
-      const termsErrorDiv = termsCheckbox.parentElement.querySelector(".error-message");
-      if (!termsCheckbox.checked) {
-        if (!termsErrorDiv) {
-          const div = document.createElement("div");
-          div.className = "error-message";
-          div.style.color = "red";
-          div.textContent = "You must agree to the Terms & Privacy Policy ❗";
-          termsCheckbox.parentElement.appendChild(div);
-        }
-        valid = false;
-      } else if (termsErrorDiv) {
-        termsErrorDiv.remove();
-      }
-    
-      // Only if valid, send data to PHP
-      if (valid) {
-        try {
-          const res = await fetch("register.php", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              fullName: nameInput.value.trim(),
-              email: emailInput.value.trim(),
-              password: passInput.value.trim()
-            })
-          });
-    
-          const data = await res.json();
-          alert(data.message);
-          if (data.status === "success") {
-            signupForm.reset();
-            popup.style.display = "none";
-          }
-        } catch (err) {
-          alert("Server error: " + err.message);
-        }
-      }
-    });
+    }
+
+    // If valid, send data via fetch
+    if(valid){
+        const formData = new FormData(signupForm);
+        fetch('signup.php', { method: 'POST', body: formData })
+        .then(res => res.text())
+        .then(data => {
+            alert(data); // PHP response
+            if(data.includes("Signup successful")) signupForm.reset();
+        })
+        .catch(err => console.error(err));
+    }
+});
+
+
     
   
     // ===== PASSWORD SHOW/HIDE =====

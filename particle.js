@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function() {
       overlay.style.width = '100%';
       overlay.style.height = '100%';
       overlay.style.pointerEvents = 'none';
-      overlay.style.background = 'radial-gradient(circle at center, rgba(0,0,0,0.4) 100%, rgba(0,0,0,0) 20%)';
+      overlay.style.background = 'radial-gradient(circle at center, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 0%)';
       overlay.style.zIndex = '0';
       document.body.appendChild(overlay);
     }
