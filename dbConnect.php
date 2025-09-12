@@ -1,9 +1,8 @@
 <?php
 $servername = "localhost";
-$dbname = "gamenestdb"; // এখন তোমার database name
-$db_user = "root";       // XAMPP default username
-$db_pass = "";           // XAMPP default password
-
+$dbname = "gamenestdb"; 
+$db_user = "root";      
+$db_pass = "";          
 try {
     $pdo = new PDO("mysql:host=$servername;dbname=$dbname", $db_user, $db_pass);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

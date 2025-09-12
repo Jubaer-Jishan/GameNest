@@ -269,25 +269,43 @@
   overflow: hidden;
   border-radius: 10px;
   min-width: 200px;
+  height: 330px;
   margin: 10px 7px;
   cursor: pointer;
   transition: transform 0.3s ease;
 }
 
+.carousel-slide::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+  top: -100%;
+  left: -100%;
+  transition: all 0.5s ease;
+}
+
+.carousel-slide:hover::before {
+  top: 100%;
+  left: 100%;
+}
+
 .carousel-slide:hover {
-  transform: scale(1.05);
+  transform: scale(1.05) rotate(2deg);
+  box-shadow: 0 0 15px #646cff50;
 }
 
 .carousel-slide img {
   width: 100%;
-  height: 85%;
+  height: 100%;
   display: block;
   border-radius: 10px;
 }
 
 .slide-overlay {
   position: absolute;
-  bottom: 54px;
+  bottom: 0;
   border-radius: 10px;
   left: 0;
   width: 100%;
@@ -347,22 +365,25 @@
 /* navigation btn container */
 .carousel-buttons {
   position: absolute;
-  bottom: 5px;
+  top: 60%;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
   display: flex;
+  justify-content: space-between;
+  width: 100%;
 }
+
 
 .carousel-btn {
   border: none;
-  padding: 5px 10px;
-  border-radius: 5px;
+  padding: 96px 45px;
   cursor: pointer;
   font-size: 20px;
   margin: 5px;
-  background-color: transparent;
+  background: linear-gradient(to right, rgba(0,0,0,1), rgba(255,255,255,0));
   color: white;
   transition: all 0.3s ease;
+  transform: scale(1.2);
 }
 
 .carousel-btn:hover {
