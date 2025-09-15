@@ -269,7 +269,7 @@
   overflow: hidden;
   border-radius: 10px;
   min-width: 200px;
-  height: 330px;
+  height: 280px;
   margin: 10px 7px;
   cursor: pointer;
   transition: transform 0.3s ease;
@@ -379,17 +379,20 @@
   padding: 96px 45px;
   cursor: pointer;
   font-size: 20px;
-  margin: 5px;
   background: linear-gradient(to right, rgba(0,0,0,1), rgba(255,255,255,0));
   color: white;
-  transition: all 0.3s ease;
-  transform: scale(1.2);
+  transition: all 0.1s ease;
+  height: 280px;
+  margin-top: 4px;
+}
+
+.next{
+  background: linear-gradient(to left, rgba(0,0,0,1), rgba(255,255,255,0));
+  
 }
 
 .carousel-btn:hover {
-  background: #00000072;
-  color: #fff;
-  transform: scale(1.1);
+  font-size: 30px;
 }
   
   
