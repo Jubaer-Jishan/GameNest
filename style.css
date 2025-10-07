@@ -40,7 +40,7 @@
   z-index: 1;
 }
 
-  .carousel-container, .navbar, .container {
+  .carousel-container {
     position: relative;
     z-index: 1;
   }
@@ -183,6 +183,21 @@
     display: flex;
     gap: 15px;
     flex-wrap: wrap;
+  }
+  .hero-buttons .btn-primary:hover {
+    background-color: #004aad; /* Slightly darker blue */
+    color: #fff; /* Ensure text is visible */
+    box-shadow: 0 8px 15px rgba(0, 74, 173, 0.3); /* Add a soft shadow */
+    transform: translateY(-3px); /* Slight upward movement */
+    transition: all 0.3s ease; /* Smooth transition */
+  }
+
+  .hero-buttons .btn-secondary:hover {
+    background-color: #5a6268; /* Slightly darker gray */
+    color: #fff; /* Ensure text is visible */
+    box-shadow: 0 8px 15px rgba(90, 98, 104, 0.3); /* Add a soft shadow */
+    transform: translateY(-3px); /* Slight upward movement */
+    transition: all 0.3s ease; /* Smooth transition */
   }
   .btn {
     padding: 12px 25px;
@@ -371,6 +386,7 @@
   display: flex;
   justify-content: space-between;
   width: 100%;
+  pointer-events: none;
 }
 
 
@@ -384,6 +400,7 @@
   transition: all 0.1s ease;
   height: 280px;
   margin-top: 4px;
+  pointer-events: auto;
 }
 
 .next{
@@ -571,16 +588,35 @@
 }
 
 .social-icons a {
-  margin-right: 12px;
-  color: #bbb;
-  font-size: 20px;
-  transition: 0.3s;
   display: inline-block;
+  margin-right: 20px;
+  font-size: 18px;
+  color: #cbd5e1; /* Default color */
+  transition: all 0.3s ease; /* Smooth transition */
 }
 
 .social-icons a:hover {
-  color: #2bb1ff;
-  transform: translateY(-5px);
+  transform: scale(1.2); /* Slight scaling effect */
+}
+
+.social-icons a.facebook:hover {
+  color: #1877f2; /* Facebook blue */
+}
+
+.social-icons a.instagram:hover {
+  color: #e1306c; /* Instagram pink */
+}
+
+.social-icons a.discord:hover {
+  color: #5865f2; /* Discord blue */
+}
+
+.social-icons a.linkedin:hover {
+  color: #0077b5; /* LinkedIn blue */
+}
+
+.social-icons a.x:hover {
+  color: #1da1f2; /* X (Twitter) blue */
 }
 
 .contact-info li {

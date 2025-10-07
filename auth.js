@@ -123,6 +123,11 @@ signupForm.addEventListener("submit", function(e){
         valid = false;
     }
 
+    //strong password
+    else if(!isStrongPassword(passInput.value.trim())){
+        alert("Password must be have A-Z, a-z, 0-9 and a spcial character");
+        valid = false;
+    }
     // Confirm password
     else if(passInput.value.trim() !== confirmPassInput.value.trim()){
         alert("Passwords do not match");
@@ -137,15 +142,29 @@ signupForm.addEventListener("submit", function(e){
 
     // If valid, send data via fetch
     if(valid){
-        const formData = new FormData(signupForm);
-        fetch('signup.php', { method: 'POST', body: formData })
-        .then(res => res.text())
-        .then(data => {
-            alert(data); // PHP response
-            if(data.includes("Signup successful")) signupForm.reset();
-        })
-        .catch(err => console.error(err));
+      const formData = new FormData(signupForm);
+      fetch("http://localhost/GameNest/signUp.php", {
+          method: "POST",
+          body: formData
+      })
+      .then(response => response.text())
+      .then(data => {
+          console.log("Server response:", data);
+
+          if (data.includes("Signup successful")) {
+              alert("Registration successful!");
+              // Redirect to login page
+              window.location.href = "auth.html";
+          } else {
+              alert(data);
+          }
+      })
+      .catch(error => {
+          console.error("Fetch error:", error);
+          alert("Network error. Please try again.");
+      });
     }
+  
 });
 
 
