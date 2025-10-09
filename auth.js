@@ -48,27 +48,52 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   
     // ===== LOGIN VALIDATION =====
-    loginForm.addEventListener("submit", (e) => {
+    loginForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       let valid = true;
-  
+
       const emailInput = loginForm.querySelector("input[type='email']");
       const passInput = loginForm.querySelector("input[type='password']");
-  
+
       if (!isValidEmail(emailInput.value.trim())) {
         showError(emailInput, "Enter a valid email address");
         valid = false;
       } else clearError(emailInput);
-  
+
       if (!isStrongPassword(passInput.value.trim())) {
         showError(passInput, "Password must be 8+ chars, include upper, lower, number & symbol");
         toggle.style.top = "40%";
         valid = false;
       } else clearError(passInput);
-  
+
       if (valid) {
-        alert("Login successful ✅");
-        loginForm.reset();
+        // Prepare the login data
+        const loginData = new FormData();
+        loginData.append("email", emailInput.value.trim());
+        loginData.append("password", passInput.value.trim());
+
+        try {
+          // Send the login data to the server
+          const response = await fetch('login.php', {
+            method: 'POST',
+            body: loginData,
+          });
+
+          // Parse the server response
+          const result = await response.json();
+
+          if (response.ok && result.success) {
+            alert("Login successful ✅");
+            loginForm.reset();
+            window.location.href = 'bidding.html'; // Redirect to bidding.html
+          } else {
+            // Show error message from the server
+            alert(result.message || "Login failed. Please try again.");
+          }
+        } catch (error) {
+          console.error("Error during login:", error);
+          alert("An error occurred. Please try again later.");
+        }
       }
     });
   
@@ -167,6 +192,78 @@ signupForm.addEventListener("submit", function(e){
   
 });
 
+// remember me cookie setup with php
+
+function setRememberMeCookie() {
+  fetch('set_cookie.php', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ action: 'setCookie' }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.status === 'success') {
+        console.log('Cookie set successfully');
+      } else {
+        console.error('Failed to set cookie:', data.message);
+      }
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+}
+
+document.getElementById('rememberMe').addEventListener('change', function () {
+  if (this.checked) {
+    setRememberMeCookie();
+  }
+});
+
+// Function to get a cookie value by name
+function getCookie(name) {
+  const cookies = document.cookie.split('; ');
+  for (let cookie of cookies) {
+    const [key, value] = cookie.split('=');
+    if (key === name) {
+      return decodeURIComponent(value);
+    }
+  }
+  return null;
+}
+
+// Auto-fill email and password if "rememberMe" cookie exists
+document.addEventListener('DOMContentLoaded', () => {
+  const rememberMeCookie = getCookie('rememberMe');
+  if (rememberMeCookie) {
+    const userData = JSON.parse(rememberMeCookie); // Assuming the cookie stores JSON data
+    const emailField = document.getElementById('email');
+    const passwordField = document.getElementById('password');
+
+    if (userData.email) {
+      emailField.value = userData.email;
+    }
+
+    if (userData.password) {
+      passwordField.value = userData.password;
+    }
+
+    // Add event listener to auto-fill password on email field interaction
+    emailField.addEventListener('keydown', (event) => {
+      if ((event.key === 'Enter' || event.key === 'Tab') && !passwordField.value) {
+        passwordField.value = userData.password || '';
+      }
+    });
+
+    // Auto-fill password if the user clicks on the password field
+    passwordField.addEventListener('focus', () => {
+      if (!passwordField.value) {
+        passwordField.value = userData.password || '';
+      }
+    });
+  }
+});
 
     
   
