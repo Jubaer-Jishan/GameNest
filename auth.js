@@ -1,391 +1,520 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // ===== TAB SWITCH =====
-    const loginTab = document.getElementById('loginTab');
-    const signupTab = document.getElementById('signupTab');
-    const loginForm = document.getElementById('loginForm');
-    const signupForm = document.getElementById('signupForm');
-  
-    loginTab.addEventListener('click', () => {
-      loginTab.classList.add('active');
-      signupTab.classList.remove('active');
-      loginForm.classList.remove('hidden');
-      signupForm.classList.add('hidden');
-    });
-  
-    signupTab.addEventListener('click', () => {
-      signupTab.classList.add('active');
-      loginTab.classList.remove('active');
-      signupForm.classList.remove('hidden');
-      loginForm.classList.add('hidden');
-    });
-  
-    // ===== ERROR FUNCTIONS =====
-    function showError(input, message) {
-      let error = input.parentElement.querySelector(".error-message");
-      if (!error) {
-        error = document.createElement("div");
-        error.className = "error-message";
-        error.style.color = "red";
-        input.parentElement.appendChild(error);
+  // ===== ELEMENT REFERENCES =====
+  const loginTab = document.getElementById('loginTab');
+  const signupTab = document.getElementById('signupTab');
+  const loginForm = document.getElementById('loginForm');
+  const signupForm = document.getElementById('signupForm');
+  const rememberCheckbox = document.getElementById('rememberMe');
+
+  const loginEmailInput = loginForm.querySelector('#loginEmail');
+  const loginPasswordInput = loginForm.querySelector('#loginPassword');
+
+  const signupNameInput = signupForm.querySelector('#fullName');
+  const signupEmailInput = signupForm.querySelector('#signupEmail');
+  const signupPasswordInput = signupForm.querySelector('#signupPassword');
+  const signupConfirmPasswordInput = signupForm.querySelector('#signupConfirmPassword');
+  const termsCheckbox = signupForm.querySelector('#terms');
+
+  // ===== TAB SWITCH =====
+  loginTab.addEventListener('click', () => {
+    loginTab.classList.add('active');
+    signupTab.classList.remove('active');
+    loginForm.classList.remove('hidden');
+    signupForm.classList.add('hidden');
+  });
+
+  signupTab.addEventListener('click', () => {
+    signupTab.classList.add('active');
+    loginTab.classList.remove('active');
+    signupForm.classList.remove('hidden');
+    loginForm.classList.add('hidden');
+  });
+
+  // ===== ERROR HELPERS =====
+  function showError(input, message) {
+    let error = input.parentElement.querySelector('.error-message');
+    if (!error) {
+      error = document.createElement('div');
+      error.className = 'error-message';
+      input.parentElement.appendChild(error);
+    }
+    error.textContent = message;
+    input.classList.add('error');
+  }
+
+  function clearError(input) {
+    const error = input.parentElement.querySelector('.error-message');
+    if (error) error.textContent = '';
+    input.classList.remove('error');
+  }
+
+  function isValidEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
+  function isStrongPassword(pass) {
+    return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(pass);
+  }
+
+  // ===== SUCCESS POPUP =====
+  let redirectTimeout;
+  function showSuccessPopup(message, redirectUrl) {
+    let modal = document.querySelector('.login-success-modal');
+    if (!modal) {
+      modal = document.createElement('div');
+      modal.className = 'login-success-modal';
+      modal.innerHTML = `
+        <div class="login-success-card">
+          <div class="login-success-icon">✅</div>
+          <h3>Login successful</h3>
+          <p class="login-success-message"></p>
+        </div>
+      `;
+      document.body.appendChild(modal);
+    }
+
+    const messageEl = modal.querySelector('.login-success-message');
+    if (messageEl) {
+      messageEl.textContent = message;
+    }
+
+    modal.classList.add('show');
+
+    if (redirectTimeout) {
+      clearTimeout(redirectTimeout);
+    }
+
+    redirectTimeout = setTimeout(() => {
+      window.location.href = redirectUrl;
+    }, 1500);
+  }
+
+  // ===== CUSTOM ALERT =====
+  const ALERT_VISIBLE_CLASS = 'gamenest-alert-visible';
+  let alertHideTimeout;
+
+  function getOrCreateAlert() {
+    let overlay = document.querySelector('.gamenest-alert-overlay');
+    if (overlay) {
+      return overlay;
+    }
+
+    overlay = document.createElement('div');
+    overlay.className = 'gamenest-alert-overlay';
+    overlay.innerHTML = `
+      <div class="gamenest-alert-card" role="alertdialog" aria-modal="true" aria-labelledby="gamenest-alert-title" aria-describedby="gamenest-alert-message">
+        <div class="gamenest-alert-header">
+          <h3 id="gamenest-alert-title">GameNest says</h3>
+          <button type="button" class="gamenest-alert-close" aria-label="Close alert">×</button>
+        </div>
+        <p id="gamenest-alert-message"></p>
+        <div class="gamenest-alert-actions">
+          <button type="button" class="gamenest-alert-ok">Okay</button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+  const card = overlay.querySelector('.gamenest-alert-card');
+  const closeButton = overlay.querySelector('.gamenest-alert-close');
+  const okButton = overlay.querySelector('.gamenest-alert-ok');
+
+  card?.setAttribute('tabindex', '-1');
+
+    const closeHandler = () => closeGameNestAlert();
+    closeButton.addEventListener('click', closeHandler);
+    okButton.addEventListener('click', closeHandler);
+    overlay.addEventListener('click', (event) => {
+      if (event.target === overlay) {
+        closeHandler();
       }
-      error.textContent = message;
-      input.classList.add("error");
-    }
-  
-    function clearError(input) {
-      const error = input.parentElement.querySelector(".error-message");
-      if (error) error.textContent = "";
-      input.classList.remove("error");
-    }
-  
-    // ===== EMAIL & PASSWORD CHECK =====
-    function isValidEmail(email) {
-      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    }
-  
-    function isStrongPassword(pass) {
-      return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(pass);
-    }
-  
-    // ===== LOGIN VALIDATION =====
-    loginForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      let valid = true;
+    });
 
-      const emailInput = loginForm.querySelector("input[type='email']");
-      const passInput = loginForm.querySelector("input[type='password']");
-
-      if (!isValidEmail(emailInput.value.trim())) {
-        showError(emailInput, "Enter a valid email address");
-        valid = false;
-      } else clearError(emailInput);
-
-      if (!isStrongPassword(passInput.value.trim())) {
-        showError(passInput, "Password must be 8+ chars, include upper, lower, number & symbol");
-        toggle.style.top = "40%";
-        valid = false;
-      } else clearError(passInput);
-
-      if (valid) {
-        // Prepare the login data
-        const loginData = new FormData();
-        loginData.append("email", emailInput.value.trim());
-        loginData.append("password", passInput.value.trim());
-
-        try {
-          // Send the login data to the server
-          const response = await fetch('login.php', {
-            method: 'POST',
-            body: loginData,
-          });
-
-          // Parse the server response
-          const result = await response.json();
-
-          if (response.ok && result.success) {
-            alert("Login successful ✅");
-            loginForm.reset();
-            window.location.href = 'bidding.html'; // Redirect to bidding.html
-          } else {
-            // Show error message from the server
-            alert(result.message || "Login failed. Please try again.");
-          }
-        } catch (error) {
-          console.error("Error during login:", error);
-          alert("An error occurred. Please try again later.");
-        }
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        closeGameNestAlert();
       }
     });
-  
-    // ===== SIGNUP VALIDATION =====
-    const nameInput = signupForm.querySelector("#fullName");
-    const emailInput = signupForm.querySelector("#email");
-    const passInput = signupForm.querySelector("#password");
-    const confirmPassInput = signupForm.querySelector("#confirmPassword");
-    const termsCheckbox = signupForm.querySelector("#terms");
-  
-    // ===== PASSWORD POPUP =====
-    const wrapperPass = passInput.parentElement;
-    wrapperPass.style.position = "relative";
-  
-    const popup = document.createElement("div");
-    popup.className = "password-popup";
-    popup.style.position = "absolute";
-    popup.style.top = "100%";
-    popup.style.left = "0";
-    popup.style.background = "#f3f4f6";
-    popup.style.border = "1px solid rgba(0,0,0,0.2)";
-    popup.style.padding = "8px";
-    popup.style.borderRadius = "5px";
-    popup.style.display = "none";
-    popup.style.zIndex = "100";
-    popup.style.color = "#0f172a";
-    wrapperPass.appendChild(popup);
-  
-    let suggestedPass = "";
 
+    return overlay;
+  }
 
-signupForm.addEventListener("submit", function(e){
-    e.preventDefault(); // Page reload stop
+  function closeGameNestAlert() {
+    const overlay = document.querySelector('.gamenest-alert-overlay');
+    if (overlay) {
+      overlay.classList.remove(ALERT_VISIBLE_CLASS);
+      overlay.setAttribute('aria-hidden', 'true');
+    }
+    if (alertHideTimeout) {
+      clearTimeout(alertHideTimeout);
+      alertHideTimeout = undefined;
+    }
+  }
+
+  function showGameNestAlert(message, { autoClose = false, duration = 3000, title = 'GameNest says' } = {}) {
+    const overlay = getOrCreateAlert();
+  const card = overlay.querySelector('.gamenest-alert-card');
+    const messageEl = overlay.querySelector('#gamenest-alert-message');
+    const titleEl = overlay.querySelector('#gamenest-alert-title');
+
+    if (titleEl) titleEl.textContent = title;
+    if (messageEl) messageEl.textContent = message;
+
+    overlay.classList.add(ALERT_VISIBLE_CLASS);
+    overlay.removeAttribute('aria-hidden');
+
+    card.focus?.();
+
+    if (alertHideTimeout) {
+      clearTimeout(alertHideTimeout);
+    }
+
+    if (autoClose) {
+      alertHideTimeout = setTimeout(() => {
+        closeGameNestAlert();
+      }, duration);
+    }
+  }
+
+  // ===== REMEMBER ME =====
+  async function updateRememberMe(email, remember) {
+    if (!rememberCheckbox) return;
+
+    try {
+      const response = await fetch('http://localhost/GameNest/GameNest/set_cookie.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: remember ? email : '', remember }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || data.status !== 'success') {
+        throw new Error(data.message || 'Failed to update remember me preference');
+      }
+    } catch (error) {
+      console.error('Remember me error:', error);
+    }
+  }
+
+  function getCookie(name) {
+    const cookies = document.cookie.split('; ');
+    for (const cookie of cookies) {
+      const [key, value] = cookie.split('=');
+      if (key === name) {
+        return decodeURIComponent(value);
+      }
+    }
+    return null;
+  }
+
+  function prefillRememberedUser() {
+    if (!rememberCheckbox || !loginEmailInput) return;
+
+    const rememberMeCookie = getCookie('rememberMe');
+    if (!rememberMeCookie) return;
+
+    try {
+      const userData = JSON.parse(rememberMeCookie);
+      if (userData?.email) {
+        loginEmailInput.value = userData.email;
+        rememberCheckbox.checked = true;
+      }
+    } catch (error) {
+      console.error('Failed to parse remember me cookie:', error);
+    }
+  }
+
+  if (rememberCheckbox) {
+    rememberCheckbox.addEventListener('change', () => {
+      if (!rememberCheckbox.checked) {
+        updateRememberMe('', false);
+      }
+    });
+  }
+
+  prefillRememberedUser();
+
+  // ===== LOGIN SUBMIT =====
+  loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
 
     let valid = true;
+    const email = loginEmailInput.value.trim();
+    const password = loginPasswordInput.value.trim();
 
-    // Name validation
-    if(nameInput.value.trim().length < 2){
-        alert("Enter your full name");
-        valid = false;
+    if (!isValidEmail(email)) {
+      showError(loginEmailInput, 'Enter a valid email address');
+      valid = false;
+    } else {
+      clearError(loginEmailInput);
     }
 
-    // Email validation
-    else if(!/\S+@\S+\.\S+/.test(emailInput.value.trim())){
-        alert("Enter a valid email address");
-        valid = false;
+    if (!password) {
+      showError(loginPasswordInput, 'Password is required');
+      valid = false;
+    } else {
+      clearError(loginPasswordInput);
     }
 
-    // Password validation
-    else if(passInput.value.trim().length < 8){
-        alert("Password must be at least 8 characters");
-        valid = false;
-    }
+    if (!valid) return;
 
-    //strong password
-    else if(!isStrongPassword(passInput.value.trim())){
-        alert("Password must be have A-Z, a-z, 0-9 and a spcial character");
-        valid = false;
-    }
-    // Confirm password
-    else if(passInput.value.trim() !== confirmPassInput.value.trim()){
-        alert("Passwords do not match");
-        valid = false;
-    }
+    const loginData = new FormData();
+    loginData.append('email', email);
+    loginData.append('password', password);
 
-    // Terms
-    else if(!termsCheckbox.checked){
-        alert("You must agree to the Terms & Privacy Policy");
-        valid = false;
-    }
-
-    // If valid, send data via fetch
-    if(valid){
-      const formData = new FormData(signupForm);
-      fetch("http://localhost/GameNest/signUp.php", {
-          method: "POST",
-          body: formData
-      })
-      .then(response => response.text())
-      .then(data => {
-          console.log("Server response:", data);
-
-          if (data.includes("Signup successful")) {
-              alert("Registration successful!");
-              // Redirect to login page
-              window.location.href = "auth.html";
-          } else {
-              alert(data);
-          }
-      })
-      .catch(error => {
-          console.error("Fetch error:", error);
-          alert("Network error. Please try again.");
+    try {
+      const response = await fetch('http://localhost/GameNest/GameNest/login.php', {
+        method: 'POST',
+        body: formData
       });
-    }
-  
-});
 
-// remember me cookie setup with php
 
-function setRememberMeCookie() {
-  fetch('set_cookie.php', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ action: 'setCookie' }),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.status === 'success') {
-        console.log('Cookie set successfully');
-      } else {
-        console.error('Failed to set cookie:', data.message);
-      }
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    });
-}
+      const result = await response.json();
 
-document.getElementById('rememberMe').addEventListener('change', function () {
-  if (this.checked) {
-    setRememberMeCookie();
-  }
-});
+      if (response.ok && result.success) {
+        const rememberSelected = rememberCheckbox ? rememberCheckbox.checked : false;
 
-// Function to get a cookie value by name
-function getCookie(name) {
-  const cookies = document.cookie.split('; ');
-  for (let cookie of cookies) {
-    const [key, value] = cookie.split('=');
-    if (key === name) {
-      return decodeURIComponent(value);
-    }
-  }
-  return null;
-}
-
-// Auto-fill email and password if "rememberMe" cookie exists
-document.addEventListener('DOMContentLoaded', () => {
-  const rememberMeCookie = getCookie('rememberMe');
-  if (rememberMeCookie) {
-    const userData = JSON.parse(rememberMeCookie); // Assuming the cookie stores JSON data
-    const emailField = document.getElementById('email');
-    const passwordField = document.getElementById('password');
-
-    if (userData.email) {
-      emailField.value = userData.email;
-    }
-
-    if (userData.password) {
-      passwordField.value = userData.password;
-    }
-
-    // Add event listener to auto-fill password on email field interaction
-    emailField.addEventListener('keydown', (event) => {
-      if ((event.key === 'Enter' || event.key === 'Tab') && !passwordField.value) {
-        passwordField.value = userData.password || '';
-      }
-    });
-
-    // Auto-fill password if the user clicks on the password field
-    passwordField.addEventListener('focus', () => {
-      if (!passwordField.value) {
-        passwordField.value = userData.password || '';
-      }
-    });
-  }
-});
-
-    
-  
-    // ===== PASSWORD SHOW/HIDE =====
-    document.querySelectorAll("input[type='password']").forEach(input => {
-      const toggle = document.createElement("span");
-      toggle.innerHTML = `
-        <svg class="eye-icon" xmlns="http://www.w3.org/2000/svg" fill="none" 
-          viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M2.458 12C3.732 7.943 7.523 5 12 5
-               c4.477 0 8.268 2.943 9.542 7
-               -1.274 4.057-5.065 7-9.542 7
-               -4.477 0-8.268-2.943-9.542-7z" />
-        </svg>
-      `;
-    
-      toggle.style.position = "absolute";
-      toggle.style.right = "12px";
-      toggle.style.top = "70%";
-      toggle.style.transform = "translateY(-50%)";
-      toggle.style.cursor = "pointer";
-      toggle.style.display = "flex";
-      toggle.style.alignItems = "center";
-      toggle.style.color = "#94a3b8";
-    
-      // Ensure color applies
-      toggle.querySelector("svg").setAttribute("stroke", "currentColor");
-    
-      const wrapper = input.parentElement;
-      wrapper.style.position = "relative";
-      wrapper.appendChild(toggle);
-    
-      let isVisible = false;
-      toggle.addEventListener("click", () => {
-        isVisible = !isVisible;
-        input.type = isVisible ? "text" : "password";
-    
-        // Change icon depending on state
-        if(isVisible){
-          toggle.innerHTML = `
-            <svg class="eye-slash" xmlns="http://www.w3.org/2000/svg" fill="none" 
-              viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M13.875 18.825A10.05 10.05 0 0112 19
-                   c-4.477 0-8.268-2.943-9.542-7
-                   a10.056 10.056 0 012.642-4.362m3.746-2.248
-                   A9.956 9.956 0 0112 5c4.477 0 8.268 2.943 9.542 7
-                   a9.96 9.96 0 01-4.043 5.411M15 12a3 3 0 11-6 0
-                   3 3 0 016 0z" />
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M3 3l18 18" />
-            </svg>
-          `;
-        } else {
-          toggle.innerHTML = `
-            <svg class="eye-icon" xmlns="http://www.w3.org/2000/svg" fill="none" 
-              viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M2.458 12C3.732 7.943 7.523 5 12 5
-                   c4.477 0 8.268 2.943 9.542 7
-                   -1.274 4.057-5.065 7-9.542 7
-                   -4.477 0-8.268-2.943-9.542-7z" />
-            </svg>
-          `;
+        if (rememberCheckbox) {
+          await updateRememberMe(email, rememberSelected);
         }
-      });
-    });
-    
-  
-    // ===== STRONG PASSWORD POPUP =====
-    passInput.addEventListener("focus", () => {
-      if (!passInput.value) {
-        suggestedPass = generateStrongPassword();
-        popup.innerHTML = `
-          Suggested strong password: <strong>${suggestedPass}</strong>
-          <button id="usePasswordBtn" style="margin-left:5px;padding:2px 5px;">Use</button>
-        `;
-        popup.style.display = "block";
-  
-        const useBtn = popup.querySelector("#usePasswordBtn");
-        useBtn.addEventListener("click", () => {
-          passInput.value = suggestedPass;
-          clearError(passInput);
-          popup.style.display = "none";
-        });
+
+        loginForm.reset();
+        if (rememberCheckbox) {
+          rememberCheckbox.checked = rememberSelected;
+        }
+
+        clearError(loginEmailInput);
+        clearError(loginPasswordInput);
+
+        showSuccessPopup('You will be redirected to the bidding arena.', 'bidding.html');
+      } else {
+        showGameNestAlert(result.message || 'Login failed. Please try again.');
       }
-    });
-  
-    passInput.addEventListener("input", () => {
-      if (passInput.value !== suggestedPass) popup.style.display = "none";
-    });
-  
-    passInput.addEventListener("blur", () => {
-      setTimeout(() => {
-        if (!popup.matches(":hover")) popup.style.display = "none";
-      }, 100);
-    });
-  
-    // ===== STRONG PASSWORD GENERATOR =====
-    function generateStrongPassword() {
-      const upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-      const lower = "abcdefghijklmnopqrstuvwxyz";
-      const numbers = "0123456789";
-      const symbols = "!@#$%^&*()_+-=[]{}|;:,.<>?";
-      const all = upper + lower + numbers + symbols;
-  
-      let password = "";
-      password += upper[Math.floor(Math.random() * upper.length)];
-      password += lower[Math.floor(Math.random() * lower.length)];
-      password += numbers[Math.floor(Math.random() * numbers.length)];
-      password += symbols[Math.floor(Math.random() * symbols.length)];
-  
-      for (let i = 0; i < 4; i++) {
-        password += all[Math.floor(Math.random() * all.length)];
-      }
-  
-      return password.split('').sort(() => 0.5 - Math.random()).join('');
+    } catch (error) {
+      console.error('Error during login:', error);
+      showGameNestAlert('An error occurred. Please try again later.');
     }
   });
-  
+
+  // ===== SIGNUP SUBMIT =====
+  signupForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const fullName = signupNameInput.value.trim();
+    const email = signupEmailInput.value.trim();
+    const password = signupPasswordInput.value.trim();
+    const confirmPassword = signupConfirmPasswordInput.value.trim();
+
+    if (fullName.length < 2) {
+      showGameNestAlert('Enter your full name');
+      return;
+    }
+
+    if (!isValidEmail(email)) {
+      showGameNestAlert('Enter a valid email address');
+      return;
+    }
+
+    if (password.length < 8) {
+      showGameNestAlert('Password must be at least 8 characters');
+      return;
+    }
+
+    if (!isStrongPassword(password)) {
+      showGameNestAlert('Password must have A-Z, a-z, 0-9 and a special character');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      showGameNestAlert('Passwords do not match');
+      return;
+    }
+
+    if (!termsCheckbox.checked) {
+      showGameNestAlert('You must agree to the Terms & Privacy Policy');
+      return;
+    }
+
+    const formData = new FormData(signupForm);
+    const submitButton = signupForm.querySelector('button[type="submit"]');
+
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.dataset.originalText = submitButton.textContent;
+      submitButton.textContent = 'Creating account...';
+    }
+
+    try {
+      const response = await fetch('http://localhost/GameNest/GameNest/signUp.php', {
+        method: 'POST',
+        body: formData
+      });
+
+
+      let data;
+      try {
+        data = await response.json();
+      } catch (parseError) {
+        console.error('Failed to parse signup response:', parseError);
+        data = null;
+      }
+
+      if (response.ok && data?.success) {
+        showGameNestAlert(data.message || 'Registration successful! You can now log in.', {
+          autoClose: true,
+          duration: 2500,
+        });
+
+        signupForm.reset();
+        termsCheckbox.checked = false;
+
+        if (loginTab && signupTab) {
+          loginTab.click();
+        }
+      } else {
+        const message = data?.message || 'Registration failed. Please try again.';
+        showGameNestAlert(message);
+      }
+    } catch (error) {
+      console.error('Fetch error:', error);
+      showGameNestAlert('Network error. Please try again.');
+    } finally {
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = submitButton.dataset.originalText || 'Create Account';
+        delete submitButton.dataset.originalText;
+      }
+    }
+  });
+
+  // ===== PASSWORD SHOW/HIDE =====
+  document.querySelectorAll("input[type='password']").forEach((input) => {
+    const toggle = document.createElement('span');
+    toggle.innerHTML = `
+      <svg class="eye-icon" xmlns="http://www.w3.org/2000/svg" fill="none"
+        viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M2.458 12C3.732 7.943 7.523 5 12 5
+             c4.477 0 8.268 2.943 9.542 7
+             -1.274 4.057-5.065 7-9.542 7
+             -4.477 0-8.268-2.943-9.542-7z" />
+      </svg>
+    `;
+
+    toggle.style.position = 'absolute';
+    toggle.style.right = '12px';
+    toggle.style.top = '70%';
+    toggle.style.transform = 'translateY(-50%)';
+    toggle.style.cursor = 'pointer';
+    toggle.style.display = 'flex';
+    toggle.style.alignItems = 'center';
+    toggle.style.color = '#94a3b8';
+
+    toggle.querySelector('svg').setAttribute('stroke', 'currentColor');
+
+    const wrapper = input.parentElement;
+    wrapper.style.position = 'relative';
+    wrapper.appendChild(toggle);
+
+    let isVisible = false;
+    toggle.addEventListener('click', () => {
+      isVisible = !isVisible;
+      input.type = isVisible ? 'text' : 'password';
+
+      if (isVisible) {
+        toggle.innerHTML = `
+          <svg class="eye-slash" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M13.875 18.825A10.05 10.05 0 0112 19
+                 c-4.477 0-8.268-2.943-9.542-7
+                 a10.056 10.056 0 012.642-4.362m3.746-2.248
+                 A9.956 9.956 0 0112 5c4.477 0 8.268 2.943 9.542 7
+                 a9.96 9.96 0 01-4.043 5.411M15 12a3 3 0 11-6 0
+                 3 3 0 016 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M3 3l18 18" />
+          </svg>
+        `;
+      } else {
+        toggle.innerHTML = `
+          <svg class="eye-icon" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M2.458 12C3.732 7.943 7.523 5 12 5
+                 c4.477 0 8.268 2.943 9.542 7
+                 -1.274 4.057-5.065 7-9.542 7
+                 -4.477 0-8.268-2.943-9.542-7z" />
+          </svg>
+        `;
+      }
+    });
+  });
+
+  // ===== STRONG PASSWORD POPUP =====
+  const passwordWrapper = signupPasswordInput.parentElement;
+  passwordWrapper.style.position = 'relative';
+
+  const popup = document.createElement('div');
+  popup.className = 'password-popup';
+  popup.style.display = 'none';
+  passwordWrapper.appendChild(popup);
+
+  let suggestedPass = '';
+
+  function generateStrongPassword() {
+    const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const lower = 'abcdefghijklmnopqrstuvwxyz';
+    const numbers = '0123456789';
+    const symbols = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+    const all = upper + lower + numbers + symbols;
+
+    let password = '';
+    password += upper[Math.floor(Math.random() * upper.length)];
+    password += lower[Math.floor(Math.random() * lower.length)];
+    password += numbers[Math.floor(Math.random() * numbers.length)];
+    password += symbols[Math.floor(Math.random() * symbols.length)];
+
+    for (let i = 0; i < 4; i++) {
+      password += all[Math.floor(Math.random() * all.length)];
+    }
+
+    return password.split('').sort(() => 0.5 - Math.random()).join('');
+  }
+
+  signupPasswordInput.addEventListener('focus', () => {
+    if (!signupPasswordInput.value) {
+      suggestedPass = generateStrongPassword();
+      popup.innerHTML = `
+        Suggested strong password: <strong>${suggestedPass}</strong>
+        <button type="button" id="usePasswordBtn" style="margin-left:5px;padding:2px 5px;">Use</button>
+      `;
+      popup.style.display = 'block';
+
+      const useBtn = popup.querySelector('#usePasswordBtn');
+      useBtn.addEventListener('click', () => {
+        signupPasswordInput.value = suggestedPass;
+        clearError(signupPasswordInput);
+        popup.style.display = 'none';
+      });
+    }
+  });
+
+  signupPasswordInput.addEventListener('input', () => {
+    if (signupPasswordInput.value !== suggestedPass) popup.style.display = 'none';
+  });
+
+  signupPasswordInput.addEventListener('blur', () => {
+    setTimeout(() => {
+      if (!popup.matches(':hover')) popup.style.display = 'none';
+    }, 100);
+  });
+});
