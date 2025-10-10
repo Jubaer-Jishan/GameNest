@@ -178,16 +178,17 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ===== REMEMBER ME =====
-  async function updateRememberMe(email, remember) {
+  async function updateRememberMe(email, remember, password = '') {
     if (!rememberCheckbox) return;
 
     try {
       const response = await fetch('http://localhost/GameNest/GameNest/set_cookie.php', {
         method: 'POST',
+        credentials: 'same-origin',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email: remember ? email : '', remember }),
+        body: JSON.stringify({ email: remember ? email : '', remember, password: remember ? password : '' }),
       });
 
       const data = await response.json();
@@ -195,15 +196,37 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!response.ok || data.status !== 'success') {
         throw new Error(data.message || 'Failed to update remember me preference');
       }
+      // if server reports success but browser didn't apply cookie (common when
+      // Set-Cookie is blocked), persist to localStorage as a fallback so
+      // autofill still works.
+      if (remember) {
+        const cookieVal = getCookie('rememberMe');
+        if (!cookieVal) {
+          try {
+            localStorage.setItem('rememberMe', JSON.stringify({ email, password }));
+            console.debug('rememberMe saved to localStorage as fallback');
+          } catch (e) {
+            console.warn('Failed to save rememberMe to localStorage', e);
+          }
+        } else {
+          // ensure no stale localStorage
+          localStorage.removeItem('rememberMe');
+        }
+      } else {
+        localStorage.removeItem('rememberMe');
+      }
     } catch (error) {
       console.error('Remember me error:', error);
     }
   }
 
   function getCookie(name) {
-    const cookies = document.cookie.split('; ');
+    const cookies = document.cookie.split(';');
     for (const cookie of cookies) {
-      const [key, value] = cookie.split('=');
+      const idx = cookie.indexOf('=');
+      if (idx === -1) continue;
+      const key = cookie.slice(0, idx).trim();
+      const value = cookie.slice(idx + 1);
       if (key === name) {
         return decodeURIComponent(value);
       }
@@ -215,16 +238,31 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!rememberCheckbox || !loginEmailInput) return;
 
     const rememberMeCookie = getCookie('rememberMe');
-    if (!rememberMeCookie) return;
-
-    try {
-      const userData = JSON.parse(rememberMeCookie);
-      if (userData?.email) {
-        loginEmailInput.value = userData.email;
-        rememberCheckbox.checked = true;
+    let userData = null;
+    if (rememberMeCookie) {
+      try {
+        userData = JSON.parse(rememberMeCookie);
+      } catch (error) {
+        console.error('Failed to parse remember me cookie:', error);
       }
-    } catch (error) {
-      console.error('Failed to parse remember me cookie:', error);
+    }
+
+    // fallback to localStorage if cookie isn't available
+    if (!userData) {
+      try {
+        const stored = localStorage.getItem('rememberMe');
+        if (stored) userData = JSON.parse(stored);
+      } catch (e) {
+        console.error('Failed to read rememberMe from localStorage:', e);
+      }
+    }
+
+    if (userData?.email) {
+      loginEmailInput.value = userData.email;
+      rememberCheckbox.checked = true;
+      if (userData?.password && loginPasswordInput) {
+        loginPasswordInput.value = userData.password;
+      }
     }
   }
 
@@ -269,7 +307,8 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const response = await fetch('http://localhost/GameNest/GameNest/login.php', {
         method: 'POST',
-        body: formData
+        credentials: 'same-origin',
+        body: loginData
       });
 
 
@@ -279,7 +318,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const rememberSelected = rememberCheckbox ? rememberCheckbox.checked : false;
 
         if (rememberCheckbox) {
-          await updateRememberMe(email, rememberSelected);
+          await updateRememberMe(email, rememberSelected, password);
         }
 
         loginForm.reset();
@@ -290,7 +329,7 @@ document.addEventListener("DOMContentLoaded", () => {
         clearError(loginEmailInput);
         clearError(loginPasswordInput);
 
-        showSuccessPopup('You will be redirected to the bidding arena.', 'bidding.html');
+        showSuccessPopup('You will be redirected to your profile.', 'profile.html');
       } else {
         showGameNestAlert(result.message || 'Login failed. Please try again.');
       }

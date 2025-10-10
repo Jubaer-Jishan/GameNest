@@ -4,7 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>GameNest - Bidding</title>
+  <link rel="stylesheet" href="common-styles.css" />
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="biddingstyle.css" />
   <script src="https://kit.fontawesome.com/5e38181f55.js" crossorigin="anonymous"></script>
   <style>
     
@@ -210,8 +212,34 @@
 <body>
   <div id="particles-js"></div>
 
-  <!-- Top Navigation -->
-  <nav>
+  <!-- Modern Classy Header -->
+  <header class="gamenest-header">
+    <div class="header-container">
+      <a href="home.html" class="gamenest-logo">Game<span>Nest</span></a>
+      
+      <nav class="header-nav">
+        <a href="home.html">Home</a>
+        <a href="gameCenter.html">Game Center</a>
+        <a href="#">Rent Games</a>
+        <a href="bidding.html" class="active">Bidding</a>
+        <a href="profile.html">Profile</a>
+      </nav>
+      
+      <div class="header-actions">
+        <a href="auth.html" class="header-btn header-btn-secondary">Login</a>
+        <a href="auth.html" class="header-btn header-btn-primary">Sign Up</a>
+      </div>
+      
+      <div class="mobile-menu-toggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hide old navigation -->
+  <nav style="display: none;">
     <div class="logo">Game<span>Nest</span></div>
     <div class="nav-right">
       <ul>
@@ -220,7 +248,7 @@
         <li><a href="rent.html">Rent Games</a></li>
         <li><a href="bidding.html" class="active">Bidding</a></li>
       </ul>
-      <a href="auth.html" class="login-link">Login / Sign Up</a>
+      <a href="auth.html" class="login-link">Logout</a>
     </div>
   </nav>
 
@@ -231,23 +259,69 @@
     <div class="bidding-cards" id="biddingCardsContainer"></div>
   </div>
 
-  <!-- Footer -->
-  <footer class="footer">
+  <!-- Modern Classy Footer -->
+  <footer class="gamenest-footer">
     <div class="footer-container">
       <div class="footer-column">
-        <h3><span class="logo">Game<span>Nest</span></span></h3>
+        <h3>Game<span>Nest</span></h3>
         <p>The ultimate platform for gamers to trade, rent, and bid on video games. Save money and play more games.</p>
-        <div class="social-icons">
-          <a href="#"><i class="fa-brands fa-facebook"></i></a>
-          <a href="#"><i class="fa-brands fa-instagram"></i></a>
-          <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
-          <a href="#"><i class="fa-brands fa-discord"></i></a>
+        <div class="footer-social">
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="Discord"><i class="fab fa-discord"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
         </div>
       </div>
+
+      <div class="footer-column">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="home.html">Home</a></li>
+          <li><a href="gameCenter.html">Game Center</a></li>
+          <li><a href="#">Rent Games</a></li>
+          <li><a href="bidding.html">Bidding</a></li>
+          <li><a href="auth.html">Login / Sign Up</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="#">Help Center</a></li>
+          <li><a href="#">Community Guidelines</a></li>
+          <li><a href="#">Safety Center</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h4>Contact Us</h4>
+        <ul class="footer-contact">
+          <li><span>✉️</span> <div>support@gamenest.com</div></li>
+          <li><span>📞</span> <div>(+88) 01836282534</div></li>
+          <li><span>📍</span> <div>Dhanmondi, Dhaka<br>Bangladesh</div></li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <p>&copy; 2025 <a href="#">GameNest</a>. All rights reserved. Built with 💙 for gamers.</p>
     </div>
   </footer>
 
   <!-- Link your JS file -->
+  <script>
+    // Mobile menu toggle
+    const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+    const headerNav = document.querySelector('.header-nav');
+    
+    if (mobileMenuToggle) {
+      mobileMenuToggle.addEventListener('click', () => {
+        headerNav.classList.toggle('active');
+      });
+    }
+  </script>
   <script src="bidding.js"></script>
 
 </body>
