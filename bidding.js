@@ -1,0 +1,70 @@
+
+const hardcodedGames = [
+  { id: 1, title: "Bloodborne", description: "A dark and gothic action RPG set in Yharnam.", image: "https://upload.wikimedia.org/wikipedia/en/6/68/Bloodborne_Cover_Wallpaper.jpg", currentBid: 50 },
+  { id: 2, title: "FC 26", description: "Next-gen football realism.", image: "sliderImage/8.jpg", currentBid: 40 },
+  { id: 3, title: "God of War", description: "Kratos and Atreus in Norse mythology.", image: "https://upload.wikimedia.org/wikipedia/en/a/a7/God_of_War_4_cover.jpg", currentBid: 60 },
+  { id: 4, title: "Minecraft", description: "Build and survive in a blocky world.", image: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fencrypted-tbn2.gstatic.com%2Fimages%3Fq%3Dtbn%3AANd9GcS8GqmyBiwcs2RvDreAHAs_fg5e8es-KYLzHM9NqA7nWuU6K705&psig=AOvVaw39cnyTlwkw8KPNgy6WUnyt&ust=1757803059443000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCKCYxOmk1I8DFQAAAAAdAAAAABAE", currentBid: 30 },
+  { id: 5, title: "Spider-Man", description: "Swing through New York City.", image: "sliderImage/14.jpg", currentBid: 55 },
+  { id: 6, title: "Until Dawn", description: "Cinematic horror adventure.", image: "sliderImage/15.jpg", currentBid: 35 },
+  { id: 7, title: "Red Dead Redemption 2", description: "Epic Western tale.", image: "https://upload.wikimedia.org/wikipedia/en/4/44/Red_Dead_Redemption_II.jpg", currentBid: 70 },
+  { id: 8, title: "NBA", description: "Aim for goal.", image: "sliderImage/16.jpg", currentBid: 20 },
+  { id: 8, title: "Witcher 3", description: "Fantasy world.", image: "sliderImage/12.jpg", currentBid: 70 },
+
+];
+
+// DOM reference
+const container = document.getElementById('biddingCardsContainer');
+
+function createCard(game) {
+  const card = document.createElement('div');
+  card.className = 'bidding-card';
+  card.innerHTML = `
+    <img src="${game.image}" alt="${game.title}" />
+    <div class="bidding-info">
+      <h3>${game.title}</h3>
+      <p>${game.description}</p>
+      <p><strong>Current Bid:</strong> $<span class="current-bid">${game.currentBid}</span></p>
+      <form class="bid-form" data-game-id="${game.id}">
+        <input type="number" min="${game.currentBid + 1}" placeholder="Your bid (min $${game.currentBid + 1})" required />
+        <button type="submit">Place Bid</button>
+      </form>
+      <p class="bid-message" style="display:none; margin-top:0.5rem;"></p>
+    </div>`;
+  return card;
+}
+
+function renderBiddingCards(games) {
+  container.innerHTML = '';
+  games.forEach(game => container.appendChild(createCard(game)));
+  attachFormListeners();
+}
+
+function attachFormListeners() {
+  container.querySelectorAll('.bid-form').forEach(form => {
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const gameId = form.getAttribute('data-game-id');
+      const input = form.querySelector('input');
+      const bidValue = Number(input.value);
+      const messageEl = form.querySelector('.bid-message');
+      messageEl.style.display = 'none';
+
+      const game = hardcodedGames.find(g => g.id == gameId);
+      if (bidValue > game.currentBid) {
+        game.currentBid = bidValue;
+        form.parentElement.querySelector('.current-bid').textContent = bidValue;
+        input.min = bidValue + 1;
+        input.value = '';
+        messageEl.textContent = 'Bid placed successfully!';
+        messageEl.style.color = '#4ade80';
+      } else {
+        messageEl.textContent = 'Bid must be higher than current bid.';
+        messageEl.style.color = '#f87171';
+      }
+      messageEl.style.display = 'block';
+    });
+  });
+}
+
+// Render games on page load
+renderBiddingCards(hardcodedGames);
