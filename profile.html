@@ -28,8 +28,8 @@
       </nav>
       
       <div class="header-actions">
-        <a href="#" class="header-btn header-btn-ghost">Settings</a>
-        <a href="auth.html" class="header-btn header-btn-secondary">Logout</a>
+        <span id="headerUserName" style="color: #60a5fa; margin-right: 1rem; font-weight: 600;"></span>
+        <a href="auth.html" class="header-btn header-btn-secondary" id="logoutBtn">Logout</a>
       </div>
       
       <div class="mobile-menu-toggle">
@@ -66,7 +66,7 @@
             <span class="tag tag-online">Online</span>
             <span class="tag">Legendary Trader</span>
           </div>
-          <h1>Jubaer N.</h1>
+          <h1 id="userName">Jubaer N.</h1>
           <p>Collecting rare titles, hosting weekend tournaments, and leading the GameNest bidding arena since 2022.</p>
           <ul class="player-highlights">
             <li><strong>Dhaka, Bangladesh</strong></li>
@@ -374,15 +374,65 @@
       });
     }
     
+    // Logout functionality
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        
+        // Clear user data from localStorage
+        localStorage.removeItem('currentUser');
+        
+        // Redirect to auth page
+        window.location.href = 'auth.html';
+      });
+    }
+    
     // Fetch logged-in user data and update profile
     async function loadUserProfile() {
       try {
+        // First try to get from localStorage (login session)
+        const currentUserData = localStorage.getItem('currentUser');
+        
+        if (currentUserData) {
+          const userData = JSON.parse(currentUserData);
+          
+          // Update header user name
+          const headerUserName = document.getElementById('headerUserName');
+          if (headerUserName && userData.fullName) {
+            headerUserName.textContent = `Welcome, ${userData.fullName.split(' ')[0]}!`;
+          }
+          
+          // Update player name
+          const playerNameElement = document.getElementById('userName');
+          if (playerNameElement && userData.fullName) {
+            playerNameElement.textContent = userData.fullName;
+          }
+          
+          // Update avatar
+          const avatarImg = document.querySelector('.player-avatar img');
+          if (avatarImg && userData.fullName) {
+            avatarImg.alt = `${userData.fullName}'s avatar`;
+            const seed = encodeURIComponent(userData.fullName.replace(/\s+/g, ''));
+            avatarImg.src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}&backgroundColor=b6e3f4,c0aede,d1d4f9&accessories=prescription02,sunglasses&accessoriesColor=black&clothesColor=3c4f5c,262e33&eyebrowType=defaultNatural&eyes=happy&facialHairColor=auburn&mouthType=smile&skinColor=light&topColor=black,auburn&topType=shortHair`;
+          }
+          
+          return; // Don't fetch from PHP if localStorage has data
+        }
+        
+        // Fallback to PHP fetch if localStorage is empty
         const response = await fetch('get_user.php');
         const data = await response.json();
         
         if (data.success && data.user) {
+          // Update header user name
+          const headerUserName = document.getElementById('headerUserName');
+          if (headerUserName && data.user.full_name) {
+            headerUserName.textContent = `Welcome, ${data.user.full_name.split(' ')[0]}!`;
+          }
+          
           // Update player name
-          const playerNameElement = document.querySelector('.player-meta h1');
+          const playerNameElement = document.getElementById('userName');
           if (playerNameElement && data.user.full_name) {
             playerNameElement.textContent = data.user.full_name;
           }
