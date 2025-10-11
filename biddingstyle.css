@@ -20,12 +20,18 @@ body {
       min-height: 100vh;
     }
 
+  header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 40px;
+    max-width: 100%;
+  }
     
     nav {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: #161b22;
       padding: 1rem 2rem;
       position: sticky;
       top: 0;

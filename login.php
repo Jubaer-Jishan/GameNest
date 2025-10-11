@@ -53,6 +53,8 @@ try {
 
     if ($user && password_verify($password, $user['password'])) {
         // Login successful
+        $_SESSION['user_id'] = $user['id']; // For profile integration
+        $_SESSION['email'] = $email;
         $_SESSION['user'] = [
             'id' => $user['id'] ?? null,
             'email' => $email,

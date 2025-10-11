@@ -34,7 +34,15 @@ body {
   line-height: 1.55;
   position: relative;
   overflow-x: hidden;
-  padding: 32px clamp(16px, 4vw, 48px);
+  max-width: 100%;
+}
+
+header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+    max-width: 100%;
 }
 
 .background-overlay {
@@ -181,6 +189,11 @@ body {
   display: flex;
   flex-direction: column;
   gap: clamp(36px, 5vw, 56px);
+  max-width: 1600px;
+  margin: 0 auto;
+  width: 100%;
+  padding: clamp(16px, 2vw, 20px) clamp(40px, 6vw, 80px);
+
 }
 
 .profile-hero {
@@ -188,6 +201,8 @@ body {
   grid-template-columns: minmax(0, 1.1fr) minmax(260px, 0.9fr);
   gap: clamp(24px, 4vw, 40px);
   padding: clamp(24px, 4vw, 40px);
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .player-info {
@@ -300,12 +315,14 @@ body {
   display: flex;
   flex-direction: column;
   gap: clamp(12px, 2vw, 20px);
+  max-width: 100%;
 }
 
 .player-tags {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  max-width: 100%;
 }
 
 .tag {
@@ -346,6 +363,8 @@ body {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   transition: background-position 0.5s ease;
+  word-wrap: break-word;
+  max-width: 100%;
 }
 
 .player-meta h1:hover {
@@ -355,6 +374,7 @@ body {
 .player-meta p {
   color: var(--text-muted);
   max-width: 520px;
+  word-wrap: break-word;
 }
 
 .player-highlights {
@@ -502,6 +522,7 @@ body {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: clamp(16px, 2.5vw, 24px);
+  max-width: 100%;
 }
 
 .stat-card {
@@ -513,6 +534,8 @@ body {
   overflow: hidden;
   transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
+  max-width: 100%;
+  word-wrap: break-word;
 }
 
 .stat-card::before {
@@ -575,10 +598,15 @@ body {
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(260px, 0.8fr);
   gap: clamp(24px, 4vw, 36px);
+  max-width: 100%;
+  overflow: hidden;
+  border-radius: 20px;
 }
 
 .activity-feed {
   padding: clamp(24px, 3.5vw, 36px);
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .activity-list {
@@ -586,6 +614,7 @@ body {
   display: grid;
   gap: 22px;
   margin-top: 12px;
+  max-width: 100%;
 }
 
 .activity-list li {
@@ -621,10 +650,14 @@ body {
 .activity-list h4 {
   font-size: 1.05rem;
   margin-bottom: 6px;
+  word-wrap: break-word;
+  max-width: 100%;
 }
 
 .activity-list p {
   color: var(--text-muted);
+  word-wrap: break-word;
+  max-width: 100%;
 }
 
 .activity-list small {
@@ -684,6 +717,7 @@ body {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: clamp(20px, 3vw, 28px);
+  max-width: 100%;
 }
 
 .game-card {
@@ -696,6 +730,7 @@ body {
   box-shadow: 0 12px 30px rgba(6, 10, 24, 0.45);
   transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
+  max-width: 100%;
 }
 
 .game-card:hover {
@@ -748,10 +783,13 @@ body {
   padding: 20px;
   display: grid;
   gap: 10px;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .game-body p {
   color: var(--text-muted);
+  word-wrap: break-word;
 }
 
 .game-tags {
@@ -772,6 +810,7 @@ body {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: clamp(18px, 2.5vw, 24px);
+  max-width: 100%;
 }
 
 .friend-card {
@@ -785,6 +824,8 @@ body {
   box-shadow: 0 12px 28px rgba(8, 12, 32, 0.45);
   transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .friend-card:hover {
@@ -839,11 +880,15 @@ body {
 
 .friend-card h3 {
   font-size: 1rem;
+  word-wrap: break-word;
+  max-width: 100%;
 }
 
 .friend-card p {
   font-size: 0.85rem;
   color: var(--text-muted);
+  word-wrap: break-word;
+  max-width: 100%;
 }
 
 .status {
@@ -867,16 +912,20 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: 24px;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .profile-footer h4 {
   font-size: 1.3rem;
   margin-bottom: 6px;
+  word-wrap: break-word;
 }
 
 .profile-footer p {
   color: var(--text-muted);
   max-width: 540px;
+  word-wrap: break-word;
 }
 
 @media (max-width: 1200px) {
@@ -919,7 +968,7 @@ body {
 
 @media (max-width: 780px) {
   body {
-    padding: 24px;
+    padding: clamp(12px, 3vw, 24px);
   }
 
   .profile-header {
@@ -943,11 +992,17 @@ body {
   .btn {
     width: 100%;
   }
+  
+  .game-grid,
+  .friend-grid,
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 520px) {
   body {
-    padding: 18px;
+    padding: clamp(8px, 2vw, 18px);
   }
 
   .profile-header {
@@ -960,6 +1015,16 @@ body {
 
   .profile-nav a::after {
     bottom: -4px;
+  }
+  
+  .player-info {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .game-grid,
+  .friend-grid {
+    grid-template-columns: 1fr;
   }
 }
 

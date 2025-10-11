@@ -34,6 +34,13 @@ body::before {
   z-index: 0;
 }
 
+header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+}
+
 #particles-js {
   position: fixed;
   width: 100%;
