@@ -414,7 +414,7 @@
           if (avatarImg && userData.fullName) {
             avatarImg.alt = `${userData.fullName}'s avatar`;
             const seed = encodeURIComponent(userData.fullName.replace(/\s+/g, ''));
-            avatarImg.src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}&backgroundColor=b6e3f4,c0aede,d1d4f9&accessories=prescription02,sunglasses&accessoriesColor=black&clothesColor=3c4f5c,262e33&eyebrowType=defaultNatural&eyes=happy&facialHairColor=auburn&mouthType=smile&skinColor=light&topColor=black,auburn&topType=shortHair`;
+            avatarImg.src = `images/dp.jpg`; // Placeholder image
           }
           
           return; // Don't fetch from PHP if localStorage has data
