@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GameNest Admin Panel</title>
+  <link rel="stylesheet" href="adminPanelstyle.css">
+  <script src="https://kit.fontawesome.com/5e38181f55.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="admin-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h2><i class="fas fa-gamepad"></i> GameNest Admin</h2>
+      </div>
+      <nav class="sidebar-nav">
+        <ul>
+          <li><a href="#" data-section="dashboard" class="nav-link active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+          <li><a href="#" data-section="inventory" class="nav-link"><i class="fas fa-boxes"></i> Inventory</a></li>
+          <li><a href="#" data-section="sales" class="nav-link"><i class="fas fa-dollar-sign"></i> Manage Sales (New/Used)</a></li>
+          <li><a href="#" data-section="rentals" class="nav-link"><i class="fas fa-handshake"></i> Manage Rentals</a></li>
+          <li><a href="#" data-section="users" class="nav-link"><i class="fas fa-users"></i> Users</a></li>
+          <li><a href="#" data-section="reports" class="nav-link"><i class="fas fa-chart-bar"></i> Reports</a></li>
+          <li><a href="#" class="nav-link logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Header -->
+      <header class="admin-header">
+        <h1>Admin Panel</h1>
+        <div class="user-info">
+          <span>Welcome, Admin</span>
+          <i class="fas fa-user-circle"></i>
+        </div>
+      </header>
+
+      <!-- Sections -->
+      <section id="dashboard" class="section active">
+        <h2>Dashboard</h2>
+        <div class="dashboard-grid">
+          <div class="stat-card">
+            <h3>Total Games</h3>
+            <p class="stat-number" id="totalGames">150</p>
+            <i class="fas fa-gamepad stat-icon"></i>
+          </div>
+          <div class="stat-card">
+            <h3>Active Rentals</h3>
+            <p class="stat-number" id="activeRentals">45</p>
+            <i class="fas fa-handshake stat-icon"></i>
+          </div>
+          <div class="stat-card">
+            <h3>Total Users</h3>
+            <p class="stat-number" id="totalUsers">1,200</p>
+            <i class="fas fa-users stat-icon"></i>
+          </div>
+          <div class="stat-card">
+            <h3>Pending Bids</h3>
+            <p class="stat-number" id="pendingBids">23</p>
+            <i class="fas fa-gavel stat-icon"></i>
+          </div>
+        </div>
+        <div class="recent-activity">
+          <h3>Recent Activity</h3>
+          <ul id="recentActivityList">
+            <li>New game added: Elden Ring</li>
+            <li>Rental completed by User123</li>
+            <li>Bid won on The Witcher 3</li>
+            <li>User registered: Gamer456</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="inventory" class="section">
+        <h2>Inventory Management</h2>
+        <div class="inventory-controls">
+          <button id="addGameBtn" class="btn-primary"><i class="fas fa-plus"></i> Add New Game</button>
+          <select id="conditionFilter">
+            <option value="">All Conditions</option>
+            <option value="new">New</option>
+            <option value="used">Used</option>
+          </select>
+        </div>
+        <table class="inventory-table">
+          <thead>
+            <tr>
+              <th>Game Title</th>
+              <th>Platform</th>
+              <th>Condition</th>
+              <th>Quantity</th>
+              <th>Price</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="inventoryTableBody">
+            <!-- Populated by JS -->
+          </tbody>
+        </table>
+      </section>
+
+      <section id="sales" class="section">
+        <h2>Manage Sales (New/Used Games)</h2>
+        <form id="addSaleForm">
+          <h3>Add New Game for Sale</h3>
+          <div class="form-group">
+            <label>Title:</label>
+            <input type="text" id="saleTitle" placeholder="e.g., Elden Ring" required>
+          </div>
+          <div class="form-group">
+            <label>Condition:</label>
+            <select id="saleCondition">
+              <option value="new">New</option>
+              <option value="used">Used</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Price ($):</label>
+            <input type="number" id="salePrice" step="0.01" placeholder="e.g., 59.99" required>
+          </div>
+          <div class="form-group">
+            <label>Platforms:</label>
+            <select id="salePlatforms" multiple>
+              <option value="pc">PC</option>
+              <option value="ps">PlayStation</option>
+              <option value="xbox">Xbox</option>
+              <option value="switch">Switch</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Stock:</label>
+            <input type="number" id="saleStock" min="0" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Add Game</button>
+        </form>
+        <div class="table-container">
+          <input type="text" id="salesSearch" placeholder="Search sales..." class="search-box">
+          <table id="salesTable">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Condition</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="rentals" class="section">
+        <h2>Manage Rentals</h2>
+        <form id="addRentalForm">
+          <h3>Add New Game for Rent</h3>
+          <div class="form-group">
+            <label>Title:</label>
+            <input type="text" id="rentalTitle" placeholder="e.g., God of War" required>
+          </div>
+          <div class="form-group">
+            <label>Platforms:</label>
+            <select id="rentalPlatforms" multiple>
+              <option value="pc">PC</option>
+              <option value="ps">PlayStation</option>
+              <option value="xbox">Xbox</option>
+              <option value="switch">Switch</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Weekly Price ($):</label>
+            <input type="number" id="rentalWeek" min="0" required>
+          </div>
+          <div class="form-group">
+            <label>Monthly Price ($):</label>
+            <input type="number" id="rentalMonth" min="0" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Add Rental</button>
+        </form>
+        <div class="table-container">
+          <input type="text" id="rentalsSearch" placeholder="Search rentals..." class="search-box">
+          <table id="rentalsTable">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Platforms</th>
+                <th>Weekly Price</th>
+                <th>Monthly Price</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="users" class="section">
+        <h2>User Management</h2>
+        <div class="table-container">
+          <input type="text" id="usersSearch" placeholder="Search users..." class="search-box">
+          <table id="usersTable">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Joined</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="reports" class="section">
+        <h2>Reports</h2>
+        <div class="reports-grid">
+          <div class="report-card">
+            <h3>Sales Report</h3>
+            <button class="btn btn-primary" onclick="generateReport('sales')">Generate</button>
+          </div>
+          <div class="report-card">
+            <h3>Rental Report</h3>
+            <button class="btn btn-primary" onclick="generateReport('rentals')">Generate</button>
+          </div>
+          <div class="report-card">
+            <h3>User Activity</h3>
+            <button class="btn btn-primary" onclick="generateReport('users')">Generate</button>
+          </div>
+        </div>
+        <div id="reportOutput" style="margin-top: 2rem;"></div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Edit Modal -->
+  <div id="editModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2 id="modalTitle">Edit Item</h2>
+      <form id="editForm">
+        <!-- Dynamic content -->
+      </form>
+    </div>
+  </div>
+
+  <script src="adminPanel.js"></script>
+</body>
+</html>
