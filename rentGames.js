@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function () {
       platformKeys: ['switch', 'xbox'],
       week: 5,
       month: 16
-    }
+    }    
   ];
 
   // DOM references
@@ -81,39 +81,45 @@ document.addEventListener('DOMContentLoaded', function () {
   const platformFilter = document.getElementById('platformFilter');
   const modal = document.getElementById('rentModal');
   const modalMessage = document.getElementById('modalMessage');
-  const closeBtn = document.querySelector('.close');
+  const closeBtn = document.querySelector('.close-modal');
+  const modalBtn = document.querySelector('.modal-btn');
 
   // ---------- CREATE CARD ----------
   function createCard(game) {
     const card = document.createElement('div');
-    card.className = 'rental-card';
+    card.className = 'game-card';
     card.setAttribute('data-platforms', game.platformKeys.join(' '));
 
     card.innerHTML = `
-      <h3 class="card-title">${game.title}</h3>
-      <p class="rent-message" style="display:none; margin: 0.5rem 0; text-align: center;"></p>
-      <img src="${game.image}" alt="${game.title}" class="game-image">
-      <div class="rental-info" style="text-align: center;">
+      <div class="game-image">
+        <img src="${game.image}" alt="${game.title}">
+      </div>
+      <div class="game-info">
+        <h3>${game.title}</h3>
         <div class="platforms">
           ${game.platforms
             .map(
               (plat, i) =>
-                `<span class="platform-badge platform-${game.platformKeys[i]}">${plat}</span>`
+                `<span class="platform-tag">${plat}</span>`
             )
             .join('')}
         </div>
-        <p class="availability">Available Now</p>
-        <div class="rental-prices">
-          <span class="price-badge active" data-duration="week">$${game.week}/week</span>
-          <span class="price-badge" data-duration="month">$${game.month}/month</span>
+        <div class="pricing">
+          <div class="price-option">
+            <span class="price-label">Weekly</span>
+            <span class="price-value">$${game.week}</span>
+            <button type="button" class="rent-btn" data-duration="week" data-price="${game.week}" data-title="${game.title}">
+              Rent Week
+            </button>
+          </div>
+          <div class="price-option">
+            <span class="price-label">Monthly</span>
+            <span class="price-value">$${game.month}</span>
+            <button type="button" class="rent-btn" data-duration="month" data-price="${game.month}" data-title="${game.title}">
+              Rent Month
+            </button>
+          </div>
         </div>
-        <form class="rental-form" data-game-id="${game.id}">
-          <select class="duration-select">
-            <option value="1-week" data-price="${game.week}">1 Week ($${game.week})</option>
-            <option value="1-month" data-price="${game.month}">1 Month ($${game.month})</option>
-          </select>
-          <button type="submit" class="rent-btn">Rent Now</button>
-        </form>
       </div>
     `;
     return card;
@@ -122,93 +128,74 @@ document.addEventListener('DOMContentLoaded', function () {
   // ---------- RENDER ALL GAMES ----------
   function renderGameCards(games) {
     gameGrid.innerHTML = '';
+    if (games.length === 0) {
+      gameGrid.innerHTML = `
+        <div class="empty-state">
+          <i class="fas fa-gamepad"></i>
+          <h3>No games found</h3>
+          <p>Try adjusting your search or filter</p>
+        </div>
+      `;
+      return;
+    }
     games.forEach(game => gameGrid.appendChild(createCard(game)));
-    attachFormListeners();
+    attachRentListeners();
   }
 
   // ---------- EVENT HANDLING ----------
-  function attachFormListeners() {
-    const forms = document.querySelectorAll('.rental-form');
+  function attachRentListeners() {
+    const rentButtons = document.querySelectorAll('.rent-btn');
 
-    forms.forEach(form => {
-      const card = form.closest('.rental-card');
-      const priceBadges = card.querySelectorAll('.price-badge');
-      const durationSelect = card.querySelector('.duration-select');
-      const rentBtn = form.querySelector('.rent-btn');
-      const availability = card.querySelector('.availability');
-      const messageEl = card.querySelector('.rent-message');
-      const gameTitle = card.querySelector('.card-title').textContent;
-
-      // Sync badges with select
-      durationSelect.addEventListener('change', () => {
-        const selected = durationSelect.value.split('-')[1];
-        priceBadges.forEach(b =>
-          b.classList.toggle('active', b.getAttribute('data-duration') === selected)
-        );
-      });
-
-      priceBadges.forEach(badge => {
-        badge.addEventListener('click', () => {
-          const duration = badge.getAttribute('data-duration');
-          durationSelect.value = `1-${duration}`;
-          priceBadges.forEach(b =>
-            b.classList.toggle('active', b === badge)
-          );
-        });
-      });
-
-      // Handle rent form submit
-      form.addEventListener('submit', e => {
-        e.preventDefault();
-        const selectedOption = durationSelect.options[durationSelect.selectedIndex];
-        const duration = selectedOption.value.replace('-', ' ');
-        const price = selectedOption.getAttribute('data-price');
-
-        rentBtn.disabled = true;
-        rentBtn.textContent = 'Renting...';
-        messageEl.style.display = 'none';
-
-        setTimeout(() => {
-          rentBtn.disabled = false;
-          rentBtn.textContent = 'Rent Now';
-          availability.textContent = 'Rented - Returning Soon';
-          availability.style.color = '#f85149';
-          messageEl.textContent = `You have rented "${gameTitle}" for ${duration} at $${price}!`;
-          messageEl.style.color = '#4ade80';
-          messageEl.style.display = 'block';
-          modalMessage.textContent = messageEl.textContent;
-          modal.style.display = 'block';
-        }, 1200);
+    rentButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const title = button.getAttribute('data-title');
+        const duration = button.getAttribute('data-duration');
+        const price = button.getAttribute('data-price');
+        
+        // Show modal with rental confirmation
+        modalMessage.textContent = `You've rented "${title}" for ${duration === 'week' ? '1 Week' : '1 Month'} at $${price}. Enjoy your game!`;
+        modal.classList.add('show');
       });
     });
   }
 
-  // ---------- FILTERS ----------
-  function filterCards() {
+  // Close modal handlers
+  if (closeBtn) {
+    closeBtn.addEventListener('click', () => {
+      modal.classList.remove('show');
+    });
+  }
+
+  if (modalBtn) {
+    modalBtn.addEventListener('click', () => {
+      modal.classList.remove('show');
+    });
+  }
+
+  // Close modal on outside click
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.classList.remove('show');
+    }
+  });
+
+  // ---------- FILTER & SEARCH ----------
+  function filterGames() {
     const searchTerm = searchInput.value.toLowerCase();
-    const selectedPlatform = platformFilter.value.toLowerCase();
-    const cards = document.querySelectorAll('.rental-card');
+    const platformValue = platformFilter.value;
 
-    cards.forEach(card => {
-      const title = card.querySelector('.card-title').textContent.toLowerCase();
-      const platforms = card.getAttribute('data-platforms').toLowerCase();
-      const matchesSearch = title.includes(searchTerm);
-      const matchesPlatform = !selectedPlatform || platforms.includes(selectedPlatform);
-      card.style.display = matchesSearch && matchesPlatform ? 'block' : 'none';
+    const filteredGames = games.filter(game => {
+      const matchesSearch = game.title.toLowerCase().includes(searchTerm);
+      const matchesPlatform = platformValue === '' || game.platformKeys.includes(platformValue);
+      return matchesSearch && matchesPlatform;
     });
+
+    renderGameCards(filteredGames);
   }
 
-  searchInput.addEventListener('input', filterCards);
-  platformFilter.addEventListener('change', filterCards);
+  searchInput.addEventListener('input', filterGames);
+  platformFilter.addEventListener('change', filterGames);
 
-  // ---------- MODAL ----------
-  window.onclick = function (event) {
-    if (event.target === modal) modal.style.display = 'none';
-  };
-  closeBtn.onclick = function () {
-    modal.style.display = 'none';
-  };
-
-  // ---------- INIT ----------
+  // ---------- INITIAL RENDER ----------
   renderGameCards(games);
 });

@@ -22,6 +22,7 @@
       linear-gradient(180deg, #0b0f25 0%, #1c1c3a 50%, #0b0f25 100%);
     background-attachment: fixed;
     background-blend-mode: overlay, overlay, overlay, normal;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   }
 
   #particles-js {

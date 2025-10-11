@@ -5,56 +5,75 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>GameNest - Rent Games</title>
   <link rel="stylesheet" href="common-styles.css" />
-  <link rel="stylesheet" href="gameCenter.css" />
+  <link rel="stylesheet" href="rentGames.css" />
+  <script src="https://kit.fontawesome.com/5e38181f55.js" crossorigin="anonymous"></script>
 </head>
 <body>
+  <div id="particles-js"></div>
 
-<header class="gamenest-header">
-  <div class="header-container">
-    <a href="home.html" class="gamenest-logo">Game<span>Nest</span></a>
-    <nav class="header-nav">
-      <a href="home.html">Home</a>
-      <a href="gameCenter.html">Game Center</a>
-      <a href="rentGames.html" class="active">Rent Games</a>
-      <a href="bidding.html">Bidding</a>
-      <a href="profile.html">Profile</a>
-    </nav>
-    <div class="header-actions">
-      <a href="auth.html">Login</a>
-      <a href="auth.html">Sign Up</a>
+  <!-- Modern Classy Header -->
+  <header class="gamenest-header">
+    <div class="header-container">
+      <a href="home.html" class="gamenest-logo">Game<span>Nest</span></a>
+      
+      <nav class="header-nav">
+        <a href="home.html">Home</a>
+        <a href="gameCenter.html">Game Center</a>
+        <a href="rentGames.html" class="active">Rent Games</a>
+        <a href="bidding.html">Bidding</a>
+        <a href="profile.html">Profile</a>
+      </nav>
+      
+      <div class="header-actions">
+        <a href="auth.html" class="header-btn header-btn-secondary">Login</a>
+        <a href="auth.html" class="header-btn header-btn-primary">Sign Up</a>
+      </div>
+      
+      <div class="mobile-menu-toggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="rent-container">
+    <h1 class="section-title">Rent Premium Games</h1>
+    <p class="section-subtitle">Select your favorite game and rent it for a week or month across your preferred platforms</p>
+
+    <!-- Search & Filter Section -->
+    <div class="search-filter">
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInput" placeholder="Search games by name...">
+      </div>
+      <div class="filter-box">
+        <i class="fas fa-filter"></i>
+        <select id="platformFilter">
+          <option value="">All Platforms</option>
+          <option value="pc">PC</option>
+          <option value="ps">PlayStation</option>
+          <option value="xbox">Xbox</option>
+          <option value="switch">Switch</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Games Grid -->
+    <div class="game-grid" id="gameGrid"></div>
+  </div>
+
+  <!-- Rental Modal -->
+  <div id="rentModal" class="rent-modal">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <div class="modal-icon">✅</div>
+      <h2>Rental Successful!</h2>
+      <p id="modalMessage">Your rental has been confirmed. Enjoy your game!</p>
+      <button class="modal-btn">Continue Browsing</button>
     </div>
   </div>
-</header>
-
-<div class="container">
-  <h1 class="section-title">Rent Games Catalog</h1>
-  <p class="section-subtitle">Select your favorite game and rent it for a week or a month across your preferred platforms.</p>
-
-  <div class="search-filter">
-    <input type="text" id="searchInput" placeholder="Search games by name...">
-    <select id="platformFilter">
-      <option value="">All Platforms</option>
-      <option value="pc">PC</option>
-      <option value="ps">PlayStation</option>
-      <option value="xbox">Xbox</option>
-      <option value="switch">Switch</option>
-    </select>
-  </div>
-
-  <div class="game-grid" id="gameGrid">
-  </div>
-</div>
-
-<!-- Modal -->
-<div id="rentModal" class="modal">
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <h2>Rental Successful!</h2>
-    <p id="modalMessage">Your rental has been confirmed. Enjoy your game!</p>
-  </div>
-</div>
-
-<script src="rentGames.js"></script>
 
   <!-- Modern Classy Footer -->
   <footer class="gamenest-footer">
@@ -108,5 +127,17 @@
     </div>
   </footer>
 
+  <script>
+        // Mobile menu toggle
+    const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+    const headerNav = document.querySelector('.header-nav');
+    
+    if (mobileMenuToggle) {
+      mobileMenuToggle.addEventListener('click', () => {
+        headerNav.classList.toggle('active');
+      });
+    }
+  </script>
+  <script src="rentGames.js"></script>
 </body>
 </html>
