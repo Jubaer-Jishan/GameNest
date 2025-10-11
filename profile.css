@@ -22,6 +22,8 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: rgb(5, 27, 54) transparent;
 }
 
 body {
@@ -958,5 +960,378 @@ body {
 
   .profile-nav a::after {
     bottom: -4px;
+  }
+}
+
+/* ==================== PROFILE PAGE PREMIUM ANIMATIONS ==================== */
+
+/* Smooth Page Entry */
+body {
+  animation: fadeIn 0.6s ease-out;
+}
+
+/* Profile Header Premium */
+.profile-header {
+  animation: slideDown 0.5s ease-out;
+  transition: all 0.3s ease;
+}
+
+.profile-avatar {
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.profile-avatar:hover {
+  transform: scale(1.05) rotate(2deg);
+  box-shadow: 
+    0 20px 40px rgba(96, 165, 250, 0.3),
+    0 0 60px rgba(167, 139, 250, 0.2);
+}
+
+/* Profile Stats Premium */
+.stat-card {
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(96, 165, 250, 0.1), transparent);
+  transition: left 0.6s ease;
+  z-index: 0;
+}
+
+.stat-card:hover::before {
+  left: 100%;
+}
+
+.stat-card:hover {
+  transform: translateY(-8px) scale(1.03);
+  border-color: rgba(96, 165, 250, 0.5);
+  box-shadow: 
+    0 15px 35px rgba(8, 12, 32, 0.7),
+    0 0 50px rgba(96, 165, 250, 0.3);
+}
+
+.stat-value {
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover .stat-value {
+  color: #60a5fa;
+  transform: scale(1.1);
+}
+
+/* Achievement Badges Premium */
+.achievement-badge {
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+}
+
+.achievement-badge::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle, rgba(96, 165, 250, 0.2), transparent);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  border-radius: 12px;
+}
+
+.achievement-badge:hover::after {
+  opacity: 1;
+}
+
+.achievement-badge:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 15px 30px rgba(96, 165, 250, 0.3);
+}
+
+.achievement-badge.locked {
+  transition: all 0.3s ease;
+}
+
+.achievement-badge.locked:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Game Library Cards Premium */
+.game-library-card {
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+}
+
+.game-library-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(96, 165, 250, 0.15), transparent);
+  transition: left 0.6s ease;
+  z-index: 1;
+}
+
+.game-library-card:hover::before {
+  left: 100%;
+}
+
+.game-library-card:hover {
+  transform: translateY(-10px) scale(1.02);
+  border-color: rgba(96, 165, 250, 0.4);
+  box-shadow: 
+    0 20px 40px rgba(8, 12, 32, 0.6),
+    0 0 60px rgba(96, 165, 250, 0.2);
+}
+
+.game-library-card img {
+  transition: transform 0.6s ease;
+}
+
+.game-library-card:hover img {
+  transform: scale(1.08);
+}
+
+/* Friends List Premium */
+.friend-item {
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.friend-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, #60a5fa, #a78bfa);
+  transform: scaleY(0);
+  transition: transform 0.3s ease;
+}
+
+.friend-item:hover::before {
+  transform: scaleY(1);
+}
+
+.friend-item:hover {
+  background: rgba(96, 165, 250, 0.1);
+  transform: translateX(5px);
+  box-shadow: 0 5px 15px rgba(96, 165, 250, 0.2);
+}
+
+.friend-avatar {
+  transition: all 0.3s ease;
+}
+
+.friend-item:hover .friend-avatar {
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 5px 15px rgba(96, 165, 250, 0.3);
+}
+
+/* Activity Timeline Premium */
+.timeline-item {
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.timeline-item::after {
+  content: '';
+  position: absolute;
+  left: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 12px;
+  background: #60a5fa;
+  border-radius: 50%;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.timeline-item:hover::after {
+  opacity: 1;
+  box-shadow: 0 0 20px rgba(96, 165, 250, 0.6);
+}
+
+.timeline-item:hover {
+  background: rgba(96, 165, 250, 0.05);
+  transform: translateX(5px);
+  border-left-color: #60a5fa;
+}
+
+/* Profile Navigation Premium */
+.profile-nav a {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.profile-nav a::after {
+  transition: all 0.3s ease;
+}
+
+.profile-nav a:hover {
+  color: #60a5fa;
+  transform: translateY(-2px);
+}
+
+.profile-nav a.active {
+  color: #60a5fa;
+}
+
+/* Buttons Premium Effects */
+.btn {
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+}
+
+.btn:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 
+    0 10px 30px rgba(96, 165, 250, 0.4),
+    0 0 40px rgba(96, 165, 250, 0.3);
+}
+
+.btn:active {
+  transform: translateY(-1px) scale(1.02);
+}
+
+/* Section Headers Premium */
+h1, h2, h3, .section-title {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+h2::after, h3::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #60a5fa, #a78bfa);
+  transition: width 0.5s ease;
+}
+
+h2:hover::after, h3:hover::after {
+  width: 100%;
+}
+
+/* Progress Bars Premium */
+.progress-bar {
+  transition: all 0.3s ease;
+}
+
+.progress-bar:hover {
+  box-shadow: 0 0 20px rgba(96, 165, 250, 0.5);
+}
+
+.progress-fill {
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Level Badge Premium Glow */
+.level-badge {
+  transition: all 0.3s ease;
+}
+
+.level-badge:hover {
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 
+    0 10px 25px rgba(96, 165, 250, 0.4),
+    0 0 40px rgba(96, 165, 250, 0.3);
+}
+
+/* Online Status Indicator */
+.online-indicator {
+  animation: onlinePulseSm 2s ease-in-out infinite;
+}
+
+/* ==================== KEYFRAME ANIMATIONS ==================== */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes onlinePulseSm {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.1);
+  }
+}
+
+/* Responsive Premium Adjustments */
+@media (max-width: 768px) {
+  .stat-card:hover {
+    transform: translateY(-5px) scale(1.02);
+  }
+  
+  .game-library-card:hover {
+    transform: translateY(-5px) scale(1.01);
+  }
+  
+  .achievement-badge:hover {
+    transform: translateY(-3px) scale(1.03);
+  }
+}
+
+/* Performance Optimization */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

@@ -1,11 +1,17 @@
- * {margin: 0; padding: 0; box-sizing: border-box;}
-    body {
-      font-family: Arial, sans-serif;
-      background: #0d0d0d;
-      color: #fff;
-    }
-    a {text-decoration: none; color: inherit;}
-    /* Navbar */
+ *
+ {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: rgb(5, 27, 54) transparent;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
 body {
   background: 
     radial-gradient(circle at 20% 20%, rgba(255, 0, 150, 0.2), transparent 60%),
@@ -14,6 +20,7 @@ body {
   background-attachment: fixed;
   background-blend-mode: overlay, overlay, normal;
   color: #e0e0e0;
+  font-family: Arial, sans-serif;
 }
 .navbar {
   position: fixed;
@@ -131,50 +138,66 @@ body {
 
     /* Containers */
     .container {
-      padding: 20px 40px;
+      padding: 60px 40px;
       margin-bottom: 30px;
     }
     .container h2 {
-      font-size: 22px;
-      margin-bottom: 10px;
+      font-size: 2rem;
+      margin-bottom: 30px;
+      font-weight: 700;
+      color: #fff;
     }
 
     /* Scrollable Rows */
     .scroll-row {
       display: flex;
-      gap: 15px;
+      gap: 20px;
       overflow-x: auto;
       scrollbar-width: thin;
       scrollbar-color: #888 transparent;
+      padding: 10px 0;
     }
-    .scroll-row::-webkit-scrollbar {height: 8px;}
-    .scroll-row::-webkit-scrollbar-thumb {background: #555; border-radius: 5px;}
+    .scroll-row::-webkit-scrollbar {
+      height: 8px;
+    }
+    .scroll-row::-webkit-scrollbar-thumb {
+      background: #555;
+      border-radius: 5px;
+    }
+    .scroll-row::-webkit-scrollbar-thumb:hover {
+      background: #777;
+    }
 
     /* Card Style */
     .card {
-      min-width: 280px;
-      height: 160px;
-      border-radius: 10px;
+      min-width: 320px;
+      height: 180px;
+      border-radius: 12px;
       overflow: hidden;
       position: relative;
       flex-shrink: 0;
       background: #1f1f1f;
       cursor: pointer;
-      transition: transform 0.3s;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     }
     .card img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
-    .card:hover {transform: scale(1.05);}
+    .card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 30px rgba(96, 165, 250, 0.3);
+    }
     .card-title {
       position: absolute;
-      bottom: 10px;
-      left: 10px;
+      bottom: 15px;
+      left: 15px;
       font-weight: bold;
-      font-size: 16px;
-      text-shadow: 0 0 5px rgba(0,0,0,0.7);
+      font-size: 1.1rem;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+      color: #fff;
     }
 
 
@@ -182,16 +205,18 @@ body {
 .carousel-container {
   position: relative;
   max-width: 100%;
-  margin: 35px auto;
+  margin: 60px auto;
   overflow: hidden;
+  padding: 0 40px;
 }
 
-.sliderTitle{
+.sliderTitle {
   color: white;
-  margin: 25px;
+  margin: 25px 0 40px 0;
   text-align: center;
-  font-weight: 500;
-  letter-spacing: 0.2em;
+  font-weight: 600;
+  font-size: 2rem;
+  letter-spacing: 0.1em;
 }
 
 .carousel-track {
@@ -203,12 +228,13 @@ body {
 .carousel-slide {
   position: relative;
   overflow: hidden;
-  border-radius: 10px;
-  min-width: 200px;
-  height: 330px;
-  margin: 10px 7px;
+  border-radius: 12px;
+  min-width: 220px;
+  height: 340px;
+  margin: 10px 10px;
   cursor: pointer;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  flex-shrink: 0;
 }
 
 .carousel-slide::before {
@@ -236,13 +262,14 @@ body {
   width: 100%;
   height: 100%;
   display: block;
-  border-radius: 10px;
+  border-radius: 12px;
+  object-fit: cover;
 }
 
 .slide-overlay {
   position: absolute;
   bottom: 0;
-  border-radius: 10px;
+  border-radius: 12px;
   left: 0;
   width: 100%;
   height: 90%;
@@ -301,31 +328,797 @@ body {
 /* navigation btn container */
 .carousel-buttons {
   position: absolute;
-  top: 60%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
   display: flex;
   justify-content: space-between;
-  width: 100%;
+  pointer-events: none;
+  z-index: 10;
 }
 
 
 .carousel-btn {
+  pointer-events: all;
   border: none;
-  padding: 96px 45px;
+  padding: 80px 30px;
   cursor: pointer;
   font-size: 20px;
-  margin: 5px;
-  background: linear-gradient(to right, rgba(0,0,0,1), rgba(255,255,255,0));
+  background: linear-gradient(to right, rgba(0,0,0,0.8), transparent);
   color: white;
   transition: all 0.3s ease;
-  transform: scale(1.2);
+  backdrop-filter: blur(5px);
+}
+
+.carousel-btn:last-child {
+  background: linear-gradient(to left, rgba(0,0,0,0.8), transparent);
 }
 
 .carousel-btn:hover {
-  background: #00000072;
-  color: #fff;
-  transform: scale(1.1);
+  background: rgba(0, 0, 0, 0.9);
+  transform: scale(1.05);
 }
 /*slide2*/
 
+/* ==================== HERO VIDEO SECTION STYLING ==================== */
+.hero-video-section {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: 700px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0;
+}
+
+.hero-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+  z-index: 1;
+}
+
+.video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(8, 11, 24, 0.7) 0%,
+    rgba(15, 23, 42, 0.85) 50%,
+    rgba(8, 11, 24, 0.9) 100%
+  );
+  z-index: 2;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 3;
+  text-align: center;
+  max-width: 900px;
+  padding: 40px;
+  color: #fff;
+}
+
+.hero-title {
+  font-size: 4rem;
+  font-weight: 800;
+  margin-bottom: 20px;
+  line-height: 1.2;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  position: relative;
+}
+
+.hero-title span {
+  background: linear-gradient(
+    90deg,
+    #60a5fa,
+    #a78bfa,
+    #ec4899,
+    #f59e0b,
+    #10b981,
+    #60a5fa
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientShift 4s ease-in-out infinite;
+  position: relative;
+  display: inline-block;
+  filter: drop-shadow(0 0 20px rgba(96, 165, 250, 0.3));
+}
+
+.hero-subtitle {
+  font-size: 1.3rem;
+  margin-bottom: 40px;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  line-height: 1.6;
+}
+
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  margin-top: 50px;
+}
+
+.stat-item {
+  text-align: center;
+  padding: 20px 30px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(96, 165, 250, 0.1), transparent);
+  transition: left 0.6s ease;
+}
+
+.stat-item:hover::before {
+  left: 100%;
+}
+
+.stat-item:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 10px 30px rgba(96, 165, 250, 0.3);
+}
+
+.stat-number {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #60a5fa;
+  margin-bottom: 5px;
+  transition: all 0.3s ease;
+}
+
+.stat-item:hover .stat-number {
+  transform: scale(1.1);
+}
+
+.stat-label {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  cursor: pointer;
+  animation: smoothFloat 2s ease-in-out infinite;
+}
+
+.scroll-arrow {
+  margin-top: 10px;
+  font-size: 1.5rem;
+}
+
+/* ==================== GENRE SECTION STYLING ==================== */
+.genre-section {
+  padding: 80px 40px;
+  background: transparent;
+}
+
+.section-title {
+  font-size: 2.8rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+  color: #fff;
+  text-align: center;
+  position: relative;
+  display: block;
+  transition: all 0.3s ease;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #60a5fa, #a78bfa);
+  transition: width 0.5s ease;
+  border-radius: 2px;
+}
+
+.section-title:hover::after {
+  width: 200px;
+}
+
+.section-subtitle {
+  text-align: center;
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 60px;
+  font-weight: 400;
+}
+
+.genre-grid {
+  display: flex;
+  gap: 30px;
+  margin-top: 50px;
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.genre-card {
+  position: relative;
+  height: 320px;
+  width: 280px;
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.genre-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.7s ease;
+  z-index: 1;
+}
+
+.genre-card:hover::before {
+  left: 100%;
+}
+
+.genre-card:hover {
+  transform: translateY(-10px) scale(1.03);
+  box-shadow: 0 20px 40px rgba(96, 165, 250, 0.3), 0 0 60px rgba(167, 139, 250, 0.2);
+}
+
+.genre-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s ease;
+}
+
+.genre-card:hover img {
+  transform: scale(1.1);
+}
+
+.genre-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(8, 11, 24, 0.7) 60%,
+    rgba(8, 11, 24, 0.95) 100%
+  );
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 25px;
+  color: #fff;
+  transition: all 0.4s ease;
+}
+
+.genre-card:hover .genre-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(96, 165, 250, 0.15) 0%,
+    rgba(8, 11, 24, 0.85) 60%,
+    rgba(8, 11, 24, 0.95) 100%
+  );
+}
+
+.genre-overlay h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  letter-spacing: 0.5px;
+}
+
+.genre-overlay p {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.5;
+}
+
+/* ==================== FEATURED COLLECTIONS SECTION ==================== */
+.featured-section {
+  padding: 80px 40px;
+}
+
+.collection-block {
+  margin-bottom: 60px;
+}
+
+.collection-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 25px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.game-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+}
+
+.game-card {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.game-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(96, 165, 250, 0.15), transparent);
+  transition: left 0.6s ease;
+  z-index: 1;
+}
+
+.game-card:hover::before {
+  left: 100%;
+}
+
+.game-card:hover {
+  transform: translateY(-10px);
+  border-color: rgba(96, 165, 250, 0.4);
+  box-shadow: 
+    0 20px 40px rgba(8, 12, 32, 0.7),
+    0 0 60px rgba(96, 165, 250, 0.25);
+}
+
+.game-card img {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.game-card:hover img {
+  transform: scale(1.1);
+}
+
+.game-info {
+  padding: 20px;
+  background: linear-gradient(
+    180deg,
+    rgba(8, 11, 24, 0.9) 0%,
+    rgba(15, 23, 42, 0.95) 100%
+  );
+}
+
+.game-info h4 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #fff;
+  transition: color 0.3s ease;
+}
+
+.game-card:hover .game-info h4 {
+  color: #60a5fa;
+}
+
+.game-info p {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ==================== PREMIUM ANIMATIONS ==================== */
+body {
+  animation: fadeIn 0.6s ease-out;
+}
+
+.hero-content h1 {
+  animation: slideInLeft 0.8s ease-out 0.3s backwards;
+}
+
+.hero-content p {
+  animation: slideInLeft 0.8s ease-out 0.4s backwards;
+}
+
+.hero-stats {
+  animation: fadeInUp 0.8s ease-out 0.5s backwards;
+}
+
+/* Update existing card styles */
+.card {
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+}
+
+.card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(96, 165, 250, 0) 0%,
+    rgba(167, 139, 250, 0.1) 50%,
+    rgba(96, 165, 250, 0) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  border-radius: 10px;
+}
+
+.card:hover::after {
+  opacity: 1;
+}
+
+/* Update carousel slide styles */
+.carousel-slide {
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.carousel-slide::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+  top: -100%;
+  left: -100%;
+  transition: all 0.6s ease;
+  pointer-events: none;
+}
+
+.carousel-slide:hover::before {
+  top: 100%;
+  left: 100%;
+}
+
+.carousel-slide:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 15px 40px rgba(96, 165, 250, 0.3), 0 0 50px rgba(167, 139, 250, 0.2);
+}
+
+/* ==================== KEYFRAME ANIMATIONS ==================== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes smoothFloat {
+  0%,
+  100% {
+    transform: translateY(0) translateX(-50%);
+  }
+  50% {
+    transform: translateY(-8px) translateX(-50%);
+  }
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% center;
+  }
+  50% {
+    background-position: 100% center;
+  }
+  100% {
+    background-position: 0% center;
+  }
+}
+
+/* ==================== RESPONSIVE DESIGN ==================== */
+@media (max-width: 992px) {
+  .hero-title {
+    font-size: 3rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.1rem;
+  }
+
+  .hero-stats {
+    gap: 30px;
+  }
+
+  .stat-number {
+    font-size: 2rem;
+  }
+
+  .genre-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+  }
+
+  .genre-card {
+    height: 340px;
+  }
+  
+  .genre-overlay h3 {
+    font-size: 1.8rem;
+  }
+  
+  .genre-overlay p {
+    font-size: 1rem;
+  }
+  
+  .section-title {
+    font-size: 2.5rem;
+  }
+  
+  .section-subtitle {
+    font-size: 1.1rem;
+  }
+
+  .carousel-slide {
+    min-width: 200px;
+    height: 320px;
+  }
+  
+  .game-grid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+  }
+  
+  .game-card img {
+    height: 260px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.5rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+
+  .hero-stats {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .stat-item {
+    padding: 15px 25px;
+  }
+
+  .section-title {
+    font-size: 2.2rem;
+  }
+  
+  .section-subtitle {
+    font-size: 1rem;
+    margin-bottom: 40px;
+  }
+
+  .genre-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .genre-card {
+    height: 320px;
+  }
+  
+  .genre-overlay h3 {
+    font-size: 1.6rem;
+  }
+  
+  .genre-overlay p {
+    font-size: 0.95rem;
+  }
+
+  .carousel-slide {
+    min-width: 180px;
+    height: 300px;
+  }
+
+  .card {
+    min-width: 280px;
+    height: 160px;
+  }
+
+  .carousel-btn {
+    padding: 60px 20px;
+  }
+
+  .genre-card:hover {
+    transform: translateY(-5px) scale(1.02);
+  }
+
+  .card:hover {
+    transform: scale(1.03);
+  }
+
+  .carousel-slide:hover {
+    transform: translateY(-5px) scale(1.01);
+  }
+  
+  .game-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+  }
+  
+  .game-card img {
+    height: 240px;
+  }
+  
+  .collection-title {
+    font-size: 1.5rem;
+  }
+  
+  .featured-section {
+    padding: 60px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .hero-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .stat-number {
+    font-size: 1.8rem;
+  }
+
+  .section-title {
+    font-size: 1.8rem;
+  }
+  
+  .section-subtitle {
+    font-size: 0.9rem;
+    margin-bottom: 30px;
+  }
+  
+  .genre-grid {
+    gap: 15px;
+  }
+  
+  .genre-card {
+    height: 280px;
+  }
+  
+  .genre-overlay {
+    padding: 20px;
+  }
+  
+  .genre-overlay h3 {
+    font-size: 1.4rem;
+  }
+  
+  .genre-overlay p {
+    font-size: 0.85rem;
+  }
+
+  .carousel-slide {
+    min-width: 160px;
+    height: 280px;
+  }
+
+  .carousel-container {
+    padding: 0 20px;
+  }
+  
+  .game-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .game-card img {
+    height: 220px;
+  }
+  
+  .collection-title {
+    font-size: 1.3rem;
+  }
+  
+  .featured-section {
+    padding: 40px 20px;
+  }
+  
+  .game-info {
+    padding: 15px;
+  }
+  
+  .game-info h4 {
+    font-size: 1.1rem;
+  }
+}
+
+/* Performance Optimization */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

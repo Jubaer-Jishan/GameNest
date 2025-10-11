@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>GameNest - Explore</title>
   <link rel="stylesheet" href="common-styles.css" />
+  <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="gameCenter.css" />
  
 </head>
@@ -50,33 +51,87 @@
    </div>
 </header>
 
-<div class="banner">
-  <video autoplay muted loop playsinline class="banner-video">
+<!-- Premium Hero Video Section -->
+<section class="hero-video-section">
+  <div class="video-overlay"></div>
+  <video autoplay muted loop playsinline class="hero-video">
     <source src="images/genre.mp4" type="video/mp4">
   </video>
-  <div class="banner-text">
-    🎮 GameNest - Discover Epic Games!
+  <div class="hero-content">
+    <h1 class="hero-title">Discover Your Next <span>Epic Adventure</span></h1>
+    <p class="hero-subtitle">Explore thousands of games across all genres. Trade, rent, or bid on your favorites.</p>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-number">10K+</div>
+        <div class="stat-label">Games</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">50K+</div>
+        <div class="stat-label">Players</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">24/7</div>
+        <div class="stat-label">Support</div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <span>Scroll to Explore</span>
+    <div class="scroll-arrow">↓</div>
+  </div>
+</section>
+
+<!-- Browse by Genre Section -->
+<div class="container genre-section">
+  <h2 class="section-title">Browse by Genre</h2>
+  <p class="section-subtitle">Find your perfect game across multiple categories</p>
+  <div class="genre-grid">
+    <div class="genre-card">
+      <img src="sliderImage/1.jpeg" alt="Adventure">
+      <div class="genre-overlay">
+        <h3>Adventure</h3>
+        <p>Epic journeys await</p>
+      </div>
+    </div>
+    <div class="genre-card">
+      <img src="sliderImage/7.jpeg" alt="Action">
+      <div class="genre-overlay">
+        <h3>Action</h3>
+        <p>Heart-pounding gameplay</p>
+      </div>
+    </div>
+    <div class="genre-card">
+      <img src="sliderImage/8.jpg" alt="Sports">
+      <div class="genre-overlay">
+        <h3>Sports</h3>
+        <p>Compete and conquer</p>
+      </div>
+    </div>
+    <div class="genre-card">
+      <img src="sliderImage/16.jpg" alt="Horror">
+      <div class="genre-overlay">
+        <h3>Horror</h3>
+        <p>Face your fears</p>
+      </div>
+    </div>
+    <div class="genre-card">
+      <img src="sliderImage/3.jpeg" alt="Stealth">
+      <div class="genre-overlay">
+        <h3>Stealth</h3>
+        <p>Master the shadows</p>
+      </div>
+    </div>
   </div>
 </div>
 
-<div class="container">
-  <h2>Genre</h2>
-  <div class="scroll-row">
-    <div class="card">  <img src="sliderImage/genre adventure.jpg" alt="4"><div class="card-title">Adventure</div></div>
-    <div class="card"><img src="sliderImage/genre action.avif" alt="4"><div class="card-title">Action</div></div>
-    <div class="card"><img src="sliderImage/genre sports.jpg" alt="4"><div class="card-title">Sports</div></div>
-    <div class="card"><img src="sliderImage/genre horror.avif" alt="4"><div class="card-title">Horror</div></div>
-        <div class="card"><img src="sliderImage/genre stealth.avif" alt="4"><div class="card-title">Stealth Games</div></div>
-  </div>
-</div>
 
 
-
-  <div class="container carousel-container">
-    <h2 class="sliderTitle"> Top Rated</h2>
+<!-- Top Rated Games Carousel -->
+<div class="container carousel-container">
+    <h2 class="sliderTitle">Trending Now</h2>
     <div class="carousel-track">
       <div class="carousel-slide">
-        <img src="sliderImage/top1.jpeg" alt="1">
+        <img src="sliderImage/1.jpeg" alt="1">
         <div class="slide-overlay">
           <h3 class="slide-title">Red Dead Redemption 2</h3>
           <p class="slide-desc">Ride into the wild west and live your outlaw legend.</p>
@@ -84,7 +139,7 @@
         </div>
       </div>
       <div class="carousel-slide">
-        <img src="sliderImage/22.webp" alt="2">
+        <img src="sliderImage/2.jpeg" alt="2">
         <div class="slide-overlay">
           <h3 class="slide-title">Bloodborne</h3>
           <p class="slide-desc">Face nightmarish beasts in a dark, gothic adventure..</p>
@@ -155,47 +210,6 @@
           <a href="#" class="slide-btn">Explore</a>
         </div>
       </div>
-      <div class="carousel-slide">
-        <img src="sliderImage/11.jpg" alt="11">
-        <div class="slide-overlay">
-          <h3 class="slide-title">Elden Ring</h3>
-          <p class="slide-desc">Explore a vast, legendary world of danger and discovery.</p>
-          <a href="#" class="slide-btn">Explore</a>
-        </div>
-      </div>
-      <div class="carousel-slide">
-        <img src="sliderImage/14.jpg" alt="14">
-        <div class="slide-overlay">
-          <h3 class="slide-title">The Witcher 3</h3>
-          <p class="slide-desc">Hunt monsters and craft your destiny as Geralt.</p>
-          <a href="#" class="slide-btn">Explore</a>
-        </div>
-      </div>
-      <div class="carousel-slide">
-        <img src="sliderImage/13.jpg" alt="13">
-        <div class="slide-overlay">
-          <h3 class="slide-title">Black Myth: Wukong</h3>
-          <p class="slide-desc">Embark on an epic journey with the Monkey King.</p>
-          <a href="#" class="slide-btn">Explore</a>
-        </div>
-      </div>
-      <div class="carousel-slide">
-        <img src="sliderImage/15.jpg" alt="15">
-        <div class="slide-overlay">
-          <h3 class="slide-title">Spider-Man: Miles Morales</h3>
-          <p class="slide-desc">Swing through the city as the next Spider-Man hero.</p>
-          <a href="#" class="slide-btn">Explore</a>
-        </div>
-      </div>
-      <div class="carousel-slide">
-        <img src="sliderImage/16.jpg" alt="16">
-        <div class="slide-overlay">
-          <h3 class="slide-title">Until Dawn</h3>
-          <p class="slide-desc">Survival horror where every choice seals your fate.</p>
-          <a href="#" class="slide-btn">Explore</a>
-        </div>
-      </div>
-    </div>
   
     <div class="carousel-buttons">
       <button class="carousel-btn prev">&#10094;</button>
@@ -203,39 +217,149 @@
     </div>
   </div>
 
-
-
-
-
-<div class="container adventure">
-  <h2> Adventure</h2>
-  <div class="scroll-row">
-    <!-- jubu de -->
+<!-- Featured Collections -->
+<div class="container featured-section">
+  <h2 class="section-title">Featured Collections</h2>
+  <p class="section-subtitle">Handpicked selections for every type of gamer</p>
+  
+  <!-- Adventure Games -->
+  <div class="collection-block">
+    <h3 class="collection-title">🗺️ Adventure Awaits</h3>
+    <div class="game-grid">
+      <div class="game-card">
+        <img src="sliderImage/1.jpeg" alt="Adventure Game">
+        <div class="game-info">
+          <h4>Red Dead Redemption 2</h4>
+          <p>Open World • Action</p>
+        </div>
+      </div>
+      <div class="game-card">
+        <img src="sliderImage/5.jpeg" alt="Adventure Game">
+        <div class="game-info">
+          <h4>Uncharted 4</h4>
+          <p>Adventure • Treasure Hunt</p>
+        </div>
+      </div>
+      <div class="game-card">
+        <img src="sliderImage/14.jpg" alt="Adventure Game">
+        <div class="game-info">
+          <h4>The Witcher 3</h4>
+          <p>RPG • Fantasy</p>
+        </div>
+      </div>
+      <div class="game-card">
+        <img src="sliderImage/12.jpg" alt="Adventure Game">
+        <div class="game-info">
+          <h4>Assassin's Creed: Mirage</h4>
+          <p>Stealth • Adventure</p>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
-<div class="container action">
-  <h2>Action</h2>
-  <div class="scroll-row">
-    <!-- jubu de -->
-  </div>
-</div>
-<div class="container sports">
-  <h2>Sports</h2>
-  <div class="scroll-row">
-    <!-- jubu de-->
-  </div>
-</div>
 
-<div class="container horror">
-  <h2>Horror</h2>
-  <div class="scroll-row">
-    <!-- jubu de -->
+  <!-- Action Games -->
+  <div class="collection-block">
+    <h3 class="collection-title">⚔️ Action-Packed Thrills</h3>
+    <div class="game-grid">
+      <div class="game-card">
+        <img src="sliderImage/7.jpeg" alt="Action Game">
+        <div class="game-info">
+          <h4>Call of Duty</h4>
+          <p>FPS • Multiplayer</p>
+        </div>
+      </div>
+      <div class="game-card">
+        <img src="sliderImage/4.jpeg" alt="Action Game">
+        <div class="game-info">
+          <h4>God of War: Ascension</h4>
+          <p>Hack & Slash • Mythology</p>
+        </div>
+      </div>
+      <div class="game-card">
+        <img src="sliderImage/10.jpg" alt="Action Game">
+        <div class="game-info">
+          <h4>God of War (2018)</h4>
+          <p>Action • Adventure</p>
+        </div>
+      </div>
+      <div class="game-card">
+        <img src="sliderImage/15.jpg" alt="Action Game">
+        <div class="game-info">
+          <h4>Spider-Man: Miles Morales</h4>
+          <p>Super Hero • Action</p>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
-<div class="container stealth games">
-  <h2>Stealth Games</h2>
-  <div class="scroll-row">
-    <!-- jube de -->
+
+  <!-- Sports Games -->
+  <div class="collection-block">
+    <h3 class="collection-title">⚽ Sports Champions</h3>
+    <div class="game-grid">
+      <div class="game-card">
+        <img src="sliderImage/8.jpg" alt="Sports Game">
+        <div class="game-info">
+          <h4>FIFA 26 Ultimate</h4>
+          <p>Football • Simulation</p>
+        </div>
+      </div>
+      <div class="game-card">
+        <img src="sliderImage/9.jpg" alt="Sports Game">
+        <div class="game-info">
+          <h4>NBA 2K</h4>
+          <p>Basketball • Sports</p>
+        </div>
+      </div>
+      <div class="game-card">
+        <img src="sliderImage/6.jpeg" alt="Racing Game">
+        <div class="game-info">
+          <h4>Racing Legends</h4>
+          <p>Racing • Simulation</p>
+        </div>
+      </div>
+      <div class="game-card">
+        <img src="sliderImage/11.jpg" alt="Sports Game">
+        <div class="game-info">
+          <h4>Elden Ring</h4>
+          <p>RPG • Dark Fantasy</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Horror Games -->
+  <div class="collection-block">
+    <h3 class="collection-title">👻 Horror & Survival</h3>
+    <div class="game-grid">
+      <div class="game-card">
+        <img src="sliderImage/16.jpg" alt="Horror Game">
+        <div class="game-info">
+          <h4>Until Dawn</h4>
+          <p>Horror • Choice-Based</p>
+        </div>
+      </div>
+      <div class="game-card">
+        <img src="sliderImage/2.jpeg" alt="Horror Game">
+        <div class="game-info">
+          <h4>Bloodborne</h4>
+          <p>Horror • Action RPG</p>
+        </div>
+      </div>
+      <div class="game-card">
+        <img src="sliderImage/6.jpeg" alt="Horror Game">
+        <div class="game-info">
+          <h4>Dark Souls 3</h4>
+          <p>Dark Fantasy • RPG</p>
+        </div>
+      </div>
+      <div class="game-card">
+        <img src="sliderImage/13.jpg" alt="Action Game">
+        <div class="game-info">
+          <h4>Black Myth: Wukong</h4>
+          <p>Action • Mythology</p>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -249,6 +373,7 @@
         <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
         <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
         <a href="#" aria-label="Discord"><i class="fab fa-discord"></i></a>
+        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
         <a href="#" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
       </div>
     </div>

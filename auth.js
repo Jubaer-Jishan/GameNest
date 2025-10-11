@@ -317,6 +317,16 @@ document.addEventListener("DOMContentLoaded", () => {
       if (response.ok && result.success) {
         const rememberSelected = rememberCheckbox ? rememberCheckbox.checked : false;
 
+        // Save user data to localStorage for profile page
+        if (result.user) {
+          localStorage.setItem('currentUser', JSON.stringify({
+            id: result.user.id,
+            email: result.user.email,
+            fullName: result.user.full_name,
+            loginTime: new Date().toISOString()
+          }));
+        }
+
         if (rememberCheckbox) {
           await updateRememberMe(email, rememberSelected, password);
         }

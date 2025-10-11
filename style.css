@@ -5,6 +5,8 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    scrollbar-width: thin;
+    scrollbar-color: rgb(5, 27, 54) transparent;
   }
   html {
     scroll-behavior: smooth;
@@ -664,4 +666,334 @@
       margin-bottom: 30px;
     }
   }
+  
+/* ==================== HOME PAGE PREMIUM ANIMATIONS ==================== */
+
+/* Smooth Page Entry */
+body {
+  animation: fadeIn 0.6s ease-out;
+}
+
+/* Navbar Premium Effects */
+nav {
+  animation: slideDown 0.5s ease-out;
+  transition: all 0.3s ease;
+}
+
+.logo {
+  transition: all 0.3s ease;
+}
+
+.logo:hover {
+  transform: scale(1.05);
+  text-shadow: 0 0 20px rgba(96, 165, 250, 0.6);
+}
+
+nav a {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+nav a::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #60a5fa, #a78bfa);
+  transition: width 0.3s ease;
+}
+
+nav a:hover::after {
+  width: 100%;
+}
+
+nav a:hover {
+  color: #60a5fa;
+  transform: translateY(-2px);
+}
+
+/* Hero Section Premium */
+.hero {
+  animation: fadeInUp 0.8s ease-out 0.2s backwards;
+}
+
+.hero-text h1 {
+  animation: slideInLeft 0.8s ease-out 0.3s backwards;
+}
+
+.hero-text p {
+  animation: slideInLeft 0.8s ease-out 0.4s backwards;
+}
+
+.hero-buttons {
+  animation: fadeInUp 0.8s ease-out 0.5s backwards;
+}
+
+.btn-primary, .btn-secondary {
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::before, .btn-secondary::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+}
+
+.btn-primary:hover::before, .btn-secondary:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.btn-primary:hover, .btn-secondary:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 
+    0 10px 30px rgba(96, 165, 250, 0.4),
+    0 0 40px rgba(96, 165, 250, 0.3);
+}
+
+.btn-primary:active, .btn-secondary:active {
+  transform: translateY(-1px) scale(1.02);
+}
+
+/* Hero Video Premium */
+.hero-video {
+  animation: slideInRight 0.8s ease-out 0.4s backwards;
+  transition: all 0.4s ease;
+}
+
+.hero-video:hover {
+  transform: scale(1.02) translateY(-5px);
+  box-shadow: 0 20px 60px rgba(96, 165, 250, 0.3);
+}
+
+.hero-video video {
+  transition: transform 0.5s ease;
+}
+
+.hero-video:hover video {
+  transform: scale(1.05);
+}
+
+/* Features Section Premium */
+.features {
+  animation: fadeInUp 0.8s ease-out 0.6s backwards;
+}
+
+.feature-card {
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(96, 165, 250, 0.1), transparent);
+  transition: left 0.6s ease;
+  z-index: 0;
+}
+
+.feature-card:hover::before {
+  left: 100%;
+}
+
+.feature-card:hover {
+  transform: translateY(-10px) scale(1.03);
+  border-color: rgba(96, 165, 250, 0.5);
+  box-shadow: 
+    0 20px 40px rgba(8, 12, 32, 0.7),
+    0 0 60px rgba(96, 165, 250, 0.3);
+}
+
+.feature-card i {
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover i {
+  transform: scale(1.2) rotate(5deg);
+  color: #60a5fa;
+}
+
+/* Banner Premium */
+.banner {
+  animation: fadeInUp 0.8s ease-out 0.7s backwards;
+  transition: all 0.4s ease;
+}
+
+.banner:hover {
+  box-shadow: 0 20px 60px rgba(96, 165, 250, 0.3);
+}
+
+.btn-join {
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-join::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+}
+
+.btn-join:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.btn-join:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 
+    0 10px 30px rgba(167, 139, 250, 0.4),
+    0 0 40px rgba(167, 139, 250, 0.3);
+}
+
+/* Footer Premium */
+.footer-column h3 {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.footer-column h3::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #60a5fa, #a78bfa);
+  transition: width 0.5s ease;
+}
+
+.footer-column h3:hover::after {
+  width: 50%;
+}
+
+.footer-column ul li {
+  transition: all 0.3s ease;
+}
+
+.footer-column ul li:hover {
+  transform: translateX(5px);
+  color: #60a5fa;
+}
+
+.footer-column a {
+  transition: all 0.3s ease;
+}
+
+.footer-column a:hover {
+  color: #60a5fa;
+  text-shadow: 0 0 10px rgba(96, 165, 250, 0.5);
+}
+
+.social-icons a {
+  transition: all 0.3s ease;
+}
+
+.social-icons a:hover {
+  transform: translateY(-5px) scale(1.2);
+  color: #60a5fa;
+  text-shadow: 0 0 20px rgba(96, 165, 250, 0.6);
+}
+
+/* ==================== KEYFRAME ANIMATIONS ==================== */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Responsive Premium Adjustments */
+@media (max-width: 768px) {
+  .feature-card:hover {
+    transform: translateY(-5px) scale(1.02);
+  }
+  
+  .hero-video:hover {
+    transform: scale(1.01) translateY(-3px);
+  }
+}
+
+/* Performance Optimization */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
   

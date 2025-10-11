@@ -1,17 +1,11 @@
-.fade-in {
-    animation: gamerEntrance 0.8s ease-in-out both;
-  }
-  
-  @keyframes gamerEntrance {
-    0% { opacity: 0; transform: scale(0.95) translateY(30px); }
-    100% { opacity: 1; transform: scale(1) translateY(0); }
-  }
   
   * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: 'Segoe UI', sans-serif;
+    scrollbar-width: thin;
+    scrollbar-color: rgb(5, 27, 54) transparent;
   }
   
   body {
@@ -22,6 +16,7 @@
     min-height: 100vh;
     display: flex;
     justify-content: center;
+    flex-direction: column;
     align-items: center;
     padding: 30px 15px;
     overflow-x: hidden;
@@ -367,4 +362,244 @@
 .gamenest-alert-actions .gamenest-alert-ok:hover {
   transform: translateY(-1px);
   box-shadow: 0 12px 20px rgba(99, 102, 241, 0.35);
+}
+
+/* ==================== AUTH PAGE ELEGANT STYLES (No Animations) ==================== */
+
+/* Auth Container - Clean & Elegant */
+.auth-container {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.auth-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* Form Card - Subtle Depth */
+.auth-form-card, .login-form, .signup-form {
+  transition: all 0.3s ease;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+.auth-form-card:hover, .login-form:hover, .signup-form:hover {
+  border-color: rgba(99, 102, 241, 0.4);
+  box-shadow: 0 8px 30px rgba(99, 102, 241, 0.2);
+}
+
+/* Logo - Simple Gradient */
+.auth-logo, .logo {
+  transition: opacity 0.3s ease;
+}
+
+.auth-logo:hover, .logo:hover {
+  opacity: 0.9;
+}
+
+.auth-logo h1, .logo {
+  background: linear-gradient(135deg, #60a5fa 0%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Form Title - Clean & Simple */
+.auth-title, h2 {
+  position: relative;
+}
+
+.auth-title::after, h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, #60a5fa, #8b5cf6);
+}
+
+/* Input Fields - Smooth Focus */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="tel"],
+textarea,
+select {
+  transition: all 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="tel"]:focus,
+textarea:focus,
+select:focus {
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2);
+  border-color: #6366f1;
+}
+
+/* Label - Subtle Transition */
+label {
+  transition: color 0.3s ease;
+}
+
+input:focus + label,
+input:not(:placeholder-shown) + label {
+  color: #60a5fa;
+}
+
+/* Icon - Simple Color Change */
+.input-icon, .icon {
+  transition: color 0.3s ease;
+}
+
+input:focus ~ .input-icon,
+input:focus ~ .icon {
+  color: #60a5fa;
+}
+
+/* Buttons - Elegant Hover */
+button[type="submit"],
+.auth-button,
+.submit-btn,
+.btn-primary {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+button[type="submit"]:hover,
+.auth-button:hover,
+.submit-btn:hover,
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+  opacity: 0.95;
+}
+
+button[type="submit"]:active,
+.auth-button:active,
+.submit-btn:active,
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+/* Links - Smooth Underline */
+.toggle-form, .switch-link, a {
+  transition: color 0.3s ease;
+  position: relative;
+}
+
+.toggle-form::after, .switch-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #60a5fa;
+  transition: width 0.3s ease;
+}
+
+.toggle-form:hover::after, .switch-link:hover::after {
+  width: 100%;
+}
+
+.toggle-form:hover, .switch-link:hover, a:hover {
+  color: #60a5fa;
+}
+
+/* Social Login Buttons - Clean Hover */
+.social-login-btn, .social-btn {
+  transition: all 0.3s ease;
+}
+
+.social-login-btn:hover, .social-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.25);
+}
+
+.social-login-btn i, .social-btn i {
+  transition: transform 0.3s ease;
+}
+
+.social-login-btn:hover i, .social-btn:hover i {
+  transform: scale(1.1);
+}
+
+/* Checkbox - Subtle Scale */
+input[type="checkbox"] {
+  transition: transform 0.2s ease;
+}
+
+input[type="checkbox"]:hover {
+  transform: scale(1.05);
+}
+
+/* Error Message - Clean Display */
+.error-message, .error {
+  background: rgba(239, 68, 68, 0.15);
+  border-left: 3px solid #ef4444;
+  padding: 10px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.error-message:hover, .error:hover {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+/* Success Message - Clean Display */
+.success-message, .success {
+  background: rgba(34, 197, 94, 0.15);
+  border-left: 3px solid #22c55e;
+  padding: 10px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.success-message:hover, .success:hover {
+  background: rgba(34, 197, 94, 0.2);
+}
+
+/* Password Strength Meter - Static Gradients */
+.password-strength.weak {
+  background: linear-gradient(90deg, #ef4444 0%, #dc2626 100%);
+}
+
+.password-strength.medium {
+  background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%);
+}
+
+.password-strength.strong {
+  background: linear-gradient(90deg, #22c55e 0%, #16a34a 100%);
+}
+
+/* Divider - Clean Line */
+.divider, hr {
+  position: relative;
+  border-color: rgba(99, 102, 241, 0.2);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .auth-form-card:hover, .login-form:hover, .signup-form:hover {
+    transform: none;
+  }
+  
+  button[type="submit"]:hover,
+  .auth-button:hover {
+    transform: none;
+  }
+}
+
+/* Performance Optimization */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+  }
 }
