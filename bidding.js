@@ -15,10 +15,11 @@ const hardcodedGames = [
 // DOM reference
 const container = document.getElementById('biddingCardsContainer');
 
-function createCard(game) {
+function createCard(game, index) {
   const card = document.createElement('div');
   card.className = 'bidding-card';
   card.innerHTML = `
+    <div class="card-badge">#${index + 1}</div>
     <img src="${game.image}" alt="${game.title}" />
     <div class="bidding-info">
       <h3>${game.title}</h3>
@@ -35,7 +36,7 @@ function createCard(game) {
 
 function renderBiddingCards(games) {
   container.innerHTML = '';
-  games.forEach(game => container.appendChild(createCard(game)));
+  games.forEach((game, index) => container.appendChild(createCard(game, index)));
   attachFormListeners();
 }
 
@@ -46,7 +47,7 @@ function attachFormListeners() {
       const gameId = form.getAttribute('data-game-id');
       const input = form.querySelector('input');
       const bidValue = Number(input.value);
-      const messageEl = form.querySelector('.bid-message');
+      const messageEl = form.parentElement.querySelector('.bid-message');
       messageEl.style.display = 'none';
 
       const game = hardcodedGames.find(g => g.id == gameId);
@@ -54,14 +55,24 @@ function attachFormListeners() {
         game.currentBid = bidValue;
         form.parentElement.querySelector('.current-bid').textContent = bidValue;
         input.min = bidValue + 1;
+        input.placeholder = `Your bid (min $${bidValue + 1})`;
         input.value = '';
-        messageEl.textContent = 'Bid placed successfully!';
+        messageEl.textContent = '✓ Bid placed successfully!';
         messageEl.style.color = '#4ade80';
+        messageEl.style.background = 'rgba(74, 222, 128, 0.1)';
+        messageEl.style.border = '1px solid rgba(74, 222, 128, 0.3)';
       } else {
-        messageEl.textContent = 'Bid must be higher than current bid.';
+        messageEl.textContent = '✗ Bid must be higher than current bid';
         messageEl.style.color = '#f87171';
+        messageEl.style.background = 'rgba(248, 113, 113, 0.1)';
+        messageEl.style.border = '1px solid rgba(248, 113, 113, 0.3)';
       }
       messageEl.style.display = 'block';
+      
+      // Auto hide after 3 seconds
+      setTimeout(() => {
+        messageEl.style.display = 'none';
+      }, 3000);
     });
   });
 }

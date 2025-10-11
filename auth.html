@@ -13,7 +13,7 @@
   <div id="particles-js"></div>
 
   <!-- Minimal Header for Auth Page -->
-  <header class="gamenest-header" style="position: fixed;">
+  <header class="gamenest-header" style="position: fixed; width: 100%;">
     <div class="header-container">
       <a href="home.html" class="gamenest-logo">Game<span>Nest</span></a>
       
@@ -99,6 +99,69 @@
     
   </div>
 
+  <!-- Modern Classy Footer -->
+  <footer class="gamenest-footer">
+    <div class="footer-container">
+      <div class="footer-column">
+        <h3>Game<span>Nest</span></h3>
+        <p>The ultimate platform for gamers to trade, rent, and bid on video games. Save money and play more games.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="Discord"><i class="fab fa-discord"></i></a>
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
+        </div>
+      </div>
+
+      <div class="footer-column">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="home.html">Home</a></li>
+          <li><a href="gameCenter.html">Game Center</a></li>
+          <li><a href="#">Rent Games</a></li>
+          <li><a href="bidding.html">Bidding</a></li>
+          <li><a href="auth.html">Login / Sign Up</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="#">Help Center</a></li>
+          <li><a href="#">Community Guidelines</a></li>
+          <li><a href="#">Safety Center</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h4>Contact Us</h4>
+        <ul class="footer-contact">
+          <li><span>✉️</span> <div>support@gamenest.com</div></li>
+          <li><span>📞</span> <div>(+88) 01836282534</div></li>
+          <li><span>📍</span> <div>Dhanmondi, Dhaka<br>Bangladesh</div></li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <p>&copy; 2025 <a href="#">GameNest</a>. All rights reserved. Built with 💙 for gamers.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+    const headerNav = document.querySelector('.header-nav');
+    
+    if (mobileMenuToggle) {
+      mobileMenuToggle.addEventListener('click', () => {
+        headerNav.classList.toggle('active');
+      });
+    }
+  </script>
   <script src="auth.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
   <script src="particle.js"></script>
