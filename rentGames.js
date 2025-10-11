@@ -1,78 +1,151 @@
 // rent-games.js
 document.addEventListener('DOMContentLoaded', function () {
   const games = [
-    {
-      id: 1,
-      title: 'Elden Ring',
-      image: 'sliderImage/11.jpg',
-      platforms: ['PC', 'PS4/PS5', 'Xbox One/Series'],
-      platformKeys: ['pc', 'ps', 'xbox'],
-      week: 7,
-      month: 20
-    },
-    {
-      id: 2,
-      title: 'God of War (2018)',
-      image: 'sliderImage/10.jpg',
-      platforms: ['PS4/PS5', 'PC'],
-      platformKeys: ['ps', 'pc'],
-      week: 5,
-      month: 15
-    },
-    {
-      id: 3,
-      title: 'Sekiro: Shadows Die Twice',
-      image: 'sliderImage/3.jpeg',
-      platforms: ['PC', 'PS4', 'Xbox One'],
-      platformKeys: ['pc', 'ps', 'xbox'],
-      week: 6,
-      month: 18
-    },
-    {
-      id: 4,
-      title: 'Spider Man',
-      image: 'sliderImage/14.jpg',
-      platforms: ['PC', 'PS4/PS5', 'Xbox One/Series', 'Switch'],
-      platformKeys: ['pc', 'ps', 'xbox', 'switch'],
-      week: 6,
-      month: 18
-    },
-    {
-      id: 5,
-      title: 'Dark Souls 3',
-      image: 'sliderImage/6.jpeg',
-      platforms: ['PC', 'PS4/PS5', 'Xbox One/Series'],
-      platformKeys: ['pc', 'ps', 'xbox'],
-      week: 8,
-      month: 22
-    },
-    {
-      id: 6,
-      title: 'Red Dead Redemption 2',
-      image: 'sliderImage/1.jpeg',
-      platforms: ['PC', 'PS4', 'Xbox One'],
-      platformKeys: ['pc', 'ps', 'xbox'],
-      week: 7,
-      month: 20
-    },
-    {
-      id: 7,
-      title: "Assassin's Creed Mirage",
-      image: 'sliderImage/9.jpg',
-      platforms: ['PC', 'PS4/PS5', 'Xbox One/Series'],
-      platformKeys: ['pc', 'ps', 'xbox'],
-      week: 6,
-      month: 19
-    },
-    {
-      id: 8,
-      title: 'Fc 26',
-      image: 'sliderImage/8.jpg',
-      platforms: ['Switch', 'Wii U'],
-      platformKeys: ['switch', 'xbox'],
-      week: 5,
-      month: 16
-    }    
+   {
+  id: 1,
+  title: 'Elden Ring',
+  image: 'sliderImage/11.jpg',
+  platforms: ['PS4/PS5', 'Xbox One/Series'],
+  platformKeys: ['ps', 'xbox'],
+  week: 6,
+  month: 17
+},
+{
+  id: 2,
+  title: 'God of War (2018)',
+  image: 'sliderImage/10.jpg',
+  platforms: ['PC', 'PS4/PS5'],
+  platformKeys: ['pc', 'ps'],
+  week: 5,
+  month: 15
+},
+{
+  id: 3,
+  title: 'Sekiro: Shadows Die Twice',
+  image: 'sliderImage/3.jpeg',
+  platforms: ['PS4', 'PS5', 'PC'],
+  platformKeys: ['ps', 'pc'],
+  week: 7,
+  month: 19
+},
+{
+  id: 4,
+  title: 'Spider Man',
+  image: 'sliderImage/14.jpg',
+  platforms: ['PS5', 'PC'],
+  platformKeys: ['ps', 'pc'],
+  week: 6,
+  month: 18
+},
+{
+  id: 5,
+  title: 'Dark Souls 3',
+  image: 'sliderImage/6.jpeg',
+  platforms: ['PC', 'PS4/PS5', 'Switch'],
+  platformKeys: ['pc', 'ps', 'switch'],
+  week: 8,
+  month: 21
+},
+{
+  id: 6,
+  title: 'Red Dead Redemption 2',
+  image: 'sliderImage/1.jpeg',
+  platforms: ['PS4', 'Xbox One', 'PC'],
+  platformKeys: ['ps', 'xbox', 'pc'],
+  week: 7,
+  month: 22
+},
+{
+  id: 7,
+  title: "Assassin's Creed Mirage",
+  image: 'sliderImage/9.jpg',
+  platforms: ['PC', 'PS5'],
+  platformKeys: ['pc', 'ps'],
+  week: 5,
+  month: 17
+},
+{
+  id: 8,
+  title: 'Fc 26',
+  image: 'sliderImage/8.jpg',
+  platforms: ['PC', 'PS5', 'Xbox One/Series'],
+  platformKeys: ['pc', 'ps', 'xbox'],
+  week: 6,
+  month: 16
+},  
+{
+  id: 9,
+  title: 'Dishonored',
+  image: 'sliderImage/17.jpg',
+  platforms: ['PC', 'PS4'],
+  platformKeys: ['pc', 'ps'],
+  week: 7,
+  month: 19
+}, 
+{
+  id: 10,
+  title: 'Little Nightmares',
+  image: 'sliderImage/18.jpg',
+  platforms: ['Switch', 'PS4'],
+  platformKeys: ['switch', 'ps'],
+  week: 8,
+  month: 18
+},
+{
+  id: 11,
+  title: 'GTA V',
+  image: 'sliderImage/19.jpg',
+  platforms: ['PS4/PS5', 'Xbox Series X/S'],
+  platformKeys: ['ps', 'xbox'],
+  week: 6,
+  month: 20
+},
+{
+  id: 12,
+  title: 'Hollow-Knight Silksong',
+  image: 'sliderImage/20.jpg',
+  platforms: ['Switch', 'PC'],
+  platformKeys: ['switch', 'pc'],
+  week: 5,
+  month: 15
+},
+{
+  id: 13,
+  title: 'F1 25',
+  image: 'sliderImage/21.jpg',
+  platforms: ['PC', 'Xbox One/Series'],
+  platformKeys: ['pc', 'xbox'],
+  week: 7,
+  month: 19
+},
+{
+  id: 15,
+  title: 'DOOM Dark Ages',
+  image: 'sliderImage/22.jpg',
+  platforms: ['PC', 'PS5'],
+  platformKeys: ['pc', 'ps'],
+  week: 6,
+  month: 18
+},
+{
+  id: 16,
+  title: 'Ghost of Yotei',
+  image: 'sliderImage/23.jpg',
+  platforms: ['PS4', 'Switch'],
+  platformKeys: ['ps', 'switch'],
+  week: 8,
+  month: 21
+},
+{
+  id: 17,
+  title: 'Hell is Us',
+  image: 'sliderImage/24.jpg',
+  platforms: ['PC', 'Xbox One/Series'],
+  platformKeys: ['pc', 'xbox'],
+  week: 6,
+  month: 17
+},
+
   ];
 
   // DOM references

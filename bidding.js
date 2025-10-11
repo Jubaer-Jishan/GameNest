@@ -9,6 +9,15 @@ const hardcodedGames = [
   { id: 7, title: "Red Dead Redemption 2", description: "Epic Western tale.", image: "https://upload.wikimedia.org/wikipedia/en/4/44/Red_Dead_Redemption_II.jpg", currentBid: 70 },
   { id: 8, title: "NBA", description: "Aim for goal.", image: "sliderImage/16.jpg", currentBid: 20 },
   { id: 8, title: "Witcher 3", description: "Fantasy world.", image: "sliderImage/12.jpg", currentBid: 70 },
+  { id: 9, title: "Dishonored", description: "Stealth action game where your choices shape the fate of Dunwall.", image: "sliderImage/17.jpg", currentBid: 45 },
+{ id: 10, title: "Little Nightmares", description: "Creepy puzzle-platformer following a child escaping a dark world.", image: "sliderImage/18.jpg", currentBid: 35 },
+{ id: 11, title: "GTA V", description: "Open-world crime epic set in Los Santos.", image: "sliderImage/19.jpg", currentBid: 60 },
+{ id: 12, title: "Hollow-Knight Silksong", description: "Fast-paced action adventure in a haunting bug kingdom.", image: "sliderImage/20.jpg", currentBid: 55 },
+{ id: 13, title: "F1 25", description: "High-speed Formula 1 racing with realistic handling.", image: "sliderImage/21.jpg", currentBid: 40 },
+{ id: 15, title: "DOOM Dark Ages", description: "Brutal medieval shooter blending metal and mayhem.", image: "sliderImage/22.jpg", currentBid: 50 },
+{ id: 16, title: "Ghost of Yotei", description: "Samurai-inspired action adventure through snow-covered lands.", image: "sliderImage/23.jpg", currentBid: 45 },
+{ id: 17, title: "Hell is Us", description: "Mysterious third-person action game set in a war-torn land.", image: "sliderImage/24.jpg", currentBid: 40 },
+
 
 ];
 
