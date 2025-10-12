@@ -196,7 +196,7 @@ try {
         
         // Set default profile picture if none
         if (empty($user['profile_picture'])) {
-            $user['profile_picture'] = 'https://i.pravatar.cc/300?u=' . $user['id'];
+            $user['profile_picture'] = 'images/default-gamer-avatar.svg';
         }
         
         echo json_encode([

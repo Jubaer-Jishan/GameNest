@@ -99,7 +99,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Profile Picture
     const avatarImg = document.querySelector('.player-avatar img');
     if (avatarImg) {
-      avatarImg.src = user.profile_picture || `https://i.pravatar.cc/300?u=${user.id}`;
+      const fallbackAvatar = 'images/default-gamer-avatar.svg';
+      avatarImg.src = user.profile_picture || fallbackAvatar;
       avatarImg.alt = user.full_name || 'Player Avatar';
     }
     
