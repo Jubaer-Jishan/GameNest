@@ -1,16 +1,12 @@
 <?php
 
-// Allow requests from the same origin or echo the Origin header when provided.
-$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
-if ($origin) {
-    header("Access-Control-Allow-Origin: $origin");
-    header('Access-Control-Allow-Credentials: true');
-} else {
-    header("Access-Control-Allow-Origin: *");
-}
+require_once 'cors.php';
+[$origin] = setupCors([
+    'methods' => ['POST', 'OPTIONS'],
+    'headers' => ['Content-Type', 'X-Requested-With']
+]);
+handleCorsPreflight($origin);
 
-header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type");
 header('Content-Type: application/json');
 
 // Only POST allowed

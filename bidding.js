@@ -1,3 +1,28 @@
+(function () {
+function resolveEndpoint(fileName) {
+  const { protocol, origin, pathname } = window.location;
+
+  if (protocol === 'file:') {
+    const decodedPath = decodeURIComponent(pathname);
+    const segments = decodedPath.split('/').filter(Boolean);
+    const gamenestIndex = segments.findIndex(segment => segment.toLowerCase() === 'gamenest');
+    let baseSegments = [];
+
+    if (gamenestIndex !== -1) {
+      baseSegments = segments.slice(gamenestIndex, -1);
+    } else if (segments.length > 1) {
+      baseSegments = segments.slice(0, -1);
+    }
+
+    const basePath = baseSegments.length ? `${baseSegments.join('/')}/` : '';
+    return `http://localhost/${basePath}${fileName}`;
+  }
+
+  const basePath = pathname.replace(/[^/]*$/, '');
+  return `${origin}${basePath}${fileName}`;
+}
+
+const bidEndpoint = resolveEndpoint('record_bid.php');
 
 const hardcodedGames = [
   { id: 1, title: "Bloodborne", description: "A dark and gothic action RPG set in Yharnam.", image: "https://upload.wikimedia.org/wikipedia/en/6/68/Bloodborne_Cover_Wallpaper.jpg", currentBid: 50 },
@@ -49,6 +74,42 @@ function renderBiddingCards(games) {
   attachFormListeners();
 }
 
+async function persistBid(game, amount) {
+  const payload = {
+    game_id: game.id,
+    game_title: game.title,
+    bid_amount: amount,
+    image_url: game.image
+  };
+
+  const response = await fetch(bidEndpoint, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+    credentials: 'include'
+  });
+
+  if (!response.ok) {
+    if (response.status === 401) {
+      const error = new Error('Not logged in');
+      error.code = 'AUTH';
+      throw error;
+    }
+    throw new Error(`Network error (${response.status}) while saving bid`);
+  }
+
+  const result = await response.json();
+  if (!result.success) {
+    const error = new Error(result.error || 'Failed to record bid');
+    if (result.error === 'Not logged in') {
+      error.code = 'AUTH';
+    }
+    throw error;
+  }
+
+  return result;
+}
+
 function attachFormListeners() {
   container.querySelectorAll('.bid-form').forEach(form => {
     form.addEventListener('submit', e => {
@@ -61,30 +122,54 @@ function attachFormListeners() {
 
       const game = hardcodedGames.find(g => g.id == gameId);
       if (bidValue > game.currentBid) {
-        game.currentBid = bidValue;
-        form.parentElement.querySelector('.current-bid').textContent = bidValue;
-        input.min = bidValue + 1;
-        input.placeholder = `Your bid (min $${bidValue + 1})`;
-        input.value = '';
-        messageEl.textContent = '✓ Bid placed successfully!';
-        messageEl.style.color = '#4ade80';
-        messageEl.style.background = 'rgba(74, 222, 128, 0.1)';
-        messageEl.style.border = '1px solid rgba(74, 222, 128, 0.3)';
+        persistBid(game, bidValue)
+          .then(() => {
+            game.currentBid = bidValue;
+            form.parentElement.querySelector('.current-bid').textContent = bidValue;
+            input.min = bidValue + 1;
+            input.placeholder = `Your bid (min $${bidValue + 1})`;
+            input.value = '';
+            messageEl.textContent = '✓ Bid placed successfully!';
+            messageEl.style.color = '#4ade80';
+            messageEl.style.background = 'rgba(74, 222, 128, 0.1)';
+            messageEl.style.border = '1px solid rgba(74, 222, 128, 0.3)';
+            messageEl.style.display = 'block';
+
+            setTimeout(() => {
+              messageEl.style.display = 'none';
+            }, 3000);
+          })
+          .catch((error) => {
+            if (error.code === 'AUTH') {
+              messageEl.textContent = 'Please log in to place bids and save them to your profile.';
+            } else {
+              messageEl.textContent = error.message || 'Unable to record bid right now.';
+            }
+            messageEl.style.color = '#f87171';
+            messageEl.style.background = 'rgba(248, 113, 113, 0.1)';
+            messageEl.style.border = '1px solid rgba(248, 113, 113, 0.3)';
+            messageEl.style.display = 'block';
+
+            setTimeout(() => {
+              messageEl.style.display = 'none';
+            }, 4000);
+          });
       } else {
         messageEl.textContent = '✗ Bid must be higher than current bid';
         messageEl.style.color = '#f87171';
         messageEl.style.background = 'rgba(248, 113, 113, 0.1)';
         messageEl.style.border = '1px solid rgba(248, 113, 113, 0.3)';
+        messageEl.style.display = 'block';
+
+        setTimeout(() => {
+          messageEl.style.display = 'none';
+        }, 3000);
       }
-      messageEl.style.display = 'block';
-      
-      // Auto hide after 3 seconds
-      setTimeout(() => {
-        messageEl.style.display = 'none';
-      }, 3000);
     });
   });
 }
 
 // Render games on page load
 renderBiddingCards(hardcodedGames);
+
+})();

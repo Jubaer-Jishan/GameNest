@@ -5,10 +5,13 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+require_once 'cors.php';
+[$origin] = setupCors([
+    'methods' => ['POST', 'OPTIONS'],
+    'headers' => ['Content-Type', 'X-Requested-With']
+]);
+handleCorsPreflight($origin);
 
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type");
 header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -52,6 +55,7 @@ try {
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($user && password_verify($password, $user['password'])) {
+        session_regenerate_id(true);
         // Login successful
         $_SESSION['user_id'] = $user['id']; // For profile integration
         $_SESSION['email'] = $email;
@@ -61,6 +65,7 @@ try {
             'full_name' => $user['full_name'] ?? null,
         ];
         $_SESSION['user_email'] = $email;
+        $_SESSION['is_authenticated'] = true;
 
         echo json_encode([
             'success' => true,

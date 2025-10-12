@@ -1,10 +1,45 @@
 document.addEventListener("DOMContentLoaded", () => {
+  function resolveApiEndpoint(fileName) {
+    const { protocol, origin, pathname } = window.location;
+
+    if (protocol === 'file:') {
+      const decodedPath = decodeURIComponent(pathname);
+      const segments = decodedPath.split('/').filter(Boolean);
+      const gamenestIndex = segments.findIndex(segment => segment.toLowerCase() === 'gamenest');
+      let baseSegments = [];
+
+      if (gamenestIndex !== -1) {
+        baseSegments = segments.slice(gamenestIndex, -1);
+      } else if (segments.length > 1) {
+        baseSegments = segments.slice(0, -1);
+      }
+
+      const basePath = baseSegments.length ? baseSegments.join('/') + '/' : '';
+      return `http://localhost/${basePath}${fileName}`;
+    }
+
+    const basePath = pathname.replace(/[^/]*$/, '');
+    return `${origin}${basePath}${fileName}`;
+  }
+
+  const loginEndpoint = resolveApiEndpoint('login.php');
+  const rememberEndpoint = resolveApiEndpoint('set_cookie.php');
+  
+  // Get redirect URL from query parameter or use default
+  const urlParams = new URLSearchParams(window.location.search);
+  const redirectAfterLogin = urlParams.get('redirect') || 'home.html';
+  
   // ===== ELEMENT REFERENCES =====
   const loginTab = document.getElementById('loginTab');
   const signupTab = document.getElementById('signupTab');
   const loginForm = document.getElementById('loginForm');
   const signupForm = document.getElementById('signupForm');
   const rememberCheckbox = document.getElementById('rememberMe');
+
+  if (!loginForm || !signupForm || !loginTab || !signupTab) {
+    console.warn('GameNest Auth: required form elements not found, skipping auth.js setup.');
+    return;
+  }
 
   const loginEmailInput = loginForm.querySelector('#loginEmail');
   const loginPasswordInput = loginForm.querySelector('#loginPassword');
@@ -182,9 +217,9 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!rememberCheckbox) return;
 
     try {
-      const response = await fetch('http://localhost/GameNest/GameNest/set_cookie.php', {
+      const response = await fetch(rememberEndpoint, {
         method: 'POST',
-        credentials: 'same-origin',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -276,6 +311,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   prefillRememberedUser();
 
+  const socialButtons = document.querySelectorAll('.social-buttons button[data-provider]');
+  socialButtons.forEach((button) => {
+    button.addEventListener('click', (event) => {
+      event.preventDefault();
+      const provider = button.getAttribute('data-provider') || 'that provider';
+      showGameNestAlert(
+        `We're having trouble connecting with ${provider} right now. Please sign in manually instead.`,
+        { title: 'Social sign-in unavailable' }
+      );
+    });
+  });
+
   // ===== LOGIN SUBMIT =====
   loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -305,9 +352,9 @@ document.addEventListener("DOMContentLoaded", () => {
     loginData.append('password', password);
 
     try {
-      const response = await fetch('http://localhost/GameNest/GameNest/login.php', {
+      const response = await fetch(loginEndpoint, {
         method: 'POST',
-        credentials: 'same-origin',
+        credentials: 'include',
         body: loginData
       });
 
@@ -317,14 +364,16 @@ document.addEventListener("DOMContentLoaded", () => {
       if (response.ok && result.success) {
         const rememberSelected = rememberCheckbox ? rememberCheckbox.checked : false;
 
-        // Save user data to localStorage for profile page
+        // Save user data to localStorage and sessionStorage for session tracking
         if (result.user) {
-          localStorage.setItem('currentUser', JSON.stringify({
+          const userData = {
             id: result.user.id,
             email: result.user.email,
             fullName: result.user.full_name,
             loginTime: new Date().toISOString()
-          }));
+          };
+          localStorage.setItem('currentUser', JSON.stringify(userData));
+          sessionStorage.setItem('isLoggedIn', 'true');
         }
 
         if (rememberCheckbox) {
@@ -339,7 +388,7 @@ document.addEventListener("DOMContentLoaded", () => {
         clearError(loginEmailInput);
         clearError(loginPasswordInput);
 
-        showSuccessPopup('You will be redirected to your profile.', 'profile.html');
+        showSuccessPopup('Login successful! Redirecting...', redirectAfterLogin);
       } else {
         showGameNestAlert(result.message || 'Login failed. Please try again.');
       }

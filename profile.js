@@ -1,11 +1,57 @@
 // profile.js - Complete Profile Management with Database Integration
 
 document.addEventListener('DOMContentLoaded', function() {
+  function resolveEndpoint(fileName) {
+    const { protocol, origin, pathname } = window.location;
+
+    if (protocol === 'file:') {
+      const decodedPath = decodeURIComponent(pathname);
+      const segments = decodedPath.split('/').filter(Boolean);
+      const gamenestIndex = segments.findIndex(segment => segment.toLowerCase() === 'gamenest');
+      let baseSegments = [];
+
+      if (gamenestIndex !== -1) {
+        baseSegments = segments.slice(gamenestIndex, -1);
+      } else if (segments.length > 1) {
+        baseSegments = segments.slice(0, -1);
+      }
+
+      const basePath = baseSegments.length ? `${baseSegments.join('/')}/` : '';
+      return `http://localhost/${basePath}${fileName}`;
+    }
+
+    const basePath = pathname.replace(/[^/]*$/, '');
+    return `${origin}${basePath}${fileName}`;
+  }
+
+  const profileEndpoint = resolveEndpoint('get_profile.php');
+  const updateProfileEndpoint = resolveEndpoint('update_profile.php');
+  const statsEndpoint = resolveEndpoint('update_stats.php');
+
+  function updateHeaderGreeting(name) {
+    const headerUser = document.querySelector('[data-auth-aware] .header-user');
+    if (headerUser) {
+      headerUser.textContent = name ? `Hi, ${name}` : 'Hi, Player';
+    }
+  }
+
+  document.addEventListener('gamenest:session', (event) => {
+    const session = event.detail?.session;
+    if (session?.authenticated && session.user) {
+      const firstName = (session.user.full_name || session.user.email || 'Player').split(' ')[0];
+      updateHeaderGreeting(firstName);
+    }
+  });
+
+  if (window.GameNestSession?.authenticated && window.GameNestSession.user) {
+    const firstName = (window.GameNestSession.user.full_name || window.GameNestSession.user.email || 'Player').split(' ')[0];
+    updateHeaderGreeting(firstName);
+  }
   
   // ==================== LOAD PROFILE DATA ====================
   async function loadProfileData() {
     try {
-      const response = await fetch('get_profile.php');
+      const response = await fetch(profileEndpoint, { credentials: 'include' });
       const data = await response.json();
       
       if (data.success && data.user) {
@@ -13,9 +59,27 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('✅ Profile loaded successfully');
       } else {
         console.error('❌ Failed to load profile:', data.error);
-        // Redirect to login if not authenticated
         if (data.error === 'Not logged in') {
-          window.location.href = 'auth.html';
+          const cachedUserRaw = localStorage.getItem('currentUser');
+          if (cachedUserRaw) {
+            try {
+              const cachedUser = JSON.parse(cachedUserRaw);
+              if (cachedUser) {
+                updateProfileUI({
+                  id: cachedUser.id,
+                  full_name: cachedUser.fullName,
+                  email: cachedUser.email
+                });
+                console.warn('⚠️ Using cached profile data; server session missing.');
+                return;
+              }
+            } catch (parseError) {
+              console.warn('GameNest Profile: unable to parse cached user', parseError);
+            }
+          }
+
+          const currentPage = window.location.pathname.split('/').pop() || 'profile.html';
+          window.location.href = `auth.html?redirect=${currentPage}`;
         }
       }
     } catch (error) {
@@ -28,13 +92,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Player Name & Basic Info
     const userName = document.getElementById('userName');
     if (userName) userName.textContent = user.full_name || user.username || 'Player';
-    
-    // Header User Name
-    const headerUserName = document.getElementById('headerUserName');
-    if (headerUserName) {
-      const firstName = user.full_name ? user.full_name.split(' ')[0] : user.username;
-      headerUserName.textContent = `Welcome, ${firstName}!`;
-    }
+
+    const firstName = user.full_name ? user.full_name.split(' ')[0] : (user.username || user.email || 'Player');
+    updateHeaderGreeting(firstName);
     
     // Profile Picture
     const avatarImg = document.querySelector('.player-avatar img');
@@ -126,8 +186,22 @@ document.addEventListener('DOMContentLoaded', function() {
     updateStatCard('Hours Played', user.hours_played || 0, '+45 this week');
     updateStatCard('Achievements', user.achievements || 0, '85% completed');
     updateStatCard('Friends', user.friends_count || 0, '+3 this week');
+
+    renderRentals(user.rentals || []);
+    renderBids(user.bids || []);
+    updateActivitySummary(user.activity_stats || {});
     
     console.log('✅ UI updated with user data');
+  }
+
+  function escapeHtml(value) {
+    if (value === null || value === undefined) return '';
+    return String(value)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
   }
 
   // Helper function to update progress stats
@@ -154,6 +228,103 @@ document.addEventListener('DOMContentLoaded', function() {
         if (deltaEl && delta) deltaEl.textContent = delta;
       }
     });
+  }
+
+  function buildActivityItem({ image, title, subtitle, badgeLabel, badgeStatus, amount, timestamp }) {
+    const thumbMarkup = image ? `<div class="activity-thumb" style="background-image: url('${escapeHtml(image)}')"></div>` : '';
+    const subtitleMarkup = subtitle ? `<p>${escapeHtml(subtitle)}</p>` : '';
+    const badgeMarkup = badgeLabel ? `<span class="badge" data-status="${escapeHtml(badgeStatus || 'active')}">${escapeHtml(badgeLabel)}</span>` : '';
+    const amountMarkup = amount ? `<span class="amount">${escapeHtml(amount)}</span>` : '';
+    const timeMarkup = timestamp ? `<time>${escapeHtml(timestamp)}</time>` : '';
+
+    return `
+      <li class="${image ? 'with-thumb' : ''}">
+        ${thumbMarkup}
+        <div class="activity-item-text">
+          <h4>${escapeHtml(title)}</h4>
+          ${subtitleMarkup}
+        </div>
+        <div class="activity-meta">
+          ${badgeMarkup}
+          ${amountMarkup}
+          ${timeMarkup}
+        </div>
+      </li>
+    `;
+  }
+
+  function renderRentals(rentals) {
+    const list = document.getElementById('rentalsList');
+    if (!list) return;
+
+    if (!rentals.length) {
+      list.innerHTML = '<li class="empty-state">No rentals recorded yet.</li>';
+      return;
+    }
+
+    const items = rentals.map(rental => {
+      const subtitleParts = [];
+      if (rental.duration_label) subtitleParts.push(rental.duration_label);
+      if (rental.platforms) subtitleParts.push(rental.platforms);
+
+      return buildActivityItem({
+        image: rental.image_url,
+        title: rental.game_title || 'Unknown title',
+        subtitle: subtitleParts.join(' • '),
+        badgeLabel: rental.status ? rental.status.charAt(0).toUpperCase() + rental.status.slice(1) : 'Active',
+        badgeStatus: rental.status || 'active',
+        amount: rental.display_price ? `$${rental.display_price}` : '',
+        timestamp: rental.rented_at_formatted || ''
+      });
+    });
+
+    list.innerHTML = items.join('');
+  }
+
+  function renderBids(bids) {
+    const list = document.getElementById('bidsList');
+    if (!list) return;
+
+    if (!bids.length) {
+      list.innerHTML = '<li class="empty-state">No bids placed yet.</li>';
+      return;
+    }
+
+    const items = bids.map(bid => buildActivityItem({
+      image: bid.image_url,
+      title: bid.game_title || 'Unknown title',
+      subtitle: 'Bid placed',
+      badgeLabel: bid.status ? bid.status.charAt(0).toUpperCase() + bid.status.slice(1) : 'Active',
+      badgeStatus: bid.status || 'active',
+      amount: bid.display_amount ? `$${bid.display_amount}` : '',
+      timestamp: bid.created_at_formatted || ''
+    }));
+
+    list.innerHTML = items.join('');
+  }
+
+  function updateActivitySummary(stats) {
+    const rentalsHeading = document.querySelector('#rentalsBoard .section-heading h2');
+    if (rentalsHeading) {
+      const count = typeof stats.active_rentals === 'number' ? stats.active_rentals : 0;
+      rentalsHeading.textContent = `Recent Rentals${count ? ' (' + count + ' active)' : ''}`;
+    }
+
+    const bidsHeading = document.querySelector('#bidsBoard .section-heading h2');
+    if (bidsHeading) {
+      const count = typeof stats.active_bids === 'number' ? stats.active_bids : 0;
+      bidsHeading.textContent = `Recent Bids${count ? ' (' + count + ' active)' : ''}`;
+    }
+
+    const rentalsLink = document.getElementById('viewAllRentals');
+    if (rentalsLink && typeof stats.total_rentals === 'number') {
+      rentalsLink.textContent = `View all (${stats.total_rentals})`;
+    }
+
+    const bidsLink = document.getElementById('viewAllBids');
+    if (bidsLink && typeof stats.total_bids === 'number') {
+      bidsLink.textContent = `View all (${stats.total_bids})`;
+    }
   }
 
   // ==================== EDIT PROFILE FUNCTIONALITY ====================
@@ -206,9 +377,10 @@ document.addEventListener('DOMContentLoaded', function() {
       formData.append('profile_picture', file);
       
       try {
-        const response = await fetch('update_profile.php', {
+        const response = await fetch(updateProfileEndpoint, {
           method: 'POST',
-          body: formData
+          body: formData,
+          credentials: 'include'
         });
         
         const result = await response.json();
@@ -304,7 +476,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.body.appendChild(modal);
     
     // Populate current values
-    fetch('get_profile.php')
+    fetch(profileEndpoint, { credentials: 'include' })
       .then(res => res.json())
       .then(data => {
         if (data.success && data.user) {
@@ -349,10 +521,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     try {
-      const response = await fetch('update_profile.php', {
+      const response = await fetch(updateProfileEndpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updateData)
+        body: JSON.stringify(updateData),
+        credentials: 'include'
       });
       
       const result = await response.json();
@@ -386,72 +559,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  // ==================== LOGOUT FUNCTIONALITY ====================
-  const logoutBtn = document.getElementById('logoutBtn');
-  if (logoutBtn) {
-    logoutBtn.addEventListener('click', function(e) {
-      e.preventDefault();
-      
-      // Create GameNest styled logout modal
-      const logoutModal = document.createElement('div');
-      logoutModal.className = 'logout-modal';
-      logoutModal.innerHTML = `
-        <div class="logout-modal-content glass-panel">
-          <div class="logout-icon">
-            <i class="fas fa-sign-out-alt"></i>
-          </div>
-          <h2>Confirm Logout</h2>
-          <p>Are you sure you want to logout from GameNest?</p>
-          <div class="logout-buttons">
-            <button class="logout-cancel-btn">Cancel</button>
-            <button class="logout-confirm-btn">Logout</button>
-          </div>
-        </div>
-      `;
-      
-      document.body.appendChild(logoutModal);
-      
-      // Show modal with animation
-      setTimeout(() => logoutModal.classList.add('show'), 10);
-      
-      // Cancel button
-      const cancelBtn = logoutModal.querySelector('.logout-cancel-btn');
-      cancelBtn.addEventListener('click', () => {
-        logoutModal.classList.remove('show');
-        setTimeout(() => logoutModal.remove(), 300);
-      });
-      
-      // Confirm button
-      const confirmBtn = logoutModal.querySelector('.logout-confirm-btn');
-      confirmBtn.addEventListener('click', () => {
-        // Show loading state
-        confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging out...';
-        confirmBtn.disabled = true;
-        cancelBtn.disabled = true;
-        
-        // Clear localStorage
-        localStorage.removeItem('currentUser');
-        
-        // Redirect to logout script
-        fetch('logout.php')
-          .then(() => {
-            window.location.href = 'auth.html';
-          })
-          .catch(() => {
-            window.location.href = 'auth.html';
-          });
-      });
-      
-      // Click outside to close
-      logoutModal.addEventListener('click', (e) => {
-        if (e.target === logoutModal) {
-          logoutModal.classList.remove('show');
-          setTimeout(() => logoutModal.remove(), 300);
-        }
-      });
-    });
-  }
-
   // ==================== MOBILE MENU TOGGLE ====================
   const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
   const headerNav = document.querySelector('.header-nav');
@@ -467,15 +574,16 @@ document.addEventListener('DOMContentLoaded', function() {
   enableProfileEdit();
   
   // Set user online when page loads
-  fetch('update_stats.php', {
+  fetch(statsEndpoint, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ stat_type: 'set_online', is_online: true })
+    body: JSON.stringify({ stat_type: 'set_online', is_online: true }),
+    credentials: 'include'
   });
   
   // Set user offline when page unloads
   window.addEventListener('beforeunload', () => {
-    navigator.sendBeacon('update_stats.php', JSON.stringify({
+    navigator.sendBeacon(statsEndpoint, JSON.stringify({
       stat_type: 'set_online',
       is_online: false
     }));

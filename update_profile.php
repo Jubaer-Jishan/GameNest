@@ -1,12 +1,25 @@
 <?php
 session_start();
+
+require_once 'cors.php';
+[$origin] = setupCors([
+    'methods' => ['POST', 'OPTIONS'],
+    'headers' => ['Content-Type', 'X-Requested-With']
+]);
+handleCorsPreflight($origin);
+
 header('Content-Type: application/json');
 
 // Database connection
 require_once 'dbConnect.php';
+require_once 'databaseSchemaHelpers.php';
+
+// Ensure auxiliary tables exist
+ensureUserMediaTable($pdo);
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
+    http_response_code(401);
     echo json_encode(['success' => false, 'error' => 'Not logged in']);
     exit;
 }
@@ -34,6 +47,7 @@ if (isset($_FILES['profile_picture']) && $_FILES['profile_picture']['error'] ===
 
 // Only check for input if it's not a file-only upload
 if (empty($input) && !$isFileUpload) {
+    http_response_code(422);
     echo json_encode(['success' => false, 'error' => 'No data provided']);
     exit;
 }
@@ -94,12 +108,32 @@ try {
         // Move uploaded file
         if (move_uploaded_file($file['tmp_name'], $filepath)) {
             $profilePicturePath = $filepath;
-            
+
+            // Persist metadata to dedicated media table
+            $mediaStmt = $pdo->prepare(
+                "INSERT INTO user_media (user_id, media_type, file_path, file_name, mime_type, file_size)
+                 VALUES (:user_id, 'profile_picture', :file_path, :file_name, :mime_type, :file_size)
+                 ON DUPLICATE KEY UPDATE
+                    file_path = VALUES(file_path),
+                    file_name = VALUES(file_name),
+                    mime_type = VALUES(mime_type),
+                    file_size = VALUES(file_size),
+                    updated_at = CURRENT_TIMESTAMP"
+            );
+
+            $mediaStmt->execute([
+                ':user_id'   => $userId,
+                ':file_path' => $profilePicturePath,
+                ':file_name' => $file['name'],
+                ':mime_type' => $fileType,
+                ':file_size' => $file['size']
+            ]);
+
             // Delete old profile picture if exists
             $oldPicStmt = $pdo->prepare("SELECT profile_picture FROM users WHERE id = ?");
             $oldPicStmt->execute([$userId]);
             $oldPic = $oldPicStmt->fetchColumn();
-            
+
             if ($oldPic && file_exists($oldPic) && strpos($oldPic, 'uploads/') === 0) {
                 @unlink($oldPic);
             }

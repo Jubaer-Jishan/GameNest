@@ -22,14 +22,16 @@
       <nav class="header-nav">
         <a href="home.html">Home</a>
         <a href="gameCenter.html">Game Center</a>
-        <a href="#">Rent Games</a>
+        <a href="rentGames.html">Rent Games</a>
         <a href="bidding.html">Bidding</a>
-        <a href="profile.html" class="active">Profile</a>
       </nav>
       
-      <div class="header-actions">
-        <span id="headerUserName" style="color: #60a5fa; margin-right: 1rem; font-weight: 600;"></span>
-        <a href="auth.html" class="header-btn header-btn-secondary" id="logoutBtn">Logout</a>
+      <div class="header-actions" data-auth-aware="true">
+        <span class="header-user" data-auth-visible="logged-in" data-auth-content="username" hidden>Hi, Player</span>
+        <a href="profile.html" class="header-btn header-btn-secondary" data-auth-visible="logged-in" data-auth-role="profile" hidden>Profile</a>
+        <button type="button" class="header-btn header-btn-primary" data-action="logout" data-auth-visible="logged-in" hidden>Logout</button>
+        <a href="auth.html?redirect=profile.html" class="header-btn header-btn-secondary" data-auth-visible="logged-out" data-auth-role="login">Login</a>
+        <a href="auth.html?redirect=profile.html" class="header-btn header-btn-primary" data-auth-visible="logged-out" data-auth-role="signup">Sign Up</a>
       </div>
       
       <div class="mobile-menu-toggle">
@@ -220,6 +222,28 @@
       </div>
     </section>
 
+    <section class="deal-history-section">
+      <div class="glass-panel activity-board" id="rentalsBoard">
+        <div class="section-heading">
+          <h2>Recent Rentals</h2>
+          <a class="link" href="#" id="viewAllRentals">View all</a>
+        </div>
+        <ul class="activity-list compact" id="rentalsList">
+          <li class="empty-state">No rentals recorded yet.</li>
+        </ul>
+      </div>
+
+      <div class="glass-panel activity-board" id="bidsBoard">
+        <div class="section-heading">
+          <h2>Recent Bids</h2>
+          <a class="link" href="#" id="viewAllBids">View all</a>
+        </div>
+        <ul class="activity-list compact" id="bidsList">
+          <li class="empty-state">No bids placed yet.</li>
+        </ul>
+      </div>
+    </section>
+
     <section class="library-section">
       <div class="section-heading">
         <h2>Featured Library</h2>
@@ -331,7 +355,7 @@
         <ul>
           <li><a href="home.html">Home</a></li>
           <li><a href="gameCenter.html">Game Center</a></li>
-          <li><a href="#">Rent Games</a></li>
+          <li><a href="rentGames.html">Rent Games</a></li>
           <li><a href="bidding.html">Bidding</a></li>
           <li><a href="auth.html">Login / Sign Up</a></li>
         </ul>
@@ -366,6 +390,7 @@
   
   
   <!-- Profile functionality with database integration -->
+  <script src="session.js"></script>
   <script src="profile.js"></script>
 </body>
 </html>

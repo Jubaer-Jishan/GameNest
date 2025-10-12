@@ -1,8 +1,13 @@
 <?php
 session_start();
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type");
+
+require_once 'cors.php';
+[$origin] = setupCors([
+    'methods' => ['POST', 'OPTIONS'],
+    'headers' => ['Content-Type', 'X-Requested-With']
+]);
+handleCorsPreflight($origin);
+
 header('Content-Type: application/json');
 
 // Database connection
@@ -10,6 +15,7 @@ require_once 'dbConnect.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
+    http_response_code(401);
     echo json_encode(['success' => false, 'error' => 'Not logged in']);
     exit;
 }

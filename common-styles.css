@@ -153,6 +153,12 @@
   gap: 16px;
 }
 
+.header-actions .header-user {
+  color: var(--text-primary);
+  font-weight: 600;
+  margin-right: 4px;
+}
+
 .header-btn {
   position: relative;
   display: inline-flex;
@@ -206,6 +212,20 @@
   border-color: rgba(96, 165, 250, 0.6);
   transform: translateY(-3px);
   box-shadow: 0 12px 24px rgba(96, 165, 250, 0.25);
+}
+
+/* Auth visibility helpers */
+[data-auth-visible][hidden] {
+  display: none !important;
+}
+
+body:not([data-auth-state]) [data-auth-visible="logged-in"],
+body[data-auth-state="logged-out"] [data-auth-visible="logged-in"] {
+  display: none !important;
+}
+
+body[data-auth-state="logged-in"] [data-auth-visible="logged-out"] {
+  display: none !important;
 }
 
 .header-btn-ghost {

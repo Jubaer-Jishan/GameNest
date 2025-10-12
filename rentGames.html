@@ -20,13 +20,15 @@
         <a href="home.html">Home</a>
         <a href="gameCenter.html">Game Center</a>
         <a href="rentGames.html" class="active">Rent Games</a>
-        <a href="bidding.html">Bidding</a>
-        <a href="profile.html">Profile</a>
+      <a href="bidding.html">Bidding</a>
       </nav>
       
-      <div class="header-actions">
-        <a href="auth.html" class="header-btn header-btn-secondary">Login</a>
-        <a href="auth.html" class="header-btn header-btn-primary">Sign Up</a>
+    <div class="header-actions" data-auth-aware="true">
+      <span class="header-user" data-auth-visible="logged-in" data-auth-content="username" hidden>Hi, Player</span>
+      <a href="profile.html" class="header-btn header-btn-secondary" data-auth-visible="logged-in" data-auth-role="profile" hidden>Profile</a>
+      <button type="button" class="header-btn header-btn-primary" data-action="logout" data-auth-visible="logged-in" hidden>Logout</button>
+      <a href="auth.html?redirect=rentGames.html" class="header-btn header-btn-secondary" data-auth-visible="logged-out" data-auth-role="login">Login</a>
+      <a href="auth.html?redirect=rentGames.html" class="header-btn header-btn-primary" data-auth-visible="logged-out" data-auth-role="signup">Sign Up</a>
       </div>
       
       <div class="mobile-menu-toggle">
@@ -127,6 +129,7 @@
     </div>
   </footer>
 
+  <script src="session.js"></script>
   <script>
         // Mobile menu toggle
     const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');

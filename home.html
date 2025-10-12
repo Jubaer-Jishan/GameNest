@@ -22,13 +22,14 @@
         <a href="gameCenter.html">Game Center</a>
         <a href="rentGames.html">Rent Games</a>
         <a href="bidding.html">Bidding</a>
-        <a href="profile.html">Profile</a>
-        
       </nav>
       
-      <div class="header-actions">
-        <a href="auth.html" class="header-btn header-btn-secondary">Login</a>
-        <a href="auth.html" class="header-btn header-btn-primary">Sign Up</a>
+      <div class="header-actions" data-auth-aware="true">
+        <span class="header-user" data-auth-visible="logged-in" data-auth-content="username" hidden>Hi, Player</span>
+        <a href="profile.html" class="header-btn header-btn-secondary" data-auth-visible="logged-in" data-auth-role="profile" hidden>Profile</a>
+        <button type="button" class="header-btn header-btn-primary" data-action="logout" data-auth-visible="logged-in" hidden>Logout</button>
+        <a href="auth.html?redirect=home.html" class="header-btn header-btn-secondary" data-auth-visible="logged-out" data-auth-role="login">Login</a>
+        <a href="auth.html?redirect=home.html" class="header-btn header-btn-primary" data-auth-visible="logged-out" data-auth-role="signup">Sign Up</a>
       </div>
       
       <div class="mobile-menu-toggle">
@@ -39,28 +40,159 @@
     </div>
   </header>
 
-  <div class="container firstSection">
-    <div class="hero scroll-animation">
-      <div class="hero-text">
-        <h1>Trade, Rent, and <br /> Bid on <span>Video Games</span></h1>
-        <p>Join the largest gaming exchange community. Save money, play more games, and connect with fellow gamers.</p>
-        <div class="hero-buttons">
-          <a href="auth.html" class="btn btn-primary">Start Trading</a>  
-          <a href="auth.html" class="btn btn-secondary">Join Now</a> 
+  <!-- Hero Section 1: Text + Video with TV Frame -->
+  <section class="hero-video-text firstSection scroll-animation">
+    <div class="hero-container">
+      <!-- Text Side - LEFT -->
+      <div class="text-side">
+        <div class="text-content">
+          <div class="hero-badge animate-slide-down">
+            <span class="badge-icon">◆</span>
+            <span class="badge-text">Premium Gaming Platform</span>
+          </div>
+          
+          <h1 class="hero-title animate-slide-up">
+            Your Gaming<br />
+            Universe<br />
+            <span class="title-gradient">Awaits</span>
+          </h1>
+          
+          <p class="hero-description animate-fade-in">
+            Join the elite gaming community where you can trade, rent, and bid on the most sought-after titles. Experience gaming like never before.
+          </p>
+          
+          <div class="hero-stats-inline animate-fade-in-delay">
+            <div class="stat-inline">
+              <span class="stat-number" data-count="8200">0</span>
+              <span class="stat-text">Active Members</span>
+            </div>
+            <div class="stat-inline">
+              <span class="stat-number" data-count="1200">0</span>
+              <span class="stat-text">Premium Games</span>
+            </div>
+            <div class="stat-inline">
+              <span class="stat-number" data-count="98">0</span>
+              <span class="stat-text">Trust Score</span>
+            </div>
+          </div>
+          
+          <div class="hero-cta-buttons animate-fade-in-last">
+            <a href="auth.html?redirect=home.html" class="btn-hero btn-hero-primary" id="joinBtn">
+              <span class="btn-text">Get Started</span>
+              <span class="btn-shine"></span>
+            </a>
+            <a href="rentGames.html" class="btn-hero btn-hero-secondary" id="exploreBtn">
+              <span class="btn-text">Explore Games</span>
+            </a>
+          </div>
         </div>
       </div>
-
-      <div class="hero-video">
-        <video autoplay muted loop disablePictureInPicture oncontextmenu="return false;">
-          <source src="images/promo.mp4" type="video/mp4">
-          <source src="images/promo.mp4" type="video/webm">
-          <source src="images/promo.mp4" type="video/ogb">
-          Your browser does not support the video tag.
-        </video>
+      
+      <!-- Video Side - RIGHT with TV Frame -->
+      <div class="video-side">
+        <div class="tv-frame">
+          <div class="tv-screen">
+            <video class="hero-video" autoplay muted loop playsinline disablePictureInPicture oncontextmenu="return false;">
+              <source src="images/promo.mp4" type="video/mp4">
+              <source src="images/promo.mp4" type="video/webm">
+              <source src="images/promo.mp4" type="video/ogv">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <div class="tv-stand"></div>
+          <div class="tv-base"></div>
+          <div class="screen-glow"></div>
+        </div>
       </div>
-     
     </div>
-  </div>
+  </section>
+
+  <!-- Hero Section 2: Feature Cards Showcase -->
+  <section class="hero-features scroll-animation">
+    <div class="features-container">
+      <div class="features-header">
+        <h2 class="features-title">What Makes Us Different</h2>
+        <p class="features-subtitle">Three powerful ways to experience gaming</p>
+      </div>
+      
+      <div class="features-grid">
+        <!-- Trade Card -->
+        <div class="feature-card card-trade">
+          <div class="card-glow"></div>
+          <div class="card-icon-wrapper">
+            <div class="card-icon">🔄</div>
+          </div>
+          <h3 class="card-title">Trade & Swap</h3>
+          <p class="card-description">
+            Exchange your games with verified collectors worldwide. Build your dream library through our secure trading platform.
+          </p>
+          <div class="card-stats">
+            <div class="card-stat">
+              <span class="card-stat-value">2.5K+</span>
+              <span class="card-stat-label">Monthly Trades</span>
+            </div>
+            <div class="card-stat">
+              <span class="card-stat-value">100%</span>
+              <span class="card-stat-label">Secure</span>
+            </div>
+          </div>
+          <a href="gameCenter.html" class="card-link">
+            Start Trading →
+          </a>
+        </div>
+        
+        <!-- Rent Card -->
+        <div class="feature-card card-rent">
+          <div class="card-glow"></div>
+          <div class="card-icon-wrapper">
+            <div class="card-icon">⚡</div>
+          </div>
+          <h3 class="card-title">Instant Rental</h3>
+          <p class="card-description">
+            Access AAA titles instantly without the commitment. Flexible rental periods from 24 hours to full months.
+          </p>
+          <div class="card-stats">
+            <div class="card-stat">
+              <span class="card-stat-value">1,200+</span>
+              <span class="card-stat-label">Available Titles</span>
+            </div>
+            <div class="card-stat">
+              <span class="card-stat-value">24/7</span>
+              <span class="card-stat-label">Access</span>
+            </div>
+          </div>
+          <a href="rentGames.html" class="card-link">
+            Browse Rentals →
+          </a>
+        </div>
+        
+        <!-- Bid Card -->
+        <div class="feature-card card-bid">
+          <div class="card-glow"></div>
+          <div class="card-icon-wrapper">
+            <div class="card-icon">🏆</div>
+          </div>
+          <h3 class="card-title">Live Auctions</h3>
+          <p class="card-description">
+            Compete for rare editions and collector's items. Real-time bidding with transparent pricing and instant wins.
+          </p>
+          <div class="card-stats">
+            <div class="card-stat">
+              <span class="card-stat-value">500+</span>
+              <span class="card-stat-label">Active Auctions</span>
+            </div>
+            <div class="card-stat">
+              <span class="card-stat-value">Live</span>
+              <span class="card-stat-label">Bidding</span>
+            </div>
+          </div>
+          <a href="bidding.html" class="card-link">
+            Join Auction →
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!--Slider Start-->
   <div class="container carousel-container">
@@ -234,7 +366,7 @@
         <h2>Ready to start gaming smarter?</h2>
         <p>Join GameNest today and connect with gamers in your area. Trade, rent, and bid on games to maximize your gaming experience.</p>
       </div>
-      <a href="auth.html" class="btn-join">Join Now</a>
+      <a href="auth.html?redirect=home.html" class="btn-join">Join Now</a>
     </div>
   </div>
 
@@ -260,7 +392,7 @@
           <li><a href="gameCenter.html">Game Center</a></li>
           <li><a href="#">Rent Games</a></li>
           <li><a href="bidding.html">Bidding</a></li>
-          <li><a href="auth.html">Login / Sign Up</a></li>
+          <li><a href="auth.html?redirect=home.html">Login / Sign Up</a></li>
         </ul>
       </div>
 
@@ -291,6 +423,7 @@
   </footer>
 
 
+  <script src="session.js"></script>
   <script>
     // Mobile menu toggle
     const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
@@ -321,5 +454,6 @@
   <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
   <script src="particle.js"></script>
   <script src="auth.js"></script>
+  <script src="scroll-effects.js"></script>
 </body>
 </html>
