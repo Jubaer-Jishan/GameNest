@@ -74,7 +74,7 @@ try {
         }
     }
     
-    // Handle profile picture upload
+    // Handle profile picture upload with AJAX
     $profilePicturePath = null;
     
     if (isset($_FILES['profile_picture']) && $_FILES['profile_picture']['error'] === UPLOAD_ERR_OK) {

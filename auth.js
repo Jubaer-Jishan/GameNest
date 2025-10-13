@@ -588,7 +588,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-      const response = await fetch('http://localhost/GameNest/GameNest/signUp.php', {
+      const response = await fetch('signUp.php', {
         method: 'POST',
         body: formData
       });
