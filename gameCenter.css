@@ -12,7 +12,7 @@ a {
   color: inherit;
 }
 
-body {
+.game-center-body {
   background: 
     radial-gradient(circle at 20% 20%, rgba(255, 0, 150, 0.2), transparent 60%),
     radial-gradient(circle at 80% 30%, rgba(0, 200, 255, 0.15), transparent 60%),
@@ -763,7 +763,7 @@ body {
 }
 
 /* ==================== PREMIUM ANIMATIONS ==================== */
-body {
+.game-center-body {
   animation: fadeIn 0.6s ease-out;
 }
 

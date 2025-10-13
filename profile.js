@@ -28,6 +28,15 @@ document.addEventListener('DOMContentLoaded', function() {
   const updateProfileEndpoint = resolveEndpoint('update_profile.php');
   const statsEndpoint = resolveEndpoint('update_stats.php');
 
+  function getSessionHeaders(extra = {}) {
+    const headers = { ...extra };
+    const sessionId = window.GameNestSessionId || localStorage.getItem('gamenestSessionId') || sessionStorage.getItem('gamenestSessionId');
+    if (sessionId && !headers['X-Session-Id']) {
+      headers['X-Session-Id'] = sessionId;
+    }
+    return headers;
+  }
+
   function updateHeaderGreeting(name) {
     const headerUser = document.querySelector('[data-auth-aware] .header-user');
     if (headerUser) {
@@ -51,7 +60,10 @@ document.addEventListener('DOMContentLoaded', function() {
   // ==================== LOAD PROFILE DATA ====================
   async function loadProfileData() {
     try {
-      const response = await fetch(profileEndpoint, { credentials: 'include' });
+      const response = await fetch(profileEndpoint, {
+        credentials: 'include',
+        headers: getSessionHeaders()
+      });
       const data = await response.json();
       
       if (data.success && data.user) {
@@ -378,10 +390,12 @@ document.addEventListener('DOMContentLoaded', function() {
       formData.append('profile_picture', file);
       
       try {
+        const headers = getSessionHeaders();
         const response = await fetch(updateProfileEndpoint, {
           method: 'POST',
           body: formData,
-          credentials: 'include'
+          credentials: 'include',
+          headers
         });
         
         const result = await response.json();
@@ -477,7 +491,10 @@ document.addEventListener('DOMContentLoaded', function() {
     document.body.appendChild(modal);
     
     // Populate current values
-    fetch(profileEndpoint, { credentials: 'include' })
+    fetch(profileEndpoint, { 
+      credentials: 'include',
+      headers: getSessionHeaders()
+    })
       .then(res => res.json())
       .then(data => {
         if (data.success && data.user) {
@@ -524,7 +541,7 @@ document.addEventListener('DOMContentLoaded', function() {
     try {
       const response = await fetch(updateProfileEndpoint, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getSessionHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify(updateData),
         credentials: 'include'
       });
@@ -577,17 +594,21 @@ document.addEventListener('DOMContentLoaded', function() {
   // Set user online when page loads
   fetch(statsEndpoint, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: getSessionHeaders({ 'Content-Type': 'application/json' }),
     body: JSON.stringify({ stat_type: 'set_online', is_online: true }),
     credentials: 'include'
   });
   
   // Set user offline when page unloads
   window.addEventListener('beforeunload', () => {
-    navigator.sendBeacon(statsEndpoint, JSON.stringify({
+    const sessionId = window.GameNestSessionId || localStorage.getItem('gamenestSessionId') || sessionStorage.getItem('gamenestSessionId');
+    const payloadData = {
       stat_type: 'set_online',
       is_online: false
-    }));
+    };
+    const payload = new Blob([JSON.stringify(payloadData)], { type: 'application/json' });
+    const target = sessionId ? `${statsEndpoint}?session_id=${encodeURIComponent(sessionId)}` : statsEndpoint;
+    navigator.sendBeacon(target, payload);
   });
 
 });

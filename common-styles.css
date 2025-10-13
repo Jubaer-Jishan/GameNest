@@ -16,6 +16,29 @@
   --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* ==================== GLOBAL LAYOUT ==================== */
+
+body {
+  margin: 0;
+}
+
+body.body-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+body.body-shell main.page-main {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+body.body-shell .gamenest-footer {
+  margin-top: auto;
+}
+
 /* ==================== HEADER STYLES ==================== */
 
 .gamenest-header {

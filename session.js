@@ -25,6 +25,19 @@
   const sessionEndpoint = resolveEndpoint('session_status.php');
   const logoutEndpoint = resolveEndpoint('logout.php');
 
+  function getStoredSessionId() {
+    if (window.GameNestSessionId) {
+      return window.GameNestSessionId;
+    }
+
+    const stored = localStorage.getItem('gamenestSessionId') || sessionStorage.getItem('gamenestSessionId');
+    if (stored) {
+      window.GameNestSessionId = stored;
+      return stored;
+    }
+    return null;
+  }
+
   function getCachedUser() {
     try {
       const stored = localStorage.getItem('currentUser');
@@ -38,13 +51,25 @@
 
   async function fetchSessionState() {
     try {
+      const headers = {};
+      const storedSessionId = getStoredSessionId();
+      if (storedSessionId) {
+        headers['X-Session-Id'] = storedSessionId;
+      }
+
       const response = await fetch(sessionEndpoint, { 
-        credentials: 'include'
+        credentials: 'include',
+        headers
       });
       if (!response.ok) {
         throw new Error(`Session check failed with status ${response.status}`);
       }
       const data = await response.json();
+      if (data?.session_id) {
+        window.GameNestSessionId = data.session_id;
+        localStorage.setItem('gamenestSessionId', data.session_id);
+        sessionStorage.setItem('gamenestSessionId', data.session_id);
+      }
       console.log('✅ Session fetched:', data);
       return data;
     } catch (error) {
@@ -286,16 +311,38 @@
     }
 
     try {
+      const headers = {};
+      const storedSessionId = getStoredSessionId();
+      if (storedSessionId) {
+        headers['X-Session-Id'] = storedSessionId;
+      }
+
       await fetch(logoutEndpoint, { 
         method: 'POST',
-        credentials: 'include'
+        credentials: 'include',
+        headers
       });
       console.log('✅ Logout successful');
     } catch (error) {
       console.error('❌ Logout error:', error);
     } finally {
-      localStorage.clear();
-      sessionStorage.clear();
+  ['currentUser', 'gamenestSessionId'].forEach((key) => {
+        try {
+          localStorage.removeItem(key);
+        } catch (storageError) {
+          console.warn('GameNest Session: unable to remove localStorage key', key, storageError);
+        }
+      });
+
+      ['isLoggedIn', 'gamenestSessionId'].forEach((key) => {
+        try {
+          sessionStorage.removeItem(key);
+        } catch (storageError) {
+          console.warn('GameNest Session: unable to remove sessionStorage key', key, storageError);
+        }
+      });
+
+      delete window.GameNestSessionId;
       closeLogoutModal(true);
 
       const currentPage = window.location.pathname.split('/').pop() || 'home.html';
@@ -380,6 +427,11 @@
       // User is logged in
       localStorage.setItem('currentUser', JSON.stringify(sessionData.user));
       sessionStorage.setItem('isLoggedIn', 'true');
+      if (sessionData.session_id) {
+        window.GameNestSessionId = sessionData.session_id;
+        localStorage.setItem('gamenestSessionId', sessionData.session_id);
+        sessionStorage.setItem('gamenestSessionId', sessionData.session_id);
+      }
       updateUIForLoggedIn(sessionData.user);
     } else {
       if (hasClientLogin) {

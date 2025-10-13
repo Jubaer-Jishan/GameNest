@@ -33,6 +33,9 @@ function setupCors(array $options = []): array
 
 	$methods = $options['methods'] ?? ['GET', 'POST', 'OPTIONS'];
 	$headers = $options['headers'] ?? ['Content-Type', 'X-Requested-With'];
+	if (!in_array('X-Session-Id', $headers, true)) {
+		$headers[] = 'X-Session-Id';
+	}
 
 	header('Access-Control-Allow-Methods: ' . implode(', ', $methods));
 	header('Access-Control-Allow-Headers: ' . implode(', ', $headers));

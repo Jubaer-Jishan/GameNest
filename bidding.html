@@ -7,10 +7,45 @@
   <link rel="stylesheet" href="common-styles.css" />
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="biddingstyle.css" />
+  <link rel="stylesheet" href="preloader.css" />
   <script src="https://kit.fontawesome.com/5e38181f55.js" crossorigin="anonymous"></script>
 
 </head>
 <body>
+
+  <!-- Preloader -->
+  <div id="gamenest-preloader" class="preloader">
+    <div class="preloader-particles"></div>
+    
+    <div class="preloader-logo">
+      <span class="logo-game">Game</span><span class="logo-nest">Nest</span>
+    </div>
+    
+    <div class="preloader-controller">
+      <div class="controller-body"></div>
+      <div class="controller-dpad">
+        <div class="dpad-btn"></div>
+        <div class="dpad-btn"></div>
+        <div class="dpad-btn"></div>
+        <div class="dpad-btn"></div>
+      </div>
+      <div class="controller-buttons">
+        <div class="action-btn"></div>
+        <div class="action-btn"></div>
+        <div class="action-btn"></div>
+        <div class="action-btn"></div>
+      </div>
+    </div>
+    
+    <div class="preloader-progress">
+      <div class="progress-bar"></div>
+    </div>
+    
+    <div class="preloader-text">
+      Loading<span class="loading-dots"><span>.</span><span>.</span><span>.</span></span>
+    </div>
+  </div>
+
   <div id="particles-js"></div>
 
   <!-- Modern Classy Header -->
@@ -58,6 +93,11 @@
   <div class="container bidding-section">
     <h1 class="section-title">Bid on Your Favorite Games</h1>
     <p class="section-subtitle">Find rare and collectible games through our auction system. Place your bids and win!</p>
+    <div class="auth-notice" data-auth-visible="logged-out" hidden>
+      <i class="fas fa-lock"></i>
+      <span>Sign in to place bids and track your wins from your profile.</span>
+      <a href="auth.html?redirect=bidding.html">Login</a>
+    </div>
     <div class="bidding-cards" id="biddingCardsContainer"></div>
   </div>
 
@@ -114,6 +154,7 @@
   </footer>
 
   <!-- Link your JS file -->
+  <script src="preloader.js"></script>
   <script src="session.js"></script>
   <script>
     // Mobile menu toggle

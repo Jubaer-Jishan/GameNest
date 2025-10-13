@@ -1,5 +1,6 @@
 <?php
-session_start();
+require_once __DIR__ . '/session_bootstrap.php';
+gamenest_start_session();
 
 require_once 'cors.php';
 [$origin] = setupCors([
@@ -20,11 +21,13 @@ if (!empty($_SESSION['user']) && isset($_SESSION['user_id'])) {
             'id' => $user['id'] ?? null,
             'email' => $user['email'] ?? ($_SESSION['user_email'] ?? null),
             'full_name' => $user['full_name'] ?? null
-        ]
+        ],
+        'session_id' => session_id()
     ]);
     exit;
 }
 
 echo json_encode([
-    'authenticated' => false
+    'authenticated' => false,
+    'session_id' => session_id()
 ]);

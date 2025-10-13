@@ -7,9 +7,43 @@
   <link rel="stylesheet" href="common-styles.css" />
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="gameCenter.css" />
+  <link rel="stylesheet" href="preloader.css" />
  
 </head>
-<body>
+<body class="body-shell game-center-body">
+
+<!-- Preloader -->
+<div id="gamenest-preloader" class="preloader">
+  <div class="preloader-particles"></div>
+  
+  <div class="preloader-logo">
+    <span class="logo-game">Game</span><span class="logo-nest">Nest</span>
+  </div>
+  
+  <div class="preloader-controller">
+    <div class="controller-body"></div>
+    <div class="controller-dpad">
+      <div class="dpad-btn"></div>
+      <div class="dpad-btn"></div>
+      <div class="dpad-btn"></div>
+      <div class="dpad-btn"></div>
+    </div>
+    <div class="controller-buttons">
+      <div class="action-btn"></div>
+      <div class="action-btn"></div>
+      <div class="action-btn"></div>
+      <div class="action-btn"></div>
+    </div>
+  </div>
+  
+  <div class="preloader-progress">
+    <div class="progress-bar"></div>
+  </div>
+  
+  <div class="preloader-text">
+    Loading<span class="loading-dots"><span>.</span><span>.</span><span>.</span></span>
+  </div>
+</div>
 
 <!-- Modern Classy Header -->
 <header class="gamenest-header">
@@ -39,19 +73,20 @@
   </div>
 </header>
 
-<!-- Hide old header -->
-<header style="display: none;">
-  
-<div class="navbar">
-    <div class="logo">Game<span>Nest</span></div>
-    <div class="nav-links">
-      <a href="#" class="active">Home</a>
-      <a href="#">Game Collections</a>
-      <a href="#">Rent Games</a>
-      <a href="#">Bidding</a>
-      <a href="#">Profile</a>
-   </div>
-</header>
+  <main class="page-main">
+    <!-- Hide old header -->
+    <header style="display: none;">
+      <div class="navbar">
+        <div class="logo">Game<span>Nest</span></div>
+        <div class="nav-links">
+          <a href="#" class="active">Home</a>
+          <a href="#">Game Collections</a>
+          <a href="#">Rent Games</a>
+          <a href="#">Bidding</a>
+          <a href="#">Profile</a>
+        </div>
+      </div>
+    </header>
 
 <!-- Premium Hero Video Section -->
 <section class="hero-video-section">
@@ -364,59 +399,60 @@
     </div>
   </div>
 </div>
+</main>
+  <!-- Modern Classy Footer -->
+  <footer class="gamenest-footer">
+    <div class="footer-container">
+      <div class="footer-column">
+        <h3>Game<span>Nest</span></h3>
+        <p>The ultimate platform for gamers to trade, rent, and bid on video games. Save money and play more games.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="Discord"><i class="fab fa-discord"></i></a>
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
+        </div>
+      </div>
 
-<!-- Modern Classy Footer -->
-<footer class="gamenest-footer">
-  <div class="footer-container">
-    <div class="footer-column">
-      <h3>Game<span>Nest</span></h3>
-      <p>The ultimate platform for gamers to trade, rent, and bid on video games. Save money and play more games.</p>
-      <div class="footer-social">
-        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
-        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-        <a href="#" aria-label="Discord"><i class="fab fa-discord"></i></a>
-        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
-        <a href="#" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
+      <div class="footer-column">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="home.html">Home</a></li>
+          <li><a href="gameCenter.html">Game Center</a></li>
+          <li><a href="rentGames.html">Rent Games</a></li>
+          <li><a href="bidding.html">Bidding</a></li>
+          <li><a href="auth.html">Login / Sign Up</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="#">Help Center</a></li>
+          <li><a href="#">Community Guidelines</a></li>
+          <li><a href="#">Safety Center</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h4>Contact Us</h4>
+        <ul class="footer-contact">
+          <li><span>✉️</span> <div>support@gamenest.com</div></li>
+          <li><span>📞</span> <div>(+88) 01836282534</div></li>
+          <li><span>📍</span> <div>Dhanmondi, Dhaka<br>Bangladesh</div></li>
+        </ul>
       </div>
     </div>
-
-    <div class="footer-column">
-      <h4>Quick Links</h4>
-      <ul>
-        <li><a href="home.html">Home</a></li>
-        <li><a href="gameCenter.html">Game Center</a></li>
-        <li><a href="#">Rent Games</a></li>
-        <li><a href="bidding.html">Bidding</a></li>
-        <li><a href="auth.html">Login / Sign Up</a></li>
-      </ul>
+    
+    <div class="footer-bottom">
+      <p>&copy; 2025 <a href="#">GameNest</a>. All rights reserved. Built with 💙 for gamers.</p>
     </div>
+  </footer>
 
-    <div class="footer-column">
-      <h4>Support</h4>
-      <ul>
-        <li><a href="#">Help Center</a></li>
-        <li><a href="#">Community Guidelines</a></li>
-        <li><a href="#">Safety Center</a></li>
-        <li><a href="#">Terms of Service</a></li>
-        <li><a href="#">Privacy Policy</a></li>
-      </ul>
-    </div>
-
-    <div class="footer-column">
-      <h4>Contact Us</h4>
-      <ul class="footer-contact">
-        <li><span>✉️</span> <div>support@gamenest.com</div></li>
-        <li><span>📞</span> <div>(+88) 01836282534</div></li>
-        <li><span>📍</span> <div>Dhanmondi, Dhaka<br>Bangladesh</div></li>
-      </ul>
-    </div>
-  </div>
-  
-  <div class="footer-bottom">
-    <p>&copy; 2025 <a href="#">GameNest</a>. All rights reserved. Built with 💙 for gamers.</p>
-  </div>
-</footer>
-
+<script src="preloader.js"></script>
 <script src="https://kit.fontawesome.com/5e38181f55.js" crossorigin="anonymous"></script>
   <script src="session.js"></script>
   <script>

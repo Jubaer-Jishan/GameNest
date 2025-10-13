@@ -1,152 +1,13 @@
 // rent-games.js
 document.addEventListener('DOMContentLoaded', function () {
-  const games = [
-   {
-  id: 1,
-  title: 'Elden Ring',
-  image: 'sliderImage/11.jpg',
-  platforms: ['PS4/PS5', 'Xbox One/Series'],
-  platformKeys: ['ps', 'xbox'],
-  week: 6,
-  month: 17
-},
-{
-  id: 2,
-  title: 'God of War (2018)',
-  image: 'sliderImage/10.jpg',
-  platforms: ['PC', 'PS4/PS5'],
-  platformKeys: ['pc', 'ps'],
-  week: 5,
-  month: 15
-},
-{
-  id: 3,
-  title: 'Sekiro: Shadows Die Twice',
-  image: 'sliderImage/3.jpeg',
-  platforms: ['PS4', 'PS5', 'PC'],
-  platformKeys: ['ps', 'pc'],
-  week: 7,
-  month: 19
-},
-{
-  id: 4,
-  title: 'Spider Man',
-  image: 'sliderImage/14.jpg',
-  platforms: ['PS5', 'PC'],
-  platformKeys: ['ps', 'pc'],
-  week: 6,
-  month: 18
-},
-{
-  id: 5,
-  title: 'Dark Souls 3',
-  image: 'sliderImage/6.jpeg',
-  platforms: ['PC', 'PS4/PS5', 'Switch'],
-  platformKeys: ['pc', 'ps', 'switch'],
-  week: 8,
-  month: 21
-},
-{
-  id: 6,
-  title: 'Red Dead Redemption 2',
-  image: 'sliderImage/1.jpeg',
-  platforms: ['PS4', 'Xbox One', 'PC'],
-  platformKeys: ['ps', 'xbox', 'pc'],
-  week: 7,
-  month: 22
-},
-{
-  id: 7,
-  title: "Assassin's Creed Mirage",
-  image: 'sliderImage/9.jpg',
-  platforms: ['PC', 'PS5'],
-  platformKeys: ['pc', 'ps'],
-  week: 5,
-  month: 17
-},
-{
-  id: 8,
-  title: 'Fc 26',
-  image: 'sliderImage/8.jpg',
-  platforms: ['PC', 'PS5', 'Xbox One/Series'],
-  platformKeys: ['pc', 'ps', 'xbox'],
-  week: 6,
-  month: 16
-},  
-{
-  id: 9,
-  title: 'Dishonored',
-  image: 'sliderImage/17.jpg',
-  platforms: ['PC', 'PS4'],
-  platformKeys: ['pc', 'ps'],
-  week: 7,
-  month: 19
-}, 
-{
-  id: 10,
-  title: 'Little Nightmares',
-  image: 'sliderImage/18.jpg',
-  platforms: ['Switch', 'PS4'],
-  platformKeys: ['switch', 'ps'],
-  week: 8,
-  month: 18
-},
-{
-  id: 11,
-  title: 'GTA V',
-  image: 'sliderImage/19.jpg',
-  platforms: ['PS4/PS5', 'Xbox Series X/S'],
-  platformKeys: ['ps', 'xbox'],
-  week: 6,
-  month: 20
-},
-{
-  id: 12,
-  title: 'Hollow-Knight Silksong',
-  image: 'sliderImage/20.jpg',
-  platforms: ['Switch', 'PC'],
-  platformKeys: ['switch', 'pc'],
-  week: 5,
-  month: 15
-},
-{
-  id: 13,
-  title: 'F1 25',
-  image: 'sliderImage/21.jpg',
-  platforms: ['PC', 'Xbox One/Series'],
-  platformKeys: ['pc', 'xbox'],
-  week: 7,
-  month: 19
-},
-{
-  id: 15,
-  title: 'DOOM Dark Ages',
-  image: 'sliderImage/22.jpg',
-  platforms: ['PC', 'PS5'],
-  platformKeys: ['pc', 'ps'],
-  week: 6,
-  month: 18
-},
-{
-  id: 16,
-  title: 'Ghost of Yotei',
-  image: 'sliderImage/23.jpg',
-  platforms: ['PS4', 'Switch'],
-  platformKeys: ['ps', 'switch'],
-  week: 8,
-  month: 21
-},
-{
-  id: 17,
-  title: 'Hell is Us',
-  image: 'sliderImage/24.jpg',
-  platforms: ['PC', 'Xbox One/Series'],
-  platformKeys: ['pc', 'xbox'],
-  week: 6,
-  month: 17
-},
-
-  ];
+  let games = [];
+  const platformLabels = {
+    pc: 'PC',
+    ps: 'PlayStation',
+    xbox: 'Xbox',
+    switch: 'Switch'
+  };
+  const fallbackImage = 'sliderImage/1.jpeg';
 
   // DOM references
   const gameGrid = document.getElementById('gameGrid');
@@ -158,6 +19,54 @@ document.addEventListener('DOMContentLoaded', function () {
   const modalBtn = document.querySelector('.modal-btn');
   const modalTitle = modal ? modal.querySelector('h2') : null;
   const modalIcon = modal ? modal.querySelector('.modal-icon') : null;
+  const authRedirect = 'auth.html?redirect=rentGames.html';
+
+  function getCachedSessionSnapshot() {
+    if (window.GameNestSession?.authenticated) {
+      return window.GameNestSession;
+    }
+
+    if (sessionStorage.getItem('isLoggedIn') === 'true') {
+      try {
+        const cachedUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+        if (cachedUser) {
+          return { authenticated: true, user: cachedUser };
+        }
+      } catch (error) {
+        console.warn('GameNest Rentals: failed to parse cached user', error);
+      }
+    }
+
+    return { authenticated: false };
+  }
+
+  function getSessionId() {
+    return window.GameNestSessionId || localStorage.getItem('gamenestSessionId') || sessionStorage.getItem('gamenestSessionId') || null;
+  }
+
+  let sessionState = getCachedSessionSnapshot();
+
+  function isAuthenticated() {
+    return !!sessionState?.authenticated;
+  }
+
+  function updateRentButtonState() {
+    document.querySelectorAll('.rent-btn').forEach((button) => {
+      const disabled = !isAuthenticated();
+      button.disabled = disabled;
+      button.classList.toggle('rent-btn-disabled', disabled);
+      if (disabled) {
+        button.title = 'Login required to rent';
+      } else {
+        button.removeAttribute('title');
+      }
+    });
+  }
+
+  document.addEventListener('gamenest:session', (event) => {
+    sessionState = event.detail?.session || { authenticated: false };
+    updateRentButtonState();
+  });
 
   function resolveEndpoint(fileName) {
     const { protocol, origin, pathname } = window.location;
@@ -195,6 +104,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   const rentalEndpoint = resolveEndpoint('record_rental.php');
+  const rentalsApiEndpoint = resolveEndpoint('api_rentals.php');
 
   function setModalState({ title, message, icon = '✅', buttonText = 'Continue Browsing', redirect = '', disableButton = false }) {
     if (!modal) return;
@@ -229,6 +139,12 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   async function persistRental(game, duration, price) {
+    if (!isAuthenticated()) {
+      const authError = new Error('Not logged in');
+      authError.code = 'AUTH';
+      throw authError;
+    }
+
     const payload = {
       game_id: game.id,
       game_title: game.title,
@@ -241,9 +157,15 @@ document.addEventListener('DOMContentLoaded', function () {
     let response;
 
     try {
+      const headers = { 'Content-Type': 'application/json' };
+      const sessionId = getSessionId();
+      if (sessionId) {
+        headers['X-Session-Id'] = sessionId;
+      }
+
       response = await fetch(rentalEndpoint, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers,
       credentials: 'include',
       body: JSON.stringify(payload)
       });
@@ -316,14 +238,14 @@ document.addEventListener('DOMContentLoaded', function () {
           <div class="price-option">
             <span class="price-label">Weekly</span>
             <span class="price-value">$${game.week}</span>
-            <button type="button" class="rent-btn" data-duration="week" data-price="${game.week}" data-title="${game.title}">
+            <button type="button" class="rent-btn" data-duration="week" data-price="${game.week}" data-game-id="${game.id}">
               Rent Week
             </button>
           </div>
           <div class="price-option">
             <span class="price-label">Monthly</span>
             <span class="price-value">$${game.month}</span>
-            <button type="button" class="rent-btn" data-duration="month" data-price="${game.month}" data-title="${game.title}">
+            <button type="button" class="rent-btn" data-duration="month" data-price="${game.month}" data-game-id="${game.id}">
               Rent Month
             </button>
           </div>
@@ -348,6 +270,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     games.forEach(game => gameGrid.appendChild(createCard(game)));
     attachRentListeners();
+    updateRentButtonState();
   }
 
   // ---------- EVENT HANDLING ----------
@@ -356,20 +279,23 @@ document.addEventListener('DOMContentLoaded', function () {
 
     rentButtons.forEach(button => {
       button.addEventListener('click', () => {
-        const title = button.getAttribute('data-title');
+        const gameId = Number(button.getAttribute('data-game-id'));
         const duration = button.getAttribute('data-duration');
         const price = Number(button.getAttribute('data-price'));
-        const selectedGame = games.find((item) => item.title === title);
+        const selectedGame = games.find((item) => item.id === gameId);
 
         if (!modal) return;
 
-        setModalState({
-          title: 'Processing Rental...',
-          message: `Locking in "${title}" for you. Hold tight!`,
-          icon: '⏳',
-          buttonText: 'Processing',
-          disableButton: true
-        });
+        if (!isAuthenticated()) {
+          setModalState({
+            title: 'Login Required',
+            message: 'Please log in to rent games and sync them to your profile.',
+            icon: '🔒',
+            buttonText: 'Go to Login',
+            redirect: authRedirect
+          });
+          return;
+        }
 
         if (!selectedGame) {
           setModalState({
@@ -381,11 +307,19 @@ document.addEventListener('DOMContentLoaded', function () {
           return;
         }
 
+        setModalState({
+          title: 'Processing Rental...',
+          message: `Locking in "${selectedGame.title}" for you. Hold tight!`,
+          icon: '⏳',
+          buttonText: 'Processing',
+          disableButton: true
+        });
+
         persistRental(selectedGame, duration, price)
           .then(() => {
             setModalState({
               title: 'Rental Confirmed!',
-              message: `You've rented "${title}" for ${duration === 'week' ? '1 Week' : '1 Month'} at $${price}. Enjoy your game!`,
+              message: `You've rented "${selectedGame.title}" for ${duration === 'week' ? '1 Week' : '1 Month'} at $${price}. Enjoy your game!`,
               icon: '✅',
               buttonText: 'Continue Browsing'
             });
@@ -397,7 +331,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 message: 'Please log in to rent games and track them in your profile.',
                 icon: '🔒',
                 buttonText: 'Go to Login',
-                redirect: 'auth.html'
+                redirect: authRedirect
               });
             } else {
               setModalState({
@@ -421,8 +355,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
   if (modalBtn) {
     modalBtn.addEventListener('click', () => {
-      if (modalBtn.dataset.redirect === 'auth.html') {
-        window.location.href = 'auth.html';
+      const redirectTarget = modalBtn.dataset.redirect;
+      if (redirectTarget) {
+        window.location.href = redirectTarget;
         return;
       }
 
@@ -441,8 +376,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // ---------- FILTER & SEARCH ----------
   function filterGames() {
-    const searchTerm = searchInput.value.toLowerCase();
-    const platformValue = platformFilter.value;
+    const searchTerm = (searchInput?.value || '').toLowerCase();
+    const platformValue = platformFilter?.value || '';
 
     const filteredGames = games.filter(game => {
       const matchesSearch = game.title.toLowerCase().includes(searchTerm);
@@ -453,9 +388,76 @@ document.addEventListener('DOMContentLoaded', function () {
     renderGameCards(filteredGames);
   }
 
-  searchInput.addEventListener('input', filterGames);
-  platformFilter.addEventListener('change', filterGames);
+  if (searchInput) {
+    searchInput.addEventListener('input', filterGames);
+  }
+  if (platformFilter) {
+    platformFilter.addEventListener('change', filterGames);
+  }
 
   // ---------- INITIAL RENDER ----------
-  renderGameCards(games);
+  function mapPlatforms(rawPlatforms) {
+    if (!rawPlatforms) return { labels: [], keys: [] };
+    const keys = rawPlatforms
+      .split(',')
+      .map(value => value.trim().toLowerCase())
+      .filter(Boolean);
+
+    const labels = keys.map(key => platformLabels[key] || key.toUpperCase());
+    return { labels, keys };
+  }
+
+  function mapRentalRecord(record) {
+    const { labels, keys } = mapPlatforms(record.platforms || '');
+    return {
+      id: Number(record.id),
+      title: record.title,
+      image: record.image || fallbackImage,
+      platforms: labels.length ? labels : ['All Platforms'],
+      platformKeys: keys.length ? keys : ['all'],
+      week: Number(parseFloat(record.weekly_price || 0).toFixed(2)) || 0,
+      month: Number(parseFloat(record.monthly_price || 0).toFixed(2)) || 0,
+      raw: record
+    };
+  }
+
+  function showLoadingState() {
+    if (!gameGrid) return;
+    gameGrid.innerHTML = `
+      <div class="loading-state">
+        <i class="fas fa-spinner fa-spin"></i>
+        <p>Loading games...</p>
+      </div>
+    `;
+  }
+
+  async function loadRentalGames() {
+    if (!gameGrid) return;
+    showLoadingState();
+
+    try {
+      const response = await fetch(`${rentalsApiEndpoint}?action=getRentals`);
+      const payload = await response.json();
+
+      if (!payload.success || !Array.isArray(payload.data)) {
+        throw new Error(payload.message || 'Unable to load rentals');
+      }
+
+      games = payload.data.map(mapRentalRecord);
+      filterGames();
+    } catch (error) {
+      console.error('Failed to load rental games:', error);
+      renderGameCards([]);
+      const errorHtml = `
+        <div class="empty-state">
+          <i class="fas fa-exclamation-triangle"></i>
+          <h3>Unable to load games</h3>
+          <p>${error.message || 'Please try again later.'}</p>
+        </div>
+      `;
+      gameGrid.innerHTML = errorHtml;
+    }
+  }
+
+  loadRentalGames();
 });

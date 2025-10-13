@@ -11,7 +11,7 @@
   box-sizing: border-box;
 }
 
-body {
+.rent-body {
   background: radial-gradient(ellipse at top, #1a1f3a 0%, #0a0e1a 50%, #000000 100%);
   position: relative;
   min-height: 100vh;
@@ -19,7 +19,7 @@ body {
   overflow-x: hidden;
 }
 
-body::before {
+.rent-body::before {
   content: '';
   position: fixed;
   top: 0;
@@ -372,6 +372,40 @@ header{
   margin: 2px 0;
 }
 
+/* ==================== AUTH NOTICE ==================== */
+
+.auth-notice {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 50%;
+    margin: auto;
+    margin-bottom: 40px;
+    padding: 14px 18px;
+    border-radius: 14px;
+    border: 1px dashed rgba(96, 165, 250, 0.4);
+    background: rgba(15, 23, 42, 0.65);
+    color: #e2e8f0;
+    font-size: 14px;
+    line-height: 1.4;
+    justify-content: center;
+}
+
+.auth-notice i {
+  font-size: 18px;
+  color: #60a5fa;
+}
+
+.auth-notice a {
+  color: #93c5fd;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.auth-notice a:hover {
+  color: #bfdbfe;
+}
+
 /* ==================== RENT BUTTON ==================== */
 
 .rent-btn {
@@ -423,6 +457,21 @@ header{
 .rent-btn:active {
   transform: translateY(0);
   box-shadow: 0 3px 10px rgba(96, 165, 250, 0.35);
+}
+
+.rent-btn[disabled],
+.rent-btn.rent-btn-disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  box-shadow: none;
+  background: linear-gradient(135deg, #475569 0%, #334155 100%);
+}
+
+.rent-btn[disabled]:hover,
+.rent-btn.rent-btn-disabled:hover {
+  transform: none;
+  box-shadow: none;
+  background: linear-gradient(135deg, #475569 0%, #334155 100%);
 }
 
 /* ==================== EMPTY STATE ==================== */

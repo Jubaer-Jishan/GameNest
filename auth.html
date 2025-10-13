@@ -6,9 +6,43 @@
   <title>GameNest - Auth</title>
   <link rel="stylesheet" href="common-styles.css">
   <link rel="stylesheet" href="auth.css">
+  <link rel="stylesheet" href="preloader.css">
   <script src="https://kit.fontawesome.com/5e38181f55.js" crossorigin="anonymous"></script>
 </head>
 <body class="fade-in">
+
+  <!-- Preloader -->
+  <div id="gamenest-preloader" class="preloader">
+    <div class="preloader-particles"></div>
+    
+    <div class="preloader-logo">
+      <span class="logo-game">Game</span><span class="logo-nest">Nest</span>
+    </div>
+    
+    <div class="preloader-controller">
+      <div class="controller-body"></div>
+      <div class="controller-dpad">
+        <div class="dpad-btn"></div>
+        <div class="dpad-btn"></div>
+        <div class="dpad-btn"></div>
+        <div class="dpad-btn"></div>
+      </div>
+      <div class="controller-buttons">
+        <div class="action-btn"></div>
+        <div class="action-btn"></div>
+        <div class="action-btn"></div>
+        <div class="action-btn"></div>
+      </div>
+    </div>
+    
+    <div class="preloader-progress">
+      <div class="progress-bar"></div>
+    </div>
+    
+    <div class="preloader-text">
+      Loading<span class="loading-dots"><span>.</span><span>.</span><span>.</span></span>
+    </div>
+  </div>
 
   <div id="particles-js"></div>
 
@@ -157,6 +191,7 @@
     </div>
   </footer>
 
+  <script src="preloader.js"></script>
   <script>
     // Mobile menu toggle
     const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');

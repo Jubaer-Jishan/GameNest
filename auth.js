@@ -374,6 +374,10 @@ document.addEventListener("DOMContentLoaded", () => {
           };
           localStorage.setItem('currentUser', JSON.stringify(userData));
           sessionStorage.setItem('isLoggedIn', 'true');
+          if (result.session_id) {
+            localStorage.setItem('gamenestSessionId', result.session_id);
+            sessionStorage.setItem('gamenestSessionId', result.session_id);
+          }
         }
 
         if (rememberCheckbox) {

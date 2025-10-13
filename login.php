@@ -1,5 +1,6 @@
 <?php
-session_start();
+require_once __DIR__ . '/session_bootstrap.php';
+gamenest_start_session();
 
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -75,6 +76,7 @@ try {
                 'email' => $email,
                 'full_name' => $user['full_name'] ?? null,
             ],
+            'session_id' => session_id(),
         ]);
         exit;
     } else {

@@ -1,5 +1,6 @@
 <?php
-session_start();
+require_once __DIR__ . '/session_bootstrap.php';
+gamenest_start_session();
 
 require_once 'cors.php';
 [$origin] = setupCors([

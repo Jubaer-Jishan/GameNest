@@ -6,9 +6,44 @@
   <title>GameNest - Rent Games</title>
   <link rel="stylesheet" href="common-styles.css" />
   <link rel="stylesheet" href="rentGames.css" />
+  <link rel="stylesheet" href="preloader.css" />
   <script src="https://kit.fontawesome.com/5e38181f55.js" crossorigin="anonymous"></script>
 </head>
-<body>
+<body class="body-shell rent-body">
+
+  <!-- Preloader -->
+  <div id="gamenest-preloader" class="preloader">
+    <div class="preloader-particles"></div>
+    
+    <div class="preloader-logo">
+      <span class="logo-game">Game</span><span class="logo-nest">Nest</span>
+    </div>
+    
+    <div class="preloader-controller">
+      <div class="controller-body"></div>
+      <div class="controller-dpad">
+        <div class="dpad-btn"></div>
+        <div class="dpad-btn"></div>
+        <div class="dpad-btn"></div>
+        <div class="dpad-btn"></div>
+      </div>
+      <div class="controller-buttons">
+        <div class="action-btn"></div>
+        <div class="action-btn"></div>
+        <div class="action-btn"></div>
+        <div class="action-btn"></div>
+      </div>
+    </div>
+    
+    <div class="preloader-progress">
+      <div class="progress-bar"></div>
+    </div>
+    
+    <div class="preloader-text">
+      Loading<span class="loading-dots"><span>.</span><span>.</span><span>.</span></span>
+    </div>
+  </div>
+
   <div id="particles-js"></div>
 
   <!-- Modern Classy Header -->
@@ -40,9 +75,15 @@
   </header>
 
   <!-- Main Content -->
+  <main class="page-main">
   <div class="rent-container">
     <h1 class="section-title">Rent Premium Games</h1>
     <p class="section-subtitle">Select your favorite game and rent it for a week or month across your preferred platforms</p>
+    <div class="auth-notice" data-auth-visible="logged-out" hidden>
+      <i class="fas fa-lock"></i>
+      <span>Sign in to rent games and sync them to your profile.</span>
+      <a href="auth.html?redirect=rentGames.html">Login</a>
+    </div>
 
     <!-- Search & Filter Section -->
     <div class="search-filter">
@@ -65,6 +106,7 @@
     <!-- Games Grid -->
     <div class="game-grid" id="gameGrid"></div>
   </div>
+  </main>
 
   <!-- Rental Modal -->
   <div id="rentModal" class="rent-modal">
@@ -129,6 +171,7 @@
     </div>
   </footer>
 
+  <script src="preloader.js"></script>
   <script src="session.js"></script>
   <script>
         // Mobile menu toggle
