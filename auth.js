@@ -547,7 +547,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const email = signupEmailInput.value.trim();
     const password = signupPasswordInput.value.trim();
     const confirmPassword = signupConfirmPasswordInput.value.trim();
-
+      // sign up validation
     if (fullName.length < 2) {
       showGameNestAlert('Enter your full name');
       return;
@@ -586,7 +586,7 @@ document.addEventListener("DOMContentLoaded", () => {
       submitButton.dataset.originalText = submitButton.textContent;
       submitButton.textContent = 'Creating account...';
     }
-
+      //ajax request
     try {
       const response = await fetch('signUp.php', {
         method: 'POST',

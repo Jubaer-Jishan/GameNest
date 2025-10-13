@@ -155,7 +155,7 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     let response;
-
+    //json response
     try {
       const headers = { 'Content-Type': 'application/json' };
       const sessionId = getSessionId();
