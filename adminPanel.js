@@ -1,11 +1,25 @@
 // Admin panel client logic for navigation, forms, and CRUD calls
+let currentUsersSearch = '';
+
 document.addEventListener('DOMContentLoaded', () => {
   initNavigation();
   initForms();
+  setupUsersSearch();
+  initImagePreview('rentalImage', '#rentalImagePreview img', 'sliderImage/1.jpeg');
+  initImagePreview('biddingImage', '#biddingImagePreview img', 'sliderImage/1.jpeg');
   refreshDashboard();
   loadRentals();
   loadBiddings();
+  loadUsers();
 });
+
+function showToast(message, type = 'info') {
+  const log = type === 'error' ? console.error : type === 'warning' ? console.warn : console.info;
+  log.call(console, message);
+  if (typeof window !== 'undefined' && typeof window.alert === 'function') {
+    window.alert(message);
+  }
+}
 
 function initNavigation() {
   const links = document.querySelectorAll('.nav-link');
@@ -33,6 +47,7 @@ function initNavigation() {
       if (targetId === 'dashboard') refreshDashboard();
       if (targetId === 'rentals') loadRentals();
       if (targetId === 'biddings') loadBiddings();
+      if (targetId === 'users') loadUsers(currentUsersSearch);
     });
   });
 }
@@ -63,15 +78,16 @@ function initForms() {
         const result = await response.json();
         if (result.success) {
           rentalForm.reset();
-          alert('Rental game added successfully.');
+          setImagePreview('#rentalImagePreview img', 'sliderImage/1.jpeg');
+          showToast('Rental game added successfully.', 'success');
           await loadRentals();
           await refreshDashboard();
         } else {
-          alert(result.message || 'Unable to add rental game.');
+          showToast(result.message || 'Unable to add rental game.', 'error');
         }
       } catch (error) {
         console.error('Rental add failed', error);
-        alert('Failed to add rental game.');
+        showToast('Failed to add rental game.', 'error');
       } finally {
         toggleButton(submitBtn, false);
       }
@@ -102,15 +118,16 @@ function initForms() {
         const result = await response.json();
         if (result.success) {
           biddingForm.reset();
-          alert('Bidding game added successfully.');
+          setImagePreview('#biddingImagePreview img', 'sliderImage/1.jpeg');
+          showToast('Bidding game added successfully.', 'success');
           await loadBiddings();
           await refreshDashboard();
         } else {
-          alert(result.message || 'Unable to add bidding game.');
+          showToast(result.message || 'Unable to add bidding game.', 'error');
         }
       } catch (error) {
         console.error('Bidding add failed', error);
-        alert('Failed to add bidding game.');
+        showToast('Failed to add bidding game.', 'error');
       } finally {
         toggleButton(submitBtn, false);
       }
@@ -120,22 +137,31 @@ function initForms() {
 
 async function refreshDashboard() {
   try {
-    const [rentalsRes, biddingsRes] = await Promise.all([
+    const [rentalsRes, biddingsRes, usersRes] = await Promise.all([
       fetch('api_rentals.php?action=getRentals'),
-      fetch('api_bidding.php?action=getBiddings')
+      fetch('api_bidding.php?action=getBiddings'),
+      fetch('api_users.php?action=getStats')
     ]);
 
     const rentalsJson = await rentalsRes.json();
     const biddingsJson = await biddingsRes.json();
+    const usersJson = await usersRes.json();
 
     const rentalCount = rentalsJson?.data?.length || 0;
     const biddingCount = biddingsJson?.data?.length || 0;
+    const userCount = usersJson?.success ? Number(usersJson.total_users || usersJson.total || 0) : 0;
 
     updateText('totalGames', rentalCount + biddingCount);
     updateText('activeRentals', rentalCount);
     updateText('pendingBids', biddingCount);
+    updateText('totalUsers', userCount);
+
+    if (!usersJson?.success) {
+      console.warn('User stats load failed:', usersJson?.message);
+    }
   } catch (error) {
     console.error('Dashboard load failed', error);
+    showToast('Unable to refresh dashboard metrics.', 'warning');
   }
 }
 
@@ -150,6 +176,7 @@ async function loadRentals() {
     const result = await response.json();
 
     if (!result.success || !Array.isArray(result.data) || result.data.length === 0) {
+      tableBody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No rental games found</td></tr>';
       tableBody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No rental games found</td></tr>';
       return;
     }
@@ -175,6 +202,7 @@ async function loadRentals() {
   } catch (error) {
     console.error('Rental load failed', error);
     tableBody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Failed to load rentals</td></tr>';
+    showToast('Failed to load rental games.', 'error');
   }
 }
 
@@ -189,6 +217,7 @@ async function loadBiddings() {
     const result = await response.json();
 
     if (!result.success || !Array.isArray(result.data) || result.data.length === 0) {
+      tableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No bidding games found</td></tr>';
       tableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No bidding games found</td></tr>';
       return;
     }
@@ -215,6 +244,7 @@ async function loadBiddings() {
   } catch (error) {
     console.error('Bidding load failed', error);
     tableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Failed to load bidding games</td></tr>';
+    showToast('Failed to load bidding games.', 'error');
   }
 }
 
@@ -236,7 +266,7 @@ function attachDeleteHandlers(container, type) {
         });
         const result = await response.json();
         if (result.success) {
-          alert('Record deleted.');
+          showToast('Record deleted.', 'success');
           if (type === 'rental') {
             await loadRentals();
           } else {
@@ -244,14 +274,143 @@ function attachDeleteHandlers(container, type) {
           }
           await refreshDashboard();
         } else {
-          alert(result.message || 'Deletion failed.');
+          showToast(result.message || 'Deletion failed.', 'error');
         }
       } catch (error) {
         console.error('Delete failed', error);
-        alert('Unable to delete record.');
+        showToast('Unable to delete record.', 'error');
       }
     });
   });
+}
+
+async function loadUsers(searchTerm = '') {
+  currentUsersSearch = searchTerm;
+  const tableBody = document.querySelector('#usersTable tbody');
+  if (!tableBody) return;
+
+  const params = new URLSearchParams({ action: 'getUsers' });
+  if (searchTerm) params.append('search', searchTerm);
+
+  tableBody.innerHTML = '<tr><td colspan="6">Loading...</td></tr>';
+
+  try {
+    const response = await fetch(`api_users.php?${params.toString()}`);
+    const result = await response.json();
+
+    if (!result.success) {
+      tableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Failed to load users</td></tr>';
+      showToast(result.message || 'Failed to load users.', 'error');
+      return;
+    }
+
+    const users = Array.isArray(result.data) ? result.data : [];
+    tableBody.innerHTML = '';
+
+    if (users.length === 0) {
+      tableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No users found</td></tr>';
+      return;
+    }
+
+    users.forEach(user => {
+      const row = document.createElement('tr');
+      const displayName = user.full_name || user.username || user.email || 'Unknown';
+      const levelValue = user.level !== null && user.level !== undefined && user.level !== ''
+        ? `Level ${user.level}`
+        : 'Level N/A';
+      const memberSinceValue = formatDate(user.member_since || user.created_at);
+      const isOnline = user.is_online === true || user.is_online === 1 || user.is_online === '1';
+
+      row.innerHTML = `
+        <td>${escapeHtml(user.id)}</td>
+        <td>${escapeHtml(displayName)}</td>
+        <td>${escapeHtml(user.email || 'Unavailable')}</td>
+        <td>${escapeHtml(levelValue)}</td>
+        <td>${escapeHtml(memberSinceValue)}</td>
+        <td>
+          <span class="status-label ${isOnline ? 'online' : 'offline'}">
+            <span class="status-dot"></span>${isOnline ? 'Online' : 'Offline'}
+          </span>
+        </td>
+        <td>
+          <div class="table-actions compact">
+            <button class="btn-icon btn-icon-sm edit" data-action="view" data-id="${escapeHtml(user.id)}" title="View profile" aria-label="View profile">
+              <i class="fas fa-eye"></i>
+            </button>
+            <button class="btn-icon btn-icon-sm delete" data-action="remove" data-id="${escapeHtml(user.id)}" title="Remove user" aria-label="Remove user">
+              <i class="fas fa-user-slash"></i>
+            </button>
+          </div>
+        </td>
+      `;
+      tableBody.appendChild(row);
+    });
+
+    attachUserActionHandlers(tableBody);
+
+    if (typeof result.total_users === 'number') {
+      updateText('totalUsers', result.total_users);
+    }
+  } catch (error) {
+    console.error('User load failed', error);
+    tableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Failed to load users</td></tr>';
+    showToast('Failed to load users.', 'error');
+  }
+}
+
+function attachUserActionHandlers(container) {
+  container.querySelectorAll('[data-action]').forEach(button => {
+    button.addEventListener('click', event => {
+      const action = button.dataset.action;
+      const userId = button.dataset.id;
+      if (action === 'view') {
+        showToast(`User ${userId} details coming soon.`, 'info');
+      } else if (action === 'remove') {
+        showToast('User management controls will be available soon.', 'warning');
+      }
+    });
+  });
+}
+
+function setupUsersSearch() {
+  const searchInput = document.getElementById('usersSearch');
+  if (!searchInput) return;
+  let debounceTimer;
+
+  searchInput.addEventListener('input', () => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+      currentUsersSearch = searchInput.value.trim();
+      loadUsers(currentUsersSearch);
+    }, 300);
+  });
+}
+
+function initImagePreview(inputId, previewSelector, fallbackSrc) {
+  const input = document.getElementById(inputId);
+  const previewImg = document.querySelector(previewSelector);
+  if (!input || !previewImg) return;
+
+  input.addEventListener('change', () => {
+    const file = input.files && input.files[0];
+    if (!file) {
+      previewImg.src = fallbackSrc;
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = event => {
+      previewImg.src = event.target?.result || fallbackSrc;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function setImagePreview(previewSelector, src) {
+  const img = document.querySelector(previewSelector);
+  if (img) {
+    img.src = src;
+  }
 }
 
 function toggleButton(button, isLoading) {
@@ -275,6 +434,19 @@ function escapeHtml(value) {
     .replace(/'/g, '&#39;');
 }
 
+function formatDate(value) {
+  if (!value) return 'N/A';
+  const parsed = new Date(value.replace(' ', 'T'));
+  if (Number.isNaN(parsed.getTime())) {
+    return value;
+  }
+  return parsed.toLocaleDateString(undefined, {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  });
+}
+
 function generateReport(type) {
-  alert(`Generating ${type} report…`);
+  showToast(`Report generation for ${type} is coming soon.`, 'info');
 }

@@ -102,6 +102,7 @@ body::before {
   margin-bottom: 2rem;
 }
 
+
 .sidebar-header h2 {
   color: var(--text);
   font-size: 1.5rem;
@@ -648,6 +649,11 @@ table button.delete:hover {
   gap: 0.65rem;
 }
 
+.table-actions.compact {
+  justify-content: center;
+  gap: 0.45rem;
+}
+
 .btn-icon {
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--border);
@@ -661,6 +667,12 @@ table button.delete:hover {
   cursor: pointer;
   transition: all 0.25s ease;
   padding: 0;
+}
+
+.btn-icon-sm {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
 }
 
 .btn-icon i {
@@ -685,6 +697,42 @@ table button.delete:hover {
   color: var(--danger);
   border-color: rgba(239, 68, 68, 0.6);
   box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+}
+
+.status-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-weight: 600;
+  color: #cbd5f5;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.15);
+}
+
+.status-label.online {
+  color: #34d399;
+  background: rgba(52, 211, 153, 0.12);
+}
+
+.status-label.offline {
+  color: #94a3b8;
+  background: rgba(148, 163, 184, 0.12);
+}
+
+.status-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 8px currentColor;
+  opacity: 0.9;
+}
+
+.status-label.offline .status-dot {
+  opacity: 0.55;
+  box-shadow: 0 0 6px rgba(148, 163, 184, 0.35);
 }
 
 .empty-row {

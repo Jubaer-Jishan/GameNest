@@ -24,6 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const loginEndpoint = resolveApiEndpoint('login.php');
   const rememberEndpoint = resolveApiEndpoint('set_cookie.php');
+  const forgotPasswordEndpoint = resolveApiEndpoint('request_password_reset.php');
   
   // Get redirect URL from query parameter or use default
   const urlParams = new URLSearchParams(window.location.search);
@@ -35,6 +36,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const loginForm = document.getElementById('loginForm');
   const signupForm = document.getElementById('signupForm');
   const rememberCheckbox = document.getElementById('rememberMe');
+  const forgotPasswordLink = document.querySelector('.forgot-password-link');
+  const forgotModal = document.getElementById('forgotPasswordModal');
+  const forgotForm = document.getElementById('forgotPasswordForm');
+  const forgotEmailInput = document.getElementById('forgotEmail');
+  const forgotFeedback = document.getElementById('forgotFeedback');
+  const modalDismissElements = document.querySelectorAll('[data-close-modal]');
 
   if (!loginForm || !signupForm || !loginTab || !signupTab) {
     console.warn('GameNest Auth: required form elements not found, skipping auth.js setup.');
@@ -49,6 +56,136 @@ document.addEventListener("DOMContentLoaded", () => {
   const signupPasswordInput = signupForm.querySelector('#signupPassword');
   const signupConfirmPasswordInput = signupForm.querySelector('#signupConfirmPassword');
   const termsCheckbox = signupForm.querySelector('#terms');
+
+  function toggleForgotModal(show) {
+    if (!forgotModal) {
+      return;
+    }
+
+    if (show) {
+      forgotModal.classList.remove('hidden');
+      setTimeout(() => {
+        forgotModal.classList.add('show');
+      }, 16);
+      forgotModal.setAttribute('aria-hidden', 'false');
+      if (forgotFeedback) {
+        forgotFeedback.classList.add('hidden');
+        forgotFeedback.classList.remove('success', 'error');
+        forgotFeedback.textContent = '';
+      }
+      forgotForm?.reset();
+      setTimeout(() => {
+        forgotEmailInput?.focus();
+      }, 120);
+    } else {
+      forgotModal.classList.remove('show');
+      forgotModal.setAttribute('aria-hidden', 'true');
+      setTimeout(() => {
+        if (!forgotModal.classList.contains('show')) {
+          forgotModal.classList.add('hidden');
+        }
+      }, 280);
+    }
+  }
+
+  if (forgotPasswordLink) {
+    forgotPasswordLink.addEventListener('click', (event) => {
+      if (forgotModal) {
+        event.preventDefault();
+        toggleForgotModal(true);
+      }
+    });
+  }
+
+  Array.prototype.forEach.call(modalDismissElements, (element) => {
+    element.addEventListener('click', () => toggleForgotModal(false));
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && forgotModal?.classList.contains('show')) {
+      toggleForgotModal(false);
+    }
+  });
+
+  if (forgotForm && forgotEmailInput) {
+    const forgotSubmitButton = forgotForm.querySelector('.modal-submit');
+
+    forgotForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const emailValue = forgotEmailInput.value.trim();
+      if (!isValidEmail(emailValue)) {
+        if (forgotFeedback) {
+          forgotFeedback.classList.remove('hidden', 'success');
+          forgotFeedback.classList.add('error');
+          forgotFeedback.textContent = 'Enter a valid email address to continue.';
+        }
+        return;
+      }
+
+      if (forgotFeedback) {
+        forgotFeedback.classList.remove('success', 'error');
+        forgotFeedback.classList.remove('hidden');
+        forgotFeedback.textContent = 'Sending reset instructions...';
+      }
+
+      if (forgotSubmitButton) {
+        forgotSubmitButton.disabled = true;
+        forgotSubmitButton.dataset.originalText = forgotSubmitButton.textContent;
+        forgotSubmitButton.textContent = 'Please wait…';
+      }
+
+      try {
+        const response = await fetch(forgotPasswordEndpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ email: emailValue })
+        });
+
+        let data = null;
+        try {
+          data = await response.json();
+        } catch (parseError) {
+          console.error('Failed to parse password reset response:', parseError);
+        }
+
+        if (data?.reset_link) {
+          console.info('Password reset link:', data.reset_link);
+        }
+
+        if (response.ok && data?.success) {
+          if (forgotFeedback) {
+            forgotFeedback.classList.remove('error');
+            forgotFeedback.classList.add('success');
+            forgotFeedback.textContent = data.message || 'If that email is registered, we will send reset instructions shortly.';
+          }
+          forgotForm.reset();
+          setTimeout(() => toggleForgotModal(false), 2000);
+        } else {
+          if (forgotFeedback) {
+            forgotFeedback.classList.remove('success');
+            forgotFeedback.classList.add('error');
+            forgotFeedback.textContent = data?.message || 'We could not start the reset process. Please try again.';
+          }
+        }
+      } catch (error) {
+        console.error('Password reset request failed:', error);
+        if (forgotFeedback) {
+          forgotFeedback.classList.remove('success');
+          forgotFeedback.classList.add('error');
+          forgotFeedback.textContent = 'Network error. Please try again later.';
+        }
+      } finally {
+        if (forgotSubmitButton) {
+          forgotSubmitButton.disabled = false;
+          forgotSubmitButton.textContent = forgotSubmitButton.dataset.originalText || 'Send reset link';
+          delete forgotSubmitButton.dataset.originalText;
+        }
+      }
+    });
+  }
 
   // ===== TAB SWITCH =====
   loginTab.addEventListener('click', () => {

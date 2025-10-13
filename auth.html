@@ -82,8 +82,8 @@
       </div>
 
       <div class="form-actions">
-        <label><input type="checkbox" id="rememberMe" /> Remember me</label>
-        <a href="#">Forgot password?</a>
+  <label><input type="checkbox" id="rememberMe" /> Remember me</label>
+  <a href="reset_password.html" class="forgot-password-link">Forgot password?</a>
       </div>
 
       <button type="submit" class="btn-primary">Log In</button>
@@ -137,6 +137,21 @@
       <button type="submit" class="btn-primary">Create Account</button>
     </form>
     
+  </div>
+
+  <div id="forgotPasswordModal" class="forgot-password-modal hidden" aria-hidden="true">
+    <div class="forgot-password-backdrop" data-close-modal></div>
+    <div class="forgot-password-card" role="dialog" aria-modal="true" aria-labelledby="forgotPasswordTitle">
+      <button type="button" class="modal-close" data-close-modal aria-label="Close reset password dialog">&times;</button>
+      <h3 id="forgotPasswordTitle">Reset your password</h3>
+      <p class="modal-subtitle">Enter the email linked to your GameNest account and we will send a reset link.</p>
+      <form id="forgotPasswordForm" novalidate>
+        <label for="forgotEmail">Email address</label>
+        <input type="email" id="forgotEmail" name="email" placeholder="you@example.com" required autocomplete="email" />
+        <button type="submit" class="btn-primary modal-submit">Send reset link</button>
+      </form>
+      <div id="forgotFeedback" class="modal-feedback hidden" role="status" aria-live="polite"></div>
+    </div>
   </div>
 
   <!-- Modern Classy Footer -->

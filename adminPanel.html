@@ -56,7 +56,7 @@
         <ul>
           <li><a href="#" data-section="dashboard" class="nav-link active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
           <li><a href="#" data-section="inventory" class="nav-link"><i class="fas fa-boxes"></i> Inventory</a></li>
-          <li><a href="#" data-section="sales" class="nav-link"><i class="fas fa-dollar-sign"></i> Manage Sales (New/Used)</a></li>
+          <li><a href="#" data-section="sales" class="nav-link"><i class="fas fa-dollar-sign"></i> Manage Sales</a></li>
           <li><a href="#" data-section="rentals" class="nav-link"><i class="fas fa-handshake"></i> Manage Rentals</a></li>
           <li><a href="#" data-section="biddings" class="nav-link"><i class="fas fa-gavel"></i> Manage Bidding</a></li>
           <li><a href="#" data-section="users" class="nav-link"><i class="fas fa-users"></i> Users</a></li>
@@ -273,11 +273,6 @@
             <small>Upload game cover (JPG, PNG, WebP, GIF)</small>
           </div>
           <div class="form-group">
-            <label>Game Thumbnail:</label>
-            <input type="file" id="biddingImage" accept="image/*" required>
-            <small>Upload game cover image (JPG, PNG, WebP)</small>
-          </div>
-          <div class="form-group">
             <label>Platform:</label>
             <select id="biddingPlatform" name="platform">
               <option value="PC">PC</option>
@@ -340,10 +335,11 @@
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Username</th>
+                <th>Name</th>
                 <th>Email</th>
-                <th>Role</th>
-                <th>Joined</th>
+                <th>Level</th>
+                <th>Member Since</th>
+                <th>Status</th>
                 <th>Actions</th>
               </tr>
             </thead>
